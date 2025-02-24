@@ -13,20 +13,22 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
- 
 model User {
-  id            String          @id @default(cuid())
+  id            String    @id @default(cuid())
   name          String?
-  email         String          @unique
+  email         String    @unique
   emailVerified DateTime?
   image         String?
   accounts      Account[]
   sessions      Session[]
- 
+  themes        Theme[]
+  likes         Like[]
+  dislikes      Dislike[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
- 
+
 model Account {
   userId            String
   type              String
@@ -39,30 +41,74 @@ model Account {
   scope             String?
   id_token          String?
   session_state     String?
- 
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
- 
+
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
- 
+
   @@id([provider, providerAccountId])
 }
- 
+
 model Session {
   sessionToken String   @unique
   userId       String
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
- 
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
- 
+
 model VerificationToken {
   identifier String
   token      String
   expires    DateTime
- 
+
   @@id([identifier, token])
 }
- 
+
+model Theme {
+  id          String      @id @default(cuid())
+  title       String
+  description String?
+  userId      String
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  likes       Like[]
+  dislikes    Dislike[]
+  modes       ThemeMode[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ThemeMode {
+  id      String @id @default(cuid())
+  mode    String
+  themeId String
+  content String
+  theme   Theme  @relation(fields: [themeId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Like {
+  id      String @id @default(cuid())
+  userId  String
+  themeId String
+  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  theme   Theme  @relation(fields: [themeId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+}
+
+model Dislike {
+  id      String @id @default(cuid())
+  userId  String
+  themeId String
+  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  theme   Theme  @relation(fields: [themeId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+}

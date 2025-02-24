@@ -26,7 +26,6 @@ import { NavUser } from './nav-user';
 import { NavMain } from './nav-main';
 import { NavProjects } from './nav-projects';
 import { TeamSwitcher } from './team-switcher';
-import { ModeToggle } from './ModeToggle';
 
 // This is sample data.
 const data = {
@@ -162,19 +161,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible='icon' {...props}>
       <SidebarHeader>
-        <div className='flex items-center justify-between px-2 pt-2'>
-          <div className='flex items-center gap-2 '>
-            <div className='flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground'>
-              <GraduationCap className='size-4' />
-            </div>
-            <div className='grid flex-1 text-left text-sm leading-tight'>
-              <span className='truncate font-semibold'>Themes</span>
-              <span className='truncate text-xs'>For Shadcn UI</span>
-            </div>
+        <div className='flex justify-between items-center gap-2'>
+          <div className='flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground'>
+            <GraduationCap className='size-4' />
           </div>
-          <span>
-            <ModeToggle />
-          </span>
+          <div className='grid flex-1 text-left text-sm leading-tight'>
+            <span className='truncate font-semibold'>Themes</span>
+            <span className='truncate text-xs'>For Shadcn UI</span>
+          </div>
         </div>
       </SidebarHeader>
       <SidebarContent>
@@ -182,7 +176,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavProjects projects={data.projects} />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>

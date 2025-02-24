@@ -6,6 +6,7 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from '@/components/ui/sidebar';
+import { ModeToggle } from '../theme/ModeToggle';
 
 export default function SidebarWrapper({
   children,
@@ -20,6 +21,7 @@ export default function SidebarWrapper({
           <div className='flex items-center gap-2 px-4'>
             <SidebarTrigger className='-ml-1' />
             <Separator orientation='vertical' className='mr-2 h-4' />
+            <ModeToggle />
           </div>
         </header>
         {children}
