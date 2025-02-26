@@ -3,7 +3,7 @@ interface ThemeEditorProps {
 }
 
 const ThemeEditor = ({ id }: ThemeEditorProps) => {
-  return <div>ThemeEditor</div>;
+  return <div>ThemeEditor {id}</div>;
 };
 
 export default ThemeEditor;

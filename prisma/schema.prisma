@@ -14,9 +14,9 @@ datasource db {
 }
 
 model User {
-  id            String    @id @default(cuid())
+  id            String     @id @default(cuid())
   name          String?
-  email         String    @unique
+  email         String     @unique
   emailVerified DateTime?
   image         String?
   accounts      Account[]
@@ -24,6 +24,7 @@ model User {
   themes        Theme[]
   likes         Like[]
   dislikes      Dislike[]
+  bookmarks     Bookmark[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -77,6 +78,7 @@ model Theme {
   likes       Like[]
   dislikes    Dislike[]
   modes       ThemeMode[]
+  bookmarks   Bookmark[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -104,6 +106,16 @@ model Like {
 }
 
 model Dislike {
+  id      String @id @default(cuid())
+  userId  String
+  themeId String
+  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  theme   Theme  @relation(fields: [themeId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+}
+
+model Bookmark {
   id      String @id @default(cuid())
   userId  String
   themeId String
