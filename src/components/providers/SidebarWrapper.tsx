@@ -8,7 +8,7 @@ import {
 } from '@/components/ui/sidebar';
 import { ModeToggle } from '../theme/ModeToggle';
 import { PlusSquare } from 'lucide-react';
-import CreateNewTheme from '../theme/create-new-theme';
+import CreateNewTheme from '../theme/createNewTheme/create-new-theme';
 
 export default function SidebarWrapper({
   children,
