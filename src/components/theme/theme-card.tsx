@@ -13,14 +13,7 @@ import { cn } from '@/lib/utils';
 import { Theme } from '@/types/apiReturnTypes';
 import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
-import {
-  Bookmark,
-  BookMarked,
-  Share,
-  Share2,
-  ThumbsDown,
-  ThumbsUp,
-} from 'lucide-react';
+import { Bookmark, Share2, ThumbsDown, ThumbsUp } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
@@ -91,8 +84,22 @@ export function ThemeCard({ theme }: { theme: Theme }) {
 
       toast.error('Failed to update dislike status');
     },
-    onSettled: () => {
-      // Optionally refetch or update the data
+  });
+
+  const bookmarkMutation = useMutation({
+    mutationFn: (themeId: string) =>
+      axios.post('/api/theme/bookmark', { themeId }),
+    onMutate: async (themeId: string) => {
+      // Optimistically update the UI
+      setIsBookmarked((prev) => !prev);
+      setBookmarkCounts((prev) => (isBookmarked ? prev - 1 : prev + 1));
+    },
+    onError: (error, themeId, context) => {
+      // Revert the optimistic update if the mutation fails
+      setIsBookmarked((prev) => !prev);
+      setBookmarkCounts((prev) => (isDisliked ? prev + 1 : prev - 1));
+
+      toast.error('Failed to update dislike status');
     },
   });
 
@@ -124,7 +131,10 @@ export function ThemeCard({ theme }: { theme: Theme }) {
           </Button>
         </div>
         <div>
-          <Button variant='ghost'>
+          <Button
+            variant='ghost'
+            onClick={() => bookmarkMutation.mutate(theme.id)}
+          >
             <Bookmark
               className={cn(isBookmarked && 'font-bold text-yellow-500')}
             />
