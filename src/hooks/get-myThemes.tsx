@@ -1,12 +1,17 @@
-import { Theme } from '@/types/apiReturnTypes';
+import { Theme, ThemesResponse } from '@/types/apiReturnTypes';
 import { useQuery } from '@tanstack/react-query';
-const fetchMyThemes = async () => {
-  const response = await fetch('/api/theme/getMythemes');
-  if (!response.ok) {
-    throw new Error('Network response was not ok');
-  }
-  return await response.json();
+import axios from 'axios';
+
+const fetchMyThemes = async (page: number, pageSize: number) => {
+  const response = await axios.get(
+    `/api/theme/getMythemes?page=${page}&pageSize=${pageSize}`
+  );
+  return response.data;
 };
-export const useMyThemes = () => {
-  return useQuery<Theme[]>({ queryKey: ['myThemes'], queryFn: fetchMyThemes });
+
+export const useMyThemes = (page: number, pageSize: number) => {
+  return useQuery<ThemesResponse>({
+    queryKey: ['myThemes', page, pageSize],
+    queryFn: () => fetchMyThemes(page, pageSize),
+  });
 };

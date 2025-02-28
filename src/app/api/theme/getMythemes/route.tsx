@@ -2,7 +2,7 @@ import { auth } from '@/auth';
 import { prisma } from '@/db/prisma';
 import { NextResponse } from 'next/server';
 
-export async function GET() {
+export async function GET(req: Request) {
   try {
     // Check if user is authenticated
     const session = await auth();
@@ -13,7 +13,20 @@ export async function GET() {
 
     const userId = session.user?.id;
 
-    // Fetch themes created by the logged-in user
+    // Get query parameters for pagination
+    const url = new URL(req.url);
+    const page = parseInt(url.searchParams.get('page') || '1', 10);
+    const pageSize = parseInt(url.searchParams.get('pageSize') || '10', 10);
+    const skip = (page - 1) * pageSize;
+
+    // Fetch total count of themes created by the logged-in user
+    const totalCount = await prisma.theme.count({
+      where: {
+        userId: userId,
+      },
+    });
+
+    // Fetch themes created by the logged-in user with pagination
     const themes = await prisma.theme.findMany({
       where: {
         userId: userId,
@@ -31,6 +44,8 @@ export async function GET() {
       orderBy: {
         updatedAt: 'desc', // Order by last modified
       },
+      skip: skip,
+      take: pageSize,
     });
 
     // Fetch likes, dislikes, and bookmarks by the user
@@ -76,7 +91,7 @@ export async function GET() {
       isBookmarked: bookmarkedThemeIds.has(theme.id),
     }));
 
-    return NextResponse.json(themesWithUserActions);
+    return NextResponse.json({ themes: themesWithUserActions, totalCount });
   } catch (error) {
     console.error('[GET_MY_THEMES]', error);
     return new NextResponse('Internal Error', { status: 500 });

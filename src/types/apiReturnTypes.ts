@@ -24,3 +24,8 @@ export interface Theme {
   isDisliked: boolean;
   isBookmarked: boolean;
 }
+
+export interface ThemesResponse {
+  themes: Theme[];
+  totalCount: number;
+}
