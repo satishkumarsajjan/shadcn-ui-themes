@@ -13,7 +13,13 @@ import { cn } from '@/lib/utils';
 import { Theme } from '@/types/apiReturnTypes';
 import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
-import { Bookmark, Share2, ThumbsDown, ThumbsUp } from 'lucide-react';
+import {
+  Bookmark,
+  BookmarkCheckIcon,
+  Share2,
+  ThumbsDown,
+  ThumbsUp,
+} from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
@@ -102,7 +108,17 @@ export function ThemeCard({ theme }: { theme: Theme }) {
       toast.error('Failed to update dislike status');
     },
   });
-
+  const handleShare = (id: string) => {
+    const pageUrl = `${window.location.origin}/themes/id/${id}`;
+    navigator.clipboard.writeText(pageUrl).then(
+      () => {
+        toast.success('Theme link copied to clipboard');
+      },
+      (err) => {
+        toast.error('Failed to copy theme link');
+      }
+    );
+  };
   return (
     <Card className='relative shadow-none'>
       <CardHeader>
@@ -135,12 +151,22 @@ export function ThemeCard({ theme }: { theme: Theme }) {
             variant='ghost'
             onClick={() => bookmarkMutation.mutate(theme.id)}
           >
-            <Bookmark
-              className={cn(isBookmarked && 'font-bold text-yellow-500')}
-            />
+            {isBookmarked ? (
+              <>
+                <BookmarkCheckIcon
+                  className={cn(
+                    isBookmarked && 'font-extrabold text-yellow-500'
+                  )}
+                />
+              </>
+            ) : (
+              <>
+                <Bookmark />
+              </>
+            )}
             <p>{bookmarkCounts}</p>
           </Button>
-          <Button variant='ghost'>
+          <Button variant='ghost' onClick={() => handleShare(theme.id)}>
             <Share2 />
           </Button>
         </div>

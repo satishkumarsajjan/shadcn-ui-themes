@@ -1,14 +1,13 @@
 'use client';
 
 import { useMyThemes } from '@/hooks/get-myThemes';
-import { ThemeCard } from '../theme-card';
-import { ThemeCardSkeleton } from '../theme-card-skeleton';
+import { ThemeCard } from '../theme-card/theme-card';
+import { ThemeCardSkeleton } from '../theme-card/theme-card-skeleton';
 
 interface MyThemesProps {}
 
 const MyThemes = ({}: MyThemesProps) => {
   const { data, isFetching, error } = useMyThemes();
-  console.log('DATA', data);
   return (
     <div className='p-4'>
       {isFetching && (
