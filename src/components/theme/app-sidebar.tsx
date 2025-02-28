@@ -3,9 +3,9 @@
 import {
   BookMarked,
   GraduationCap,
-  Map,
   SwatchBook,
   Telescope,
+  ThumbsUp,
 } from 'lucide-react';
 import * as React from 'react';
 
@@ -29,6 +29,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         url: '/themes',
         icon: Telescope,
         enabled: true,
+      },
+      {
+        name: 'Liked themes',
+        url: '/themes/liked',
+        icon: ThumbsUp,
+        enabled: !!session,
       },
       {
         name: 'BookMarks',

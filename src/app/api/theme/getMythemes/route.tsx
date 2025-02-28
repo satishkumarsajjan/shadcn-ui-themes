@@ -28,6 +28,9 @@ export async function GET() {
           },
         },
       },
+      orderBy: {
+        updatedAt: 'desc', // Order by last modified
+      },
     });
 
     // Fetch likes, dislikes, and bookmarks by the user

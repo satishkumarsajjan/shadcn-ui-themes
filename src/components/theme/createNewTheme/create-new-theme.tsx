@@ -52,10 +52,9 @@ const CreateNewTheme = ({}: CreateNewThemeProps) => {
     mutationFn: (values: z.infer<typeof formSchema>) => {
       return axios.post('/api/theme/createtheme', values);
     },
-    onSuccess(data, variables, context) {
+    onSuccess(data) {
       // Do something on success
       toast.success('Theme created successfully');
-      console.log(data.data);
       router.push(`/themes/id/${data.data.id}`);
     },
   });
