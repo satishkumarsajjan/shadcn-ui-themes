@@ -5,7 +5,6 @@ import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
@@ -36,13 +35,67 @@ export function ThemeCard({ theme }: { theme: Theme }) {
   const [bookmarkCounts, setBookmarkCounts] = useState<number>(
     theme._count.bookmarks
   );
-  const mutation = useMutation({
-    mutationFn: (themeId: string) => {
-      setIsLiked(!isLiked);
-      setLikeCounts(isLiked ? likeCounts - 1 : likeCounts + 1);
-      return axios.post('/api/theme/liketheme', { themeId });
+
+  const likeMutation = useMutation({
+    mutationFn: (themeId: string) =>
+      axios.post('/api/theme/liketheme', { themeId }),
+    onMutate: async (themeId: string) => {
+      // Optimistically update the UI
+      setIsLiked((prev) => !prev);
+      setLikeCounts((prev) => (isLiked ? prev - 1 : prev + 1));
+
+      if (isDisliked) {
+        setIsDisliked(false);
+        setDislikeCounts((prev) => prev - 1);
+      }
+    },
+    onError: (error, themeId, context) => {
+      // Revert the optimistic update if the mutation fails
+      setIsLiked((prev) => !prev);
+      setLikeCounts((prev) => (isLiked ? prev + 1 : prev - 1));
+
+      if (isDisliked) {
+        setIsDisliked(true);
+        setDislikeCounts((prev) => prev + 1);
+      }
+
+      toast.error('Failed to update like status');
+    },
+    onSettled: () => {
+      // Optionally refetch or update the data
     },
   });
+
+  const dislikeMutation = useMutation({
+    mutationFn: (themeId: string) =>
+      axios.post('/api/theme/disliketheme', { themeId }),
+    onMutate: async (themeId: string) => {
+      // Optimistically update the UI
+      setIsDisliked((prev) => !prev);
+      setDislikeCounts((prev) => (isDisliked ? prev - 1 : prev + 1));
+
+      if (isLiked) {
+        setIsLiked(false);
+        setLikeCounts((prev) => prev - 1);
+      }
+    },
+    onError: (error, themeId, context) => {
+      // Revert the optimistic update if the mutation fails
+      setIsDisliked((prev) => !prev);
+      setDislikeCounts((prev) => (isDisliked ? prev + 1 : prev - 1));
+
+      if (isLiked) {
+        setIsLiked(true);
+        setLikeCounts((prev) => prev + 1);
+      }
+
+      toast.error('Failed to update dislike status');
+    },
+    onSettled: () => {
+      // Optionally refetch or update the data
+    },
+  });
+
   return (
     <Card className='relative shadow-none'>
       <CardHeader>
@@ -53,23 +106,29 @@ export function ThemeCard({ theme }: { theme: Theme }) {
       </CardContent>
       <CardFooter className='flex justify-between'>
         <div className='flex items-center gap-0'>
-          <Button variant={'ghost'} onClick={() => mutation.mutate(theme.id)}>
+          <Button
+            variant={'ghost'}
+            onClick={() => likeMutation.mutate(theme.id)}
+          >
             <ThumbsUp className={cn(isLiked && 'font-bold text-cyan-500')} />
             <p>{likeCounts}</p>
           </Button>
-          <Button variant='ghost'>
+          <Button
+            variant='ghost'
+            onClick={() => dislikeMutation.mutate(theme.id)}
+          >
             <ThumbsDown
-              className={cn(theme.isDisliked && 'font-bold text-red-500')}
+              className={cn(isDisliked && 'font-bold text-red-500')}
             />
-            <p>{theme._count.dislikes}</p>
+            <p>{dislikeCounts}</p>
           </Button>
         </div>
         <div>
           <Button variant='ghost'>
             <Bookmark
-              className={cn(theme.isBookmarked && 'font-bold text-yellow-500')}
+              className={cn(isBookmarked && 'font-bold text-yellow-500')}
             />
-            <p>{theme._count.bookmarks}</p>
+            <p>{bookmarkCounts}</p>
           </Button>
           <Button variant='ghost'>
             <Share2 />
