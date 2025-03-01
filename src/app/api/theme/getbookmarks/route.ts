@@ -19,17 +19,17 @@ export async function GET(req: Request) {
     const pageSize = parseInt(url.searchParams.get('pageSize') || '10', 10);
     const skip = (page - 1) * pageSize;
 
-    // Fetch total count of themes liked by the logged-in user
+    // Fetch total count of themes bookmarked by the logged-in user
     const totalCount = await prisma.theme.count({
      where: {
-       likes :{ some: { userId: userId } },
+       bookmarks :{ some: { userId: userId } },
       },
     });
 
-    // Fetch themes liked by the logged-in user with pagination
+    // Fetch themes bookmarked by the logged-in user with pagination
     const themes = await prisma.theme.findMany({
       where: {
-       likes :{ some: { userId: userId } },
+       bookmarks :{ some: { userId: userId } },
       },
       include: {
         modes: true, // Include related ThemeMode records
@@ -93,7 +93,7 @@ export async function GET(req: Request) {
 
     return NextResponse.json({ themes: themesWithUserActions, totalCount });
   } catch (error) {
-    console.error('[GET_LIKED_THEMES]', error);
+    console.error('[GET_BOOKMARKS]', error);
     return new NextResponse('Internal Error', { status: 500 });
   }
 }

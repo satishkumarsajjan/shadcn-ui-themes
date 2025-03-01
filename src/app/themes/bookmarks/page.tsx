@@ -1,4 +1,5 @@
 import { auth } from '@/auth';
+import BookmarksGrid from '@/components/theme/bookmarks/BookmarksGrid';
 import { redirect } from 'next/navigation';
 
 const page = async () => {
@@ -7,7 +8,7 @@ const page = async () => {
   if (!session) {
     redirect('/');
   }
-  return <div>page</div>;
+  return <BookmarksGrid />;
 };
 
 export default page;
