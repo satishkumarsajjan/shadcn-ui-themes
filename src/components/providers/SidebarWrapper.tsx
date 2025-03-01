@@ -19,7 +19,7 @@ export default function SidebarWrapper({
     <SidebarProvider>
       <AppSidebar />
       <SidebarInset>
-        <header className='flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12'>
+        <header className='sticky top-0 z-10 backdrop-blur-lg flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12 shadow-md'>
           <div className='flex items-center justify-between px-4 w-full'>
             <div className='flex items-center gap-2'>
               <SidebarTrigger className='-ml-1' />

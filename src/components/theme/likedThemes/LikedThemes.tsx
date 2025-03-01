@@ -1,15 +1,15 @@
 'use client';
 
-import { useMyThemes } from '@/hooks/get-myThemes';
+import { useLikedThemes } from '@/hooks/get-liked-themes';
 import { useState } from 'react';
 import ThemesGrid from '../themes/themesGrid';
 
 interface MyThemesProps {}
 
-const MyThemes = ({}: MyThemesProps) => {
+const LikedThemes = ({}: MyThemesProps) => {
   const [page, setPage] = useState(1);
   const pageSize = 9;
-  const { data, isFetching, error } = useMyThemes(page, pageSize);
+  const { data, isFetching, error } = useLikedThemes(page, pageSize);
 
   return (
     <ThemesGrid
@@ -23,4 +23,4 @@ const MyThemes = ({}: MyThemesProps) => {
   );
 };
 
-export default MyThemes;
+export default LikedThemes;

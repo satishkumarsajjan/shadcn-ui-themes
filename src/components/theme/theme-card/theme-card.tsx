@@ -119,10 +119,26 @@ export function ThemeCard({ theme }: { theme: Theme }) {
       }
     );
   };
+  const colors = [
+    '#ccd5ae',
+    '#f8b595',
+    '#f67280',
+    '#c06c84',
+    '#6c5b7b',
+    '#355c7d',
+  ];
   return (
     <Card className='relative shadow-none'>
       <CardHeader>
-        <div className='w-full h-[300px] rounded-md bg-cyan-800'></div>
+        <div className='w-full h-[300px] grid grid-cols-6 rounded-md overflow-hidden'>
+          {colors?.map((item) => (
+            <div
+              key={item}
+              className={`col-span-1 h-full`}
+              style={{ backgroundColor: item }}
+            ></div>
+          ))}
+        </div>
       </CardHeader>
       <CardContent>
         <CardTitle className='text-2xl'>{theme.title}</CardTitle>
