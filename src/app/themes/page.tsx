@@ -1,7 +1,7 @@
-interface pageProps {}
+import AllThemes from '@/components/theme/allthemes/Allthemes';
 
-const page = ({}: pageProps) => {
-  return <div>Themes</div>;
+const page = () => {
+  return <AllThemes />;
 };
 
 export default page;

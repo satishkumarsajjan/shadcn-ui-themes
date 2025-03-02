@@ -1,3 +1,5 @@
+import { ThemeSortBy, ThemeTimeframe } from "@/types/ThemeFilters"
+
 export const defaultTheme = `--background: 20 14.3% 4.1%;
     --foreground: 60 9.1% 97.8%;
     --card: 20 14.3% 4.1%;
@@ -22,3 +24,9 @@ export const defaultTheme = `--background: 20 14.3% 4.1%;
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;`
+
+// Updated sort options to match the ThemeSortBy type
+export const ThemeSortByValues: ThemeSortBy[] = ["newest", "oldest", "popular", "alphabetical"]
+
+// Updated timeframe options to match the ThemeTimeframe type
+export const ThemeTimeFrameValues: ThemeTimeframe[] = ["all", "today", "week", "month", "year"]

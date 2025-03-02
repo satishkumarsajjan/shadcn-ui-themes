@@ -51,7 +51,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     ],
   };
   return (
-    <Sidebar collapsible='icon' {...props}>
+    <Sidebar collapsible='offcanvas' variant='floating' {...props}>
       <SidebarHeader>
         <div className='flex justify-between items-center gap-2'>
           <div className='flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground'>
