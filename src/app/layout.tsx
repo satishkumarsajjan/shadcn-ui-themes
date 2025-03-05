@@ -1,3 +1,4 @@
+import { ViewTransitions } from 'next-view-transitions';
 import ClientQueryProvider from '@/components/providers/QueryClientProvider';
 import { ThemeProvider } from '@/components/providers/theme-provider';
 import type { Metadata } from 'next';
@@ -31,19 +32,21 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <SessionProvider>
-          <ClientQueryProvider>
-            <ThemeProvider
-              attribute='class'
-              defaultTheme='system'
-              enableSystem
-              disableTransitionOnChange
-            >
-              {children}
-              <Toaster />
-            </ThemeProvider>
-          </ClientQueryProvider>
-        </SessionProvider>
+        <ViewTransitions>
+          <SessionProvider>
+            <ClientQueryProvider>
+              <ThemeProvider
+                attribute='class'
+                defaultTheme='system'
+                enableSystem
+                disableTransitionOnChange
+              >
+                {children}
+                <Toaster />
+              </ThemeProvider>
+            </ClientQueryProvider>
+          </SessionProvider>
+        </ViewTransitions>
       </body>
     </html>
   );

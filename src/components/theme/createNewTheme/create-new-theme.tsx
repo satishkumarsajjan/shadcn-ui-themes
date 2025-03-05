@@ -16,7 +16,8 @@ import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 import { LucidePlusSquare } from 'lucide-react';
 import { signIn, useSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
+import { useTransitionRouter } from 'next-view-transitions';
+
 import { useForm } from 'react-hook-form';
 import { BsGithub } from 'react-icons/bs';
 import { toast } from 'sonner';
@@ -40,7 +41,7 @@ const formSchema = z.object({
 const CreateNewTheme = ({}: CreateNewThemeProps) => {
   const { data: session } = useSession();
   // if (!session) return <NotSignedIn />;
-  const router = useRouter();
+  const router = useTransitionRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
