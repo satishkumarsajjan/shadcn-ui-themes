@@ -1,4 +1,4 @@
-import { Theme, ThemesResponse } from '@/types/apiReturnTypes';
+import { ThemesResponse } from '@/types/apiReturnTypes';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 

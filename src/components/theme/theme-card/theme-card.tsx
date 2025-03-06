@@ -10,7 +10,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
-import { Theme } from '@/types/apiReturnTypes';
+import { ThemeWithUserActions } from '@/types/apiReturnTypes';
 import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 import {
@@ -23,7 +23,7 @@ import {
 import { useState } from 'react';
 import { toast } from 'sonner';
 
-export function ThemeCard({ theme }: { theme: Theme }) {
+export function ThemeCard({ theme }: { theme: ThemeWithUserActions }) {
   const [isLiked, setIsLiked] = useState<boolean>(theme.isLiked);
   const [likeCounts, setLikeCounts] = useState<number>(theme._count.likes);
   const [isDisliked, setIsDisliked] = useState<boolean>(theme.isDisliked);
@@ -128,7 +128,7 @@ export function ThemeCard({ theme }: { theme: Theme }) {
     '#355c7d',
   ];
   return (
-    <Card className='relative shadow-none'>
+    <Card className='relative shadow-none bg-neutral-900'>
       <CardHeader>
         <div className='w-full h-[300px] grid grid-cols-6 rounded-md overflow-hidden'>
           {colors?.map((item) => (

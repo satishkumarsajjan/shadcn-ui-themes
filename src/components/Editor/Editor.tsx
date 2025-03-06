@@ -23,6 +23,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
+import { Edit } from 'lucide-react';
 
 // Define the props interface
 interface EditorProps {
@@ -238,10 +239,16 @@ const Editor = ({
 
   return (
     <Tabs defaultValue='preview' className='w-full'>
-      <TabsList className='grid w-full grid-cols-2'>
-        <TabsTrigger value='preview'>Preview</TabsTrigger>
-
-        <TabsTrigger value='code'>Code</TabsTrigger>
+      <TabsList className='grid w-full grid-cols-5 h-auto'>
+        <TabsTrigger value='preview' className='col-span-2'>
+          Preview
+        </TabsTrigger>
+        <TabsTrigger value='code' className='col-span-2'>
+          Code
+        </TabsTrigger>
+        <Button className='ml-2 col-span-1'>
+          <Edit />
+        </Button>
       </TabsList>
       <TabsContent value='preview'>{previewComponent}</TabsContent>
 

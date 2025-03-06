@@ -2,22 +2,54 @@
 
 import { components } from '@/lib/components';
 import Editor from './Editor';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 
 interface ComponentGridProps {}
 
 const ComponentGrid = ({}: ComponentGridProps) => {
   const [mounted, setMounted] = useState(false);
+  const [columns, setColumns] = useState(3);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   // This ensures the animation runs after initial render
   useEffect(() => {
     setMounted(true);
   }, []);
 
+  // Adjust grid columns based on container width
+  useEffect(() => {
+    if (!containerRef.current) return;
+
+    const resizeObserver = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        const width = entry.contentRect.width;
+
+        if (width < 768) {
+          setColumns(1);
+        } else if (width < 1200) {
+          setColumns(2);
+        } else {
+          setColumns(3);
+        }
+      }
+    });
+
+    resizeObserver.observe(containerRef.current);
+
+    return () => {
+      if (containerRef.current) {
+        resizeObserver.unobserve(containerRef.current);
+      }
+    };
+  }, []);
+
   return (
     <div
-      className='grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 
-                 gap-4 m-4 overflow-hidden'
+      ref={containerRef}
+      className={`grid gap-4 m-4 overflow-hidden`}
+      style={{
+        gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))`,
+      }}
     >
       {components.map((component, index) => (
         <div

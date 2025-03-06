@@ -140,7 +140,6 @@ function CardsStats() {
     },
   };
   return (
-    <div className='grid gap-4 sm:grid-cols-2 xl:grid-cols-2'>
       <Card>
         <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
           <CardTitle className='text-sm font-normal'>Total Revenue</CardTitle>
@@ -150,7 +149,7 @@ function CardsStats() {
           <p className='text-xs text-muted-foreground'>
             +20.1% from last month
           </p>
-          <ChartContainer config={chartConfig} className='h-[80px] w-full'>
+          <ChartContainer config={chartConfig} className=' w-full'>
             <LineChart
               data={data}
               margin={{
@@ -172,7 +171,73 @@ function CardsStats() {
             </LineChart>
           </ChartContainer>
         </CardContent>
-      </Card>
+
+    </div>
+  );
+}
+
+  `,
+  scope: {
+    Card,
+    CardContent,
+    CardHeader,
+    CardTitle,
+    Bar,
+    Line,
+    LineChart,
+    BarChart,
+    ChartContainer,
+  },
+};
+const CardStatsTwo = {
+  initialCode: `
+function CardsStats() {
+  const data = [
+    {
+      revenue: 10400,
+      subscription: 240,
+    },
+    {
+      revenue: 14405,
+      subscription: 300,
+    },
+    {
+      revenue: 9400,
+      subscription: 200,
+    },
+    {
+      revenue: 8200,
+      subscription: 278,
+    },
+    {
+      revenue: 7000,
+      subscription: 189,
+    },
+    {
+      revenue: 9600,
+      subscription: 239,
+    },
+    {
+      revenue: 11244,
+      subscription: 278,
+    },
+    {
+      revenue: 26475,
+      subscription: 189,
+    },
+  ];
+
+  const chartConfig = {
+    revenue: {
+      label: 'Revenue',
+      color: 'hsl(var(--primary))',
+    },
+    subscription: {
+      label: 'Subscriptions',
+      color: 'hsl(var(--primary))',
+    },
+  };
+  return (
       <Card>
         <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
           <CardTitle className='text-sm font-normal'>Subscriptions</CardTitle>
@@ -182,7 +247,7 @@ function CardsStats() {
           <p className='text-xs text-muted-foreground'>
             +180.1% from last month
           </p>
-          <ChartContainer config={chartConfig} className='mt-2 h-[80px] w-full'>
+          <ChartContainer config={chartConfig} className='mt-2 w-full'>
             <BarChart data={data}>
               <Bar
                 dataKey='subscription'
@@ -193,7 +258,6 @@ function CardsStats() {
           </ChartContainer>
         </CardContent>
       </Card>
-    </div>
   );
 }
 
@@ -1581,6 +1645,7 @@ function CardWithForm() {
   CardsCookieSettings,
   CardsChat,
   CardsCreateAccount,
+  CardStatsTwo,
   {
     initialCode: `
 function CardDemo({ className, ...props }) {
