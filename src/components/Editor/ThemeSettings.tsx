@@ -1,5 +1,16 @@
 'use client';
 import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
+import {
   Select,
   SelectContent,
   SelectGroup,
@@ -9,17 +20,23 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { ThemeWithCounts, ThemeWithUserActions } from '@/types/apiReturnTypes';
-import { Dispatch, SetStateAction, useState, useEffect } from 'react';
-import { Button } from '../ui/button';
-import { Textarea } from '../ui/textarea';
-import { CreateMode } from './CreateMode';
-import { useSession } from 'next-auth/react';
-import { Separator } from '../ui/separator';
-import { Input } from '../ui/input';
-import { toast } from 'sonner';
 import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
-
+import { TrashIcon } from 'lucide-react';
+import { useSession } from 'next-auth/react';
+import {
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useState,
+} from 'react';
+import { toast } from 'sonner';
+import { Button } from '../ui/button';
+import { Input } from '../ui/input';
+import { Separator } from '../ui/separator';
+import { Textarea } from '../ui/textarea';
+import { CreateMode } from './CreateMode';
 interface UpdateModeResponse {
   message: string;
   mode: {
@@ -40,17 +57,27 @@ export function EditTheme({
 }) {
   const { data: session } = useSession();
 
-  const [themeMode, setThemeMode] = useState({
-    modeId: theme?.modes[0].id,
-    mode: theme?.modes[0].mode,
-    content: theme?.modes[0].content,
+  const [themeMode, setThemeMode] = useState(() => {
+    if (theme && theme.modes && theme.modes.length > 0) {
+      return {
+        modeId: theme.modes[0].id,
+        mode: theme.modes[0].mode,
+        content: theme.modes[0].content,
+      };
+    }
+    return { modeId: '', mode: '', content: '' };
   });
 
   // Track original values to detect changes
-  const [originalValues, setOriginalValues] = useState({
-    modeId: theme?.modes[0].id,
-    mode: theme?.modes[0].mode,
-    content: theme?.modes[0].content,
+  const [originalValues, setOriginalValues] = useState(() => {
+    if (theme && theme.modes && theme.modes.length > 0) {
+      return {
+        modeId: theme.modes[0].id,
+        mode: theme.modes[0].mode,
+        content: theme.modes[0].content,
+      };
+    }
+    return { modeId: '', mode: '', content: '' };
   });
 
   // State to track if there are changes
@@ -82,14 +109,27 @@ export function EditTheme({
     }
   };
 
+  // Create a single debounced function that persists across renders
+  const debouncedSetTheme = useCallback(
+    debounce((newContent: string) => {
+      setTheme(newContent);
+    }, 300),
+    []
+  );
+
   const handleContentChange = (
     event: React.ChangeEvent<HTMLTextAreaElement>
   ) => {
+    const newContent = event.target.value;
+
+    // Update the local state immediately for a responsive UI
     setThemeMode((prevThemeMode) => ({
       ...prevThemeMode,
-      content: event.target.value,
+      content: newContent,
     }));
-    setTheme(event.target.value);
+
+    // Debounce the more expensive setTheme operation
+    debouncedSetTheme(newContent);
   };
 
   const handleModeNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -119,15 +159,21 @@ export function EditTheme({
       });
     },
 
-    onSuccess() {
+    onSuccess(data) {
       setOriginalValues({
-        modeId: themeMode.modeId,
-        mode: themeMode.mode,
-        content: themeMode.content,
+        modeId: data.data.mode.id,
+        mode: data.data.mode.mode,
+        content: data.data.mode.content,
+      });
+      setThemeMode({
+        modeId: data.data.mode.id,
+        mode: data.data.mode.mode,
+        content: data.data.mode.content,
       });
       toast.success('Mode updated successfully');
       setIsLoading(false);
       setHasChanges(false);
+      window.location.reload();
     },
     onError(error) {
       toast.error('Failed to update mode');
@@ -195,6 +241,26 @@ export function EditTheme({
     }
   };
 
+  const deleteMutation = useMutation({
+    mutationFn: ({ themeId, modeId }: { themeId: string; modeId: string }) => {
+      return axios.post<UpdateModeResponse>('/api/theme/deletemode', {
+        themeId,
+        modeId,
+      });
+    },
+
+    onSuccess() {
+      toast.success('Mode deleted successfully');
+      setIsLoading(false);
+      setHasChanges(false);
+      window.location.reload();
+    },
+    onError(error) {
+      toast.error('Failed to delete mode');
+      setIsLoading(false);
+    },
+  });
+
   return (
     <div className='m-2 h-full'>
       <h1 className='font-bold text-xl mb-2'>{theme?.title}</h1>
@@ -222,15 +288,57 @@ export function EditTheme({
       </span>
       <Separator orientation='horizontal' className='my-3' />
       <div className='flex flex-col'>
-        <div className='flex'>
+        <div className='flex gap-2'>
           <Input value={themeMode.mode} onChange={handleModeNameChange} />
           <Button
-            className='ml-2'
-            onClick={onUpdate}
+            onClick={() => {
+              if (window.confirm('Are you sure you want to update the mode?')) {
+                onUpdate();
+              }
+            }}
             disabled={!hasChanges || isLoading}
           >
             {isLoading ? 'Updating...' : 'Update'}
           </Button>
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button variant={'destructive'}>
+                <TrashIcon />
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  This action cannot be undone. This will permanently delete
+                  your mode.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction
+                  onClick={() => {
+                    if (!themeMode.modeId) {
+                      toast.error('Mode ID is missing');
+                      setIsLoading(false);
+                      return;
+                    }
+                    if (!theme?.id) {
+                      toast.error('Theme ID is missing');
+                      setIsLoading(false);
+                      return;
+                    }
+                    deleteMutation.mutate({
+                      themeId: theme?.id,
+                      modeId: themeMode.modeId,
+                    });
+                  }}
+                >
+                  Continue
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </div>
         <div className='relative mt-2'>
           <Textarea
@@ -251,4 +359,13 @@ export function EditTheme({
       </div>
     </div>
   );
+}
+
+// Helper function for debouncing
+function debounce(func: Function, delay: number) {
+  let timeoutId: NodeJS.Timeout;
+  return (...args: any[]) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => func(...args), delay);
+  };
 }
