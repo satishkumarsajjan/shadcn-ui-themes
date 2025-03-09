@@ -37,6 +37,7 @@ import { Input } from '../ui/input';
 import { Separator } from '../ui/separator';
 import { Textarea } from '../ui/textarea';
 import { CreateMode } from './CreateMode';
+import { prisma } from '@/db/prisma';
 interface UpdateModeResponse {
   message: string;
   mode: {
@@ -292,9 +293,7 @@ export function EditTheme({
           <Input value={themeMode.mode} onChange={handleModeNameChange} />
           <Button
             onClick={() => {
-              if (window.confirm('Are you sure you want to update the mode?')) {
-                onUpdate();
-              }
+              onUpdate();
             }}
             disabled={!hasChanges || isLoading}
           >

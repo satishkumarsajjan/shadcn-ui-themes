@@ -79,9 +79,10 @@ model Theme {
   dislikes    Dislike[]
   modes       ThemeMode[]
   bookmarks   Bookmark[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  tags        ThemeTag[]
+  colors      String[]
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
 }
 
 model ThemeMode {
@@ -123,4 +124,26 @@ model Bookmark {
   theme   Theme  @relation(fields: [themeId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
+}
+
+model Tag {
+  id        String     @id @default(cuid())
+  name      String     @unique
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  themes    ThemeTag[]
+}
+
+model ThemeTag {
+  id        String   @id @default(cuid())
+  theme     Theme    @relation(fields: [themeId], references: [id], onDelete: Cascade)
+  themeId   String
+  tag       Tag      @relation(fields: [tagId], references: [id], onDelete: Cascade)
+  tagId     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([themeId, tagId])
+  @@index([themeId])
+  @@index([tagId])
 }

@@ -20,6 +20,7 @@ import {
   ThumbsDown,
   ThumbsUp,
 } from 'lucide-react';
+import { Link } from 'next-view-transitions';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
@@ -141,7 +142,9 @@ export function ThemeCard({ theme }: { theme: ThemeWithUserActions }) {
         </div>
       </CardHeader>
       <CardContent>
-        <CardTitle className='text-2xl'>{theme.title}</CardTitle>
+        <Link href={`/themes/id/${theme.id}`}>
+          <CardTitle className='text-2xl'>{theme.title}</CardTitle>
+        </Link>
       </CardContent>
       <CardFooter className='flex justify-between'>
         <div className='flex items-center gap-0'>

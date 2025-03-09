@@ -215,9 +215,6 @@ function ThemeEditor({ id }: { id: string }) {
                         backgroundColor: value.includes('%')
                           ? `hsl(${value})`
                           : value,
-                        color: `hsl(${
-                          themeConfig['--foreground'] || '0 0% 100%'
-                        })`,
                       }}
                     >
                       <div className='flex flex-col bg-black bg-opacity-50 p-2 rounded-md'>

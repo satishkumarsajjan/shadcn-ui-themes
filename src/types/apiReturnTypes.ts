@@ -1,5 +1,21 @@
 import { Theme, ThemeMode } from '@prisma/client';
 
+// Tag model
+export interface Tag {
+  id: string;
+  name: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+// Junction table between themes and tags
+export interface ThemeTag {
+  id: string;
+  themeId: string;
+  tagId: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
 // Base theme type from the database with counts
 export type ThemeWithCounts = Theme & {
   modes: ThemeMode[];
@@ -8,6 +24,7 @@ export type ThemeWithCounts = Theme & {
     dislikes: number;
     bookmarks: number;
   };
+  tags: Tag[]; 
 };
 
 // Theme with user interaction data
