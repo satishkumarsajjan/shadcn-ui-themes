@@ -19,7 +19,7 @@ import { signIn, useSession } from 'next-auth/react';
 import { useTransitionRouter } from 'next-view-transitions';
 
 import { useForm } from 'react-hook-form';
-import { BsGithub } from 'react-icons/bs';
+import { BsGithub, BsGoogle } from 'react-icons/bs';
 import { toast } from 'sonner';
 import { z } from 'zod';
 import {
@@ -126,6 +126,17 @@ const CreateNewTheme = ({}: CreateNewThemeProps) => {
             <BsGithub className='h-6 w-6' />
             <span>Login with Github</span>
             <span className='sr-only'>Login with Github</span>
+          </Button>
+          <Button
+            variant={'default'}
+            className='flex w-full justify-center px-2'
+            onClick={() => {
+              signIn('google');
+            }}
+          >
+            <BsGoogle className='h-6 w-6' />
+            <span>Login with Google</span>
+            <span className='sr-only'>Login with Google</span>
           </Button>
         </DialogContent>
       )}

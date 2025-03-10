@@ -4,14 +4,9 @@ import { NextResponse } from 'next/server';
 
 export async function GET(req: Request) {
   try {
-    // Check if user is authenticated
+    // Check if user is authenticated (optional now)
     const session = await auth();
-
-    if (!session) {
-      return new NextResponse('Unauthorized', { status: 401 });
-    }
-
-    const userId = session.user?.id;
+    const userId = session?.user?.id;
 
     // Get query parameters for pagination and filtering
     const url = new URL(req.url);
@@ -95,48 +90,60 @@ export async function GET(req: Request) {
       take: pageSize,
     });
 
-    // Fetch likes, dislikes, and bookmarks by the user
-    const likes = await prisma.like.findMany({
-      where: {
-        userId: userId,
-      },
-      select: {
-        themeId: true,
-      },
-    });
+    // If user is authenticated, fetch their likes, dislikes, and bookmarks
+    let themesWithUserActions = themes;
+    
+    if (userId) {
+      const likes = await prisma.like.findMany({
+        where: {
+          userId: userId,
+        },
+        select: {
+          themeId: true,
+        },
+      });
 
-    const dislikes = await prisma.dislike.findMany({
-      where: {
-        userId: userId,
-      },
-      select: {
-        themeId: true,
-      },
-    });
+      const dislikes = await prisma.dislike.findMany({
+        where: {
+          userId: userId,
+        },
+        select: {
+          themeId: true,
+        },
+      });
 
-    const bookmarks = await prisma.bookmark.findMany({
-      where: {
-        userId: userId,
-      },
-      select: {
-        themeId: true,
-      },
-    });
+      const bookmarks = await prisma.bookmark.findMany({
+        where: {
+          userId: userId,
+        },
+        select: {
+          themeId: true,
+        },
+      });
 
-    const likedThemeIds = new Set(likes.map((like) => like.themeId));
-    const dislikedThemeIds = new Set(
-      dislikes.map((dislike) => dislike.themeId)
-    );
-    const bookmarkedThemeIds = new Set(
-      bookmarks.map((bookmark) => bookmark.themeId)
-    );
+      const likedThemeIds = new Set(likes.map((like) => like.themeId));
+      const dislikedThemeIds = new Set(
+        dislikes.map((dislike) => dislike.themeId)
+      );
+      const bookmarkedThemeIds = new Set(
+        bookmarks.map((bookmark) => bookmark.themeId)
+      );
 
-    const themesWithUserActions = themes.map((theme) => ({
-      ...theme,
-      isLiked: likedThemeIds.has(theme.id),
-      isDisliked: dislikedThemeIds.has(theme.id),
-      isBookmarked: bookmarkedThemeIds.has(theme.id),
-    }));
+      themesWithUserActions = themes.map((theme) => ({
+        ...theme,
+        isLiked: likedThemeIds.has(theme.id),
+        isDisliked: dislikedThemeIds.has(theme.id),
+        isBookmarked: bookmarkedThemeIds.has(theme.id),
+      }));
+    } else {
+      // For unauthenticated users, set all user actions to false
+      themesWithUserActions = themes.map((theme) => ({
+        ...theme,
+        isLiked: false,
+        isDisliked: false,
+        isBookmarked: false,
+      }));
+    }
 
     return NextResponse.json({ 
       themes: themesWithUserActions, 
@@ -153,7 +160,3 @@ export async function GET(req: Request) {
     return new NextResponse('Internal Error', { status: 500 });
   }
 }
-
-// Type definitions for the filter options
-export type SortOption = 'newest' | 'oldest' | 'popular' | 'alphabetical';
-export type TimeframeOption = 'all' | 'today' | 'week' | 'month' | 'year';

@@ -28,19 +28,23 @@ export function NavProjects({
       <SidebarGroupLabel>Menu</SidebarGroupLabel>
       <SidebarMenu>
         {pages.map((item) => (
-          <SidebarMenuItem
-            key={item.name}
-            className={cn(
-              pathname === item.url && 'bg-sidebar-primary rounded-md'
+          <div key={item.url}>
+            {item.enabled && (
+              <SidebarMenuItem
+                key={item.name}
+                className={cn(
+                  pathname === item.url && 'bg-sidebar-primary rounded-md'
+                )}
+              >
+                <SidebarMenuButton asChild>
+                  <Link href={item.url}>
+                    <item.icon />
+                    <span>{item.name}</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
             )}
-          >
-            <SidebarMenuButton asChild>
-              <Link href={item.url}>
-                <item.icon />
-                <span>{item.name}</span>
-              </Link>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
+          </div>
         ))}
       </SidebarMenu>
     </SidebarGroup>
