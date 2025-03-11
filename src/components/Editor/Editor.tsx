@@ -29,11 +29,10 @@ import { Edit } from 'lucide-react';
 interface EditorProps {
   initialCode?: string;
   debounceTime?: number;
-  scope?: any;
+  scope?: Record<string, unknown>;
 }
 
-const Editor = ({
-  initialCode = `function CardWithForm() {
+const DEFAULT_CODE = `function CardWithForm() {
   return (
     <Card className="border-none w-full">
       <CardHeader>
@@ -70,9 +69,15 @@ const Editor = ({
       </CardFooter>
     </Card>
   )
-}`,
+}`;
+
+const Editor = ({
+  initialCode = DEFAULT_CODE,
   debounceTime = 500,
-  scope = useMemo(
+  scope: externalScope,
+}: EditorProps) => {
+  // Move the useMemo hook inside the component body
+  const defaultScope = useMemo(
     () => ({
       Button,
       Card,
@@ -90,14 +95,19 @@ const Editor = ({
       Label,
     }),
     []
-  ),
-}: EditorProps) => {
+  );
+
+  // Use the provided scope or fall back to the default scope
+  const scope = useMemo(
+    () => externalScope || defaultScope,
+    [externalScope, defaultScope]
+  );
+
   const [code, setCode] = useState(initialCode);
   const tailwindScriptRef = useRef<HTMLScriptElement | null>(null);
   const debounceTimeout = useRef<NodeJS.Timeout | null>(null);
   const [debouncedCode, setDebouncedCode] = useState(initialCode);
   const monacoRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
-  scope = useMemo(() => scope, []);
 
   // Add Tailwind CSS runtime styles
   useEffect(() => {

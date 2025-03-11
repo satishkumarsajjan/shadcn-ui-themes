@@ -4,9 +4,7 @@ import { useMyThemes } from '@/hooks/get-myThemes';
 import { useState } from 'react';
 import ThemesGrid from '../themes/themesGrid';
 
-interface MyThemesProps {}
-
-const MyThemes = ({}: MyThemesProps) => {
+const MyThemes = () => {
   const [page, setPage] = useState(1);
   const pageSize = 9;
   const { data, isFetching, error } = useMyThemes(page, pageSize);

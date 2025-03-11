@@ -20,24 +20,17 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { ThemeWithCounts, ThemeWithUserActions } from '@/types/apiReturnTypes';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 import { TrashIcon } from 'lucide-react';
 import { useSession } from 'next-auth/react';
-import {
-  Dispatch,
-  SetStateAction,
-  useCallback,
-  useEffect,
-  useState,
-} from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Separator } from '../ui/separator';
 import { Textarea } from '../ui/textarea';
 import { CreateMode } from './CreateMode';
-import { prisma } from '@/db/prisma';
 interface UpdateModeResponse {
   message: string;
   mode: {
@@ -54,10 +47,10 @@ export function EditTheme({
   setTheme,
 }: {
   theme: ThemeWithCounts | ThemeWithUserActions | undefined;
-  setTheme: Dispatch<SetStateAction<string>>;
+  setTheme: (newTheme: string) => void;
 }) {
   const { data: session } = useSession();
-
+  const queryClient = useQueryClient();
   const [themeMode, setThemeMode] = useState(() => {
     if (theme && theme.modes && theme.modes.length > 0) {
       return {
@@ -110,13 +103,19 @@ export function EditTheme({
     }
   };
 
-  // Create a single debounced function that persists across renders
+  // Create a debounced function that persists across renders using useCallback with inline function
   const debouncedSetTheme = useCallback(
-    debounce((newContent: string) => {
-      setTheme(newContent);
-    }, 300),
-    []
-  );
+    (newContent: string) => {
+      // Define the debounce function inside the callback
+      const debouncedFn = debounce((content: string) => {
+        setTheme(content);
+      }, 300);
+
+      // Call the debounced function
+      debouncedFn(newContent);
+    },
+    [setTheme]
+  ); // Add setTheme as a dependency
 
   const handleContentChange = (
     event: React.ChangeEvent<HTMLTextAreaElement>
@@ -161,56 +160,84 @@ export function EditTheme({
     },
 
     onSuccess(data) {
-      setOriginalValues({
+      // Update both original values and current theme mode state
+      const updatedMode = {
         modeId: data.data.mode.id,
         mode: data.data.mode.mode,
         content: data.data.mode.content,
-      });
-      setThemeMode({
-        modeId: data.data.mode.id,
-        mode: data.data.mode.mode,
-        content: data.data.mode.content,
-      });
-      toast.success('Mode updated successfully');
+      };
+
+      setOriginalValues(updatedMode);
+      setThemeMode(updatedMode);
       setIsLoading(false);
       setHasChanges(false);
-      window.location.reload();
+
+      if (theme?.id) {
+        // Ensure consistent casing in query key (lowercase 'theme')
+        queryClient.invalidateQueries({
+          queryKey: ['theme', theme.id],
+        });
+
+        // Also invalidate the themes list if needed
+        queryClient.invalidateQueries({
+          queryKey: ['theme'],
+          exact: false,
+        });
+      }
     },
-    onError(error) {
-      toast.error('Failed to update mode');
+    onError() {
       setIsLoading(false);
     },
   });
-
   const onUpdate = async () => {
     setIsLoading(true);
-    if (!themeMode.mode) {
-      toast.error('Mode name cannot be null');
-      setIsLoading(false);
-      return;
-    }
-    if (!themeMode.content) {
-      toast.error('Mode content cannot be null');
-      setIsLoading(false);
-      return;
-    }
-    if (!themeMode.modeId) {
-      toast.error('Mode ID is missing');
-      setIsLoading(false);
-      return;
-    }
-    if (!theme?.id) {
-      toast.error('Theme ID is missing');
-      setIsLoading(false);
-      return;
-    }
 
-    mutation.mutate({
-      themeId: theme.id,
-      modeId: themeMode.modeId,
-      content: themeMode.content,
-      mode: themeMode.mode,
-    });
+    try {
+      // Validate all required fields at once
+      const validationErrors = [];
+
+      if (!themeMode.mode) {
+        validationErrors.push('Mode name cannot be null');
+      }
+
+      if (!themeMode.content) {
+        validationErrors.push('Mode content cannot be null');
+      }
+
+      if (!themeMode.modeId) {
+        validationErrors.push('Mode ID is missing');
+      }
+
+      if (!theme?.id) {
+        validationErrors.push('Theme ID is missing');
+      }
+
+      // If any validation errors, show the first one and return early
+      if (validationErrors.length > 0) {
+        toast.error(validationErrors[0]);
+        return;
+      }
+
+      // All validations passed, proceed with mutation
+      await mutation.mutateAsync({
+        themeId: theme!.id,
+        modeId: themeMode.modeId,
+        content: themeMode.content,
+        mode: themeMode.mode,
+      });
+
+      // Optional: Show success toast
+      toast.success('Theme mode updated successfully');
+    } catch (error) {
+      // Handle mutation errors
+      console.error('Failed to update theme mode:', error);
+      toast.error(
+        error instanceof Error ? error.message : 'Failed to update theme mode'
+      );
+    } finally {
+      // Always set loading to false when done, regardless of success or failure
+      setIsLoading(false);
+    }
   };
 
   const formatContent = () => {
@@ -222,10 +249,10 @@ export function EditTheme({
         ...themeMode,
         content: formattedContent,
       });
-    } catch (e) {
+    } catch {
       // If not JSON, apply basic text formatting
       // Split by lines, trim each line, and rejoin
-      //@ts-ignore
+      // (" @ts-expect-error Content might not be a string but we're handling it safely");
       const lines = themeMode.content.split('\n');
       const formattedLines = lines.map((line) => line.trim());
 
@@ -254,9 +281,19 @@ export function EditTheme({
       toast.success('Mode deleted successfully');
       setIsLoading(false);
       setHasChanges(false);
-      window.location.reload();
+      if (theme?.id) {
+        // Invalidate the specific theme query to trigger a refetch
+        queryClient.invalidateQueries({
+          queryKey: ['theme', theme.id],
+        });
+
+        // Also invalidate any themes list queries that might include this theme
+        queryClient.invalidateQueries({
+          queryKey: ['themes'],
+        });
+      }
     },
-    onError(error) {
+    onError() {
       toast.error('Failed to delete mode');
       setIsLoading(false);
     },
@@ -289,56 +326,59 @@ export function EditTheme({
       </span>
       <Separator orientation='horizontal' className='my-3' />
       <div className='flex flex-col'>
-        <div className='flex gap-2'>
-          <Input value={themeMode.mode} onChange={handleModeNameChange} />
-          <Button
-            onClick={() => {
-              onUpdate();
-            }}
-            disabled={!hasChanges || isLoading}
-          >
-            {isLoading ? 'Updating...' : 'Update'}
-          </Button>
-          <AlertDialog>
-            <AlertDialogTrigger asChild>
-              <Button variant={'destructive'}>
-                <TrashIcon />
-              </Button>
-            </AlertDialogTrigger>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                <AlertDialogDescription>
-                  This action cannot be undone. This will permanently delete
-                  your mode.
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction
-                  onClick={() => {
-                    if (!themeMode.modeId) {
-                      toast.error('Mode ID is missing');
-                      setIsLoading(false);
-                      return;
-                    }
-                    if (!theme?.id) {
-                      toast.error('Theme ID is missing');
-                      setIsLoading(false);
-                      return;
-                    }
-                    deleteMutation.mutate({
-                      themeId: theme?.id,
-                      modeId: themeMode.modeId,
-                    });
-                  }}
-                >
-                  Continue
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
-        </div>
+        {session && session.user?.id === theme?.userId && (
+          <div className='flex gap-2'>
+            <Input value={themeMode.mode} onChange={handleModeNameChange} />
+            <Button
+              onClick={() => {
+                onUpdate();
+              }}
+              disabled={!hasChanges || isLoading}
+            >
+              {isLoading ? 'Updating...' : 'Update'}
+            </Button>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button variant={'destructive'}>
+                  <TrashIcon />
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This action cannot be undone. This will permanently delete
+                    your mode.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction
+                    onClick={() => {
+                      if (!themeMode.modeId) {
+                        toast.error('Mode ID is missing');
+                        setIsLoading(false);
+                        return;
+                      }
+                      if (!theme?.id) {
+                        toast.error('Theme ID is missing');
+                        setIsLoading(false);
+                        return;
+                      }
+                      deleteMutation.mutate({
+                        themeId: theme?.id,
+                        modeId: themeMode.modeId,
+                      });
+                    }}
+                  >
+                    Continue
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          </div>
+        )}
+
         <div className='relative mt-2'>
           <Textarea
             value={themeMode.content}
@@ -361,9 +401,12 @@ export function EditTheme({
 }
 
 // Helper function for debouncing
-function debounce(func: Function, delay: number) {
+function debounce<T extends (...args: string[]) => void>(
+  func: T,
+  delay: number
+): (...args: Parameters<T>) => void {
   let timeoutId: NodeJS.Timeout;
-  return (...args: any[]) => {
+  return (...args: Parameters<T>) => {
     clearTimeout(timeoutId);
     timeoutId = setTimeout(() => func(...args), delay);
   };

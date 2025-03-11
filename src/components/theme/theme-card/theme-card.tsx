@@ -1,5 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
-
 'use client';
 import { Button } from '@/components/ui/button';
 import {
@@ -39,7 +37,7 @@ export function ThemeCard({ theme }: { theme: ThemeWithUserActions }) {
   const likeMutation = useMutation({
     mutationFn: (themeId: string) =>
       axios.post('/api/theme/liketheme', { themeId }),
-    onMutate: async (themeId: string) => {
+    onMutate: async () => {
       // Optimistically update the UI
       setIsLiked((prev) => !prev);
       setLikeCounts((prev) => (isLiked ? prev - 1 : prev + 1));
@@ -49,7 +47,7 @@ export function ThemeCard({ theme }: { theme: ThemeWithUserActions }) {
         setDislikeCounts((prev) => prev - 1);
       }
     },
-    onError: (error, themeId, context) => {
+    onError: () => {
       // Revert the optimistic update if the mutation fails
       setIsLiked((prev) => !prev);
       setLikeCounts((prev) => (isLiked ? prev + 1 : prev - 1));
@@ -69,7 +67,7 @@ export function ThemeCard({ theme }: { theme: ThemeWithUserActions }) {
   const dislikeMutation = useMutation({
     mutationFn: (themeId: string) =>
       axios.post('/api/theme/disliketheme', { themeId }),
-    onMutate: async (themeId: string) => {
+    onMutate: async () => {
       // Optimistically update the UI
       setIsDisliked((prev) => !prev);
       setDislikeCounts((prev) => (isDisliked ? prev - 1 : prev + 1));
@@ -79,7 +77,7 @@ export function ThemeCard({ theme }: { theme: ThemeWithUserActions }) {
         setLikeCounts((prev) => prev - 1);
       }
     },
-    onError: (error, themeId, context) => {
+    onError: () => {
       // Revert the optimistic update if the mutation fails
       setIsDisliked((prev) => !prev);
       setDislikeCounts((prev) => (isDisliked ? prev + 1 : prev - 1));
@@ -96,12 +94,12 @@ export function ThemeCard({ theme }: { theme: ThemeWithUserActions }) {
   const bookmarkMutation = useMutation({
     mutationFn: (themeId: string) =>
       axios.post('/api/theme/bookmark', { themeId }),
-    onMutate: async (themeId: string) => {
+    onMutate: async () => {
       // Optimistically update the UI
       setIsBookmarked((prev) => !prev);
       setBookmarkCounts((prev) => (isBookmarked ? prev - 1 : prev + 1));
     },
-    onError: (error, themeId, context) => {
+    onError: () => {
       // Revert the optimistic update if the mutation fails
       setIsBookmarked((prev) => !prev);
       setBookmarkCounts((prev) => (isDisliked ? prev + 1 : prev - 1));
@@ -115,7 +113,7 @@ export function ThemeCard({ theme }: { theme: ThemeWithUserActions }) {
       () => {
         toast.success('Theme link copied to clipboard');
       },
-      (err) => {
+      () => {
         toast.error('Failed to copy theme link');
       }
     );

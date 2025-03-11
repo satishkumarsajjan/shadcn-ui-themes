@@ -4,9 +4,7 @@ import { components } from '@/lib/components';
 import Editor from './Editor';
 import { useEffect, useState, useRef } from 'react';
 
-interface ComponentGridProps {}
-
-const ComponentGrid = ({}: ComponentGridProps) => {
+const ComponentGrid = () => {
   const [mounted, setMounted] = useState(false);
   const [columns, setColumns] = useState(3);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -19,6 +17,9 @@ const ComponentGrid = ({}: ComponentGridProps) => {
   // Adjust grid columns based on container width
   useEffect(() => {
     if (!containerRef.current) return;
+
+    // Store the current value of the ref in a variable
+    const currentContainer = containerRef.current;
 
     const resizeObserver = new ResizeObserver((entries) => {
       for (const entry of entries) {
@@ -34,12 +35,11 @@ const ComponentGrid = ({}: ComponentGridProps) => {
       }
     });
 
-    resizeObserver.observe(containerRef.current);
+    resizeObserver.observe(currentContainer);
 
     return () => {
-      if (containerRef.current) {
-        resizeObserver.unobserve(containerRef.current);
-      }
+      // Use the stored reference in the cleanup function
+      resizeObserver.unobserve(currentContainer);
     };
   }, []);
 

@@ -17,7 +17,7 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 import { LoaderCircle, PlusIcon } from 'lucide-react';
 import { useState } from 'react';
@@ -41,7 +41,7 @@ const formSchema = z.object({
 
 export function CreateMode({ themeId }: { themeId?: string }) {
   const [open, setOpen] = useState(false);
-
+  const queryClient = useQueryClient();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -60,7 +60,12 @@ export function CreateMode({ themeId }: { themeId?: string }) {
       toast.success('Mode created successfully');
       form.reset();
       setOpen(false);
-      window.location.reload();
+      if (themeId) {
+        // Invalidate the specific theme query to trigger a refetch
+        queryClient.invalidateQueries({
+          queryKey: ['Theme', themeId],
+        });
+      }
     },
     onError(error) {
       toast.error('Failed to create mode');

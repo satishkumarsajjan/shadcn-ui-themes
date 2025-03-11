@@ -1,14 +1,7 @@
 'use client';
 import { signIn, signOut, useSession } from 'next-auth/react';
 
-import {
-  ChevronRight,
-  ChevronsUpDown,
-  LogIn,
-  LogOut,
-  LucideLogIn,
-  User,
-} from 'lucide-react';
+import { ChevronsUpDown, LogOut, LucideLogIn, User } from 'lucide-react';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
@@ -26,7 +19,7 @@ import {
   useSidebar,
 } from '@/components/ui/sidebar';
 
-export function NavUser({}: {}) {
+export function NavUser() {
   const { isMobile } = useSidebar();
   const { data: session } = useSession();
 

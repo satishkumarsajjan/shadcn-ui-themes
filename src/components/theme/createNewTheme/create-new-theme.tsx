@@ -32,13 +32,12 @@ import {
   FormMessage,
 } from '../../ui/form';
 
-interface CreateNewThemeProps {}
 const formSchema = z.object({
   theme_name: z.string().min(3, {
     message: 'Theme name must be at least 3 characters.',
   }),
 });
-const CreateNewTheme = ({}: CreateNewThemeProps) => {
+const CreateNewTheme = () => {
   const { data: session } = useSession();
   // if (!session) return <NotSignedIn />;
   const router = useTransitionRouter();

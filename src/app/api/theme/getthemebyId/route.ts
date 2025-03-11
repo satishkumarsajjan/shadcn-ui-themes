@@ -1,6 +1,5 @@
 import { auth } from '@/auth';
 import { prisma } from '@/db/prisma';
-import { log } from 'console';
 import { NextResponse } from 'next/server';
 
 export async function GET(req: Request) {

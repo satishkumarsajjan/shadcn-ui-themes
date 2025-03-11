@@ -1,5 +1,6 @@
 import { auth } from '@/auth';
 import { prisma } from '@/db/prisma';
+import { Prisma } from '@prisma/client';
 import { NextResponse } from 'next/server';
 
 export async function GET(req: Request) {
@@ -19,11 +20,12 @@ export async function GET(req: Request) {
     const timeframe = url.searchParams.get('timeframe') || 'all';
 
     // Build where clause for timeframe filtering
-    let whereClause: any = {};
+    const whereClause: Prisma.ThemeWhereInput = {};
+
     
     if (timeframe !== 'all') {
       const now = new Date();
-      let dateFilter = new Date();
+      const dateFilter = new Date();
       
       switch (timeframe) {
         case 'today':
@@ -44,7 +46,7 @@ export async function GET(req: Request) {
     }
 
     // Build orderBy clause based on sort parameter
-    let orderByClause: any = {};
+    let orderByClause: Prisma.Enumerable<Prisma.ThemeOrderByWithRelationInput> = {};
     
     switch (sortBy) {
       case 'newest':
@@ -61,7 +63,7 @@ export async function GET(req: Request) {
         ];
         break;
       case 'alphabetical':
-        orderByClause = { name: 'asc' };
+        orderByClause = { title: 'asc' };
         break;
       default:
         orderByClause = { createdAt: 'desc' };

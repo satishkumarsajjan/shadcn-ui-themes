@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useMemo, useCallback } from 'react';
 import ComponentGrid from '@/components/Editor/ComponentGrid';
 import { EditTheme } from '../Editor/ThemeSettings';
 import { useThemeById } from '@/hooks/get-theme-by-Id';
@@ -15,7 +15,8 @@ interface ThemeConfig {
   [key: string]: string;
 }
 
-const inputString = `
+// Default theme as a constant outside the component to avoid recreating on each render
+const DEFAULT_THEME = `
       --gradient: #00F5A0;
 
     --background: 169 65% 3.84%;
@@ -57,18 +58,35 @@ const inputString = `
 // Create a cache to store theme data by ID
 const themeCache = new Map<string, string>();
 
+/**
+ * Converts CSS variable string to a JSON object
+ */
+const convertThemeToJSON = (str: string): ThemeConfig => {
+  const regex = /(--[\w-]+):\s([^;]+);/g;
+  let match;
+  const result: ThemeConfig = {};
+
+  while ((match = regex.exec(str)) !== null) {
+    const key = match[1]; // Keep the -- prefix in the key
+    const value = match[2].trim();
+    result[key] = value;
+  }
+
+  return result;
+};
+
 function ThemeEditor({ id }: { id: string }) {
-  const [theme, setTheme] = useState(() => {
-    // Try to get cached theme first
-    return themeCache.get(id) || inputString;
-  });
+  const [theme, setTheme] = useState(() => themeCache.get(id) || DEFAULT_THEME);
   const containerRef = useRef<HTMLDivElement>(null);
-  const [themeConfig, setThemeConfig] = useState<ThemeConfig>({});
+  const styleRef = useRef<HTMLStyleElement | null>(null);
   const { data, isFetching, error } = useThemeById(id);
   const [isLoading, setIsLoading] = useState(true);
   const [initialLoadDone, setInitialLoadDone] = useState(false);
 
-  // First useEffect to handle data fetching and update theme state
+  // Memoize the theme config to avoid recalculating on every render
+  const themeConfig = useMemo(() => convertThemeToJSON(theme), [theme]);
+
+  // Handle data fetching and update theme state
   useEffect(() => {
     if (isFetching) {
       setIsLoading(true);
@@ -96,32 +114,17 @@ function ThemeEditor({ id }: { id: string }) {
     }
   }, [theme, id]);
 
-  // Second useEffect to process the theme and apply styles
+  // Apply theme styles to the DOM
   useEffect(() => {
-    const convertToJSON = (str: string) => {
-      const regex = /(--[\w-]+):\s([^;]+);/g;
-      let match;
-      const result: { [key: string]: string } = {};
-
-      while ((match = regex.exec(str)) !== null) {
-        const key = match[1]; // Keep the -- prefix in the key
-        const value = match[2].trim();
-
-        result[key] = value;
-      }
-
-      return result;
-    };
-
-    const jsonResult = convertToJSON(theme);
-    setThemeConfig(jsonResult);
-
-    // Create a style element for scoped styles
-    const styleElement = document.createElement('style');
+    // Create a style element for scoped styles if it doesn't exist
+    if (!styleRef.current) {
+      styleRef.current = document.createElement('style');
+      document.head.appendChild(styleRef.current);
+    }
 
     // Generate CSS with higher specificity using the container's class
     let cssText = `.theme-editor-${id} {`;
-    for (const [key, value] of Object.entries(jsonResult)) {
+    for (const [key, value] of Object.entries(themeConfig)) {
       cssText += `\n  ${key}: ${value};`;
     }
     cssText += '\n}';
@@ -131,14 +134,21 @@ function ThemeEditor({ id }: { id: string }) {
       border-color: hsl(var(--border)) !important;
     }`;
 
-    styleElement.textContent = cssText;
-    document.head.appendChild(styleElement);
+    styleRef.current.textContent = cssText;
 
     // Cleanup function to remove the style element when component unmounts
     return () => {
-      document.head.removeChild(styleElement);
+      if (styleRef.current) {
+        document.head.removeChild(styleRef.current);
+        styleRef.current = null;
+      }
     };
-  }, [theme, id]);
+  }, [themeConfig, id]);
+
+  // Memoize the theme update handler to avoid recreating on each render
+  const handleThemeUpdate = useCallback((newTheme: string) => {
+    setTheme(newTheme);
+  }, []);
 
   // Show loading state while data is being fetched or processed
   if (isLoading && !initialLoadDone) {
@@ -287,7 +297,7 @@ function ThemeEditor({ id }: { id: string }) {
         <ResizableHandle withHandle />
         <ResizablePanel defaultSize={25}>
           <ScrollArea className='h-screen rounded-md'>
-            <EditTheme theme={data?.theme} setTheme={setTheme} />
+            <EditTheme theme={data?.theme} setTheme={handleThemeUpdate} />
           </ScrollArea>
         </ResizablePanel>
       </ResizablePanelGroup>

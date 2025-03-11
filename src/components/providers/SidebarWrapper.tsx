@@ -6,9 +6,8 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from '@/components/ui/sidebar';
-import { ModeToggle } from '../theme/ModeToggle';
-import { PlusSquare } from 'lucide-react';
 import CreateNewTheme from '../theme/createNewTheme/create-new-theme';
+import { ModeToggle } from '../theme/ModeToggle';
 
 export default function SidebarWrapper({
   children,

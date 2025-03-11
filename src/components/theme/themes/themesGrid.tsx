@@ -11,7 +11,7 @@ import {
 import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
 import { ThemesResponse } from '@/types/apiReturnTypes';
-import { Dispatch, SetStateAction, useState } from 'react';
+import { Dispatch, SetStateAction } from 'react';
 import { ThemeCard } from '../theme-card/theme-card';
 import { ThemeCardSkeleton } from '../theme-card/theme-card-skeleton';
 interface ThemesGridProps {
