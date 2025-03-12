@@ -1,6 +1,6 @@
 import { auth } from '@/auth'
 import { prisma } from '@/db/prisma'
-import { defaultTheme } from '@/lib/constants'
+import { DEFAULT_THEME } from '@/lib/constants'
 import { NextResponse } from 'next/server'
 
 
@@ -42,7 +42,7 @@ export async function POST(req: Request) {
         modes: {
           create: {
             mode: "orange_dark",
-            content: defaultTheme
+            content: DEFAULT_THEME
           }
         }
       }

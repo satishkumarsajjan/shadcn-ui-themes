@@ -1,6 +1,6 @@
 import { auth } from '@/auth';
 import { prisma } from '@/db/prisma';
-import { defaultTheme } from '@/lib/constants';
+import { DEFAULT_THEME } from '@/lib/constants';
 import { NextResponse } from 'next/server';
 
 export async function POST(req: Request) {
@@ -54,7 +54,7 @@ export async function POST(req: Request) {
     const newMode = await prisma.themeMode.create({
       data: {
         mode: modeName,
-        content: defaultTheme,
+        content: DEFAULT_THEME,
         themeId: themeId,
       },
     });

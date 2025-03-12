@@ -13,11 +13,27 @@ import { Button } from '../../ui/button';
 import { Input } from '../../ui/input';
 import { Separator } from '../../ui/separator';
 import { DeleteModeDialog } from './DeleteModeDialog';
-import { EditThemeProps, ModeSelector } from './ModeSelector';
+import { ModeSelector } from './ModeSelector';
 import { ThemeContentEditor } from './ThemeContentEditor';
+import { ThemeWithCounts, ThemeWithUserActions } from '@/types/apiReturnTypes';
+
+// Component props
+export interface EditThemeProps {
+  theme: ThemeWithCounts | ThemeWithUserActions | undefined;
+  setTheme: (content: string) => void;
+  currentTheme?: string;
+  onModeChange?: (modeId: string) => void;
+  onUpdate?: () => void; // Add this prop for explicit updates
+}
 
 // Main component
-export function EditTheme({ theme, setTheme, currentTheme }: EditThemeProps) {
+export function EditTheme({
+  theme,
+  setTheme,
+  currentTheme,
+  onModeChange,
+  onUpdate,
+}: EditThemeProps) {
   const { data: session } = useSession();
   const isOwner = session?.user?.id === theme?.userId;
 
@@ -64,6 +80,11 @@ export function EditTheme({ theme, setTheme, currentTheme }: EditThemeProps) {
         mode: selectedMode.mode,
         content: selectedMode.content,
       });
+
+      // Call the onModeChange prop if provided
+      if (onModeChange) {
+        onModeChange(selectedMode.id);
+      }
     }
   };
 
@@ -170,8 +191,21 @@ export function EditTheme({ theme, setTheme, currentTheme }: EditThemeProps) {
         mode: mode,
         content: content,
       });
+
+      // Call onModeChange if the mode ID changed
+      if (onModeChange && id !== themeMode.modeId) {
+        onModeChange(id);
+      }
+
+      // Call onUpdate to explicitly reset ColorSwatches
+      if (onUpdate) {
+        onUpdate();
+      }
     } catch (error) {
       console.error('Failed to update theme mode:', error);
+      toast.error('Failed to update theme');
+    } finally {
+      setIsLoading(false);
     }
   };
 

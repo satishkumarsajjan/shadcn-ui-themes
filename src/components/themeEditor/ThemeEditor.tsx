@@ -56,6 +56,17 @@ function ThemeEditor({ id }: { id: string }) {
   const [isLoading, setIsLoading] = useState(true);
   const [initialLoadDone, setInitialLoadDone] = useState(false);
 
+  // Add state to track the current mode ID
+  const [currentModeId, setCurrentModeId] = useState<string>('');
+
+  // Add a key to force re-mount of ColorSwatches when mode changes or updates happen
+  const [colorSwatchesKey, setColorSwatchesKey] = useState(0);
+
+  // Function to explicitly reset the ColorSwatches component
+  const resetColorSwatches = useCallback(() => {
+    setColorSwatchesKey((prev) => prev + 1);
+  }, []);
+
   // Memoize the theme config to avoid recalculating on every render
   const themeConfig = useMemo(() => convertThemeToJSON(theme), [theme]);
 
@@ -113,6 +124,12 @@ function ThemeEditor({ id }: { id: string }) {
     if (!initialLoadDone && data?.theme?.modes && data.theme.modes.length > 0) {
       const newTheme = data.theme.modes[0].content;
       setTheme(newTheme);
+
+      // Set the initial mode ID
+      if (data.theme.modes[0].id) {
+        setCurrentModeId(data.theme.modes[0].id);
+      }
+
       // Cache the theme data
       themeCache.set(id, newTheme);
       setInitialLoadDone(true);
@@ -164,6 +181,18 @@ function ThemeEditor({ id }: { id: string }) {
   const handleThemeUpdate = useCallback((newTheme: string) => {
     setTheme(newTheme);
   }, []);
+
+  // Handle mode change from EditTheme
+  const handleModeChange = useCallback(
+    (modeId: string) => {
+      if (modeId !== currentModeId) {
+        setCurrentModeId(modeId);
+        // Reset ColorSwatches when mode changes
+        resetColorSwatches();
+      }
+    },
+    [currentModeId, resetColorSwatches]
+  );
 
   // Show loading state while data is being fetched or processed
   if (isLoading && !initialLoadDone) {
@@ -224,6 +253,7 @@ function ThemeEditor({ id }: { id: string }) {
               </div>
 
               <ColorSwatches
+                key={colorSwatchesKey} // Force re-mount when mode changes
                 themeConfig={themeConfig}
                 onThemeChange={handleColorChange}
               />
@@ -293,6 +323,8 @@ function ThemeEditor({ id }: { id: string }) {
               theme={data?.theme}
               setTheme={handleThemeUpdate}
               currentTheme={theme} // Pass the current theme to EditTheme
+              onModeChange={handleModeChange} // Pass the mode change handler
+              onUpdate={resetColorSwatches} // Pass the reset function for updates
             />
           </ScrollArea>
         </ResizablePanel>
