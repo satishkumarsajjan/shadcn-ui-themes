@@ -1,6 +1,6 @@
 import { ThemeSortBy, ThemeTimeframe } from "@/types/ThemeFilters"
 
-export const defaultTheme = `
+export const DEFAULT_THEME = `
     --background: 20 14.3% 4.1%;
     --foreground: 60 9.1% 97.8%;
     --card: 20 14.3% 4.1%;

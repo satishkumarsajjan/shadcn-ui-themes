@@ -10,50 +10,12 @@ import {
   ResizablePanelGroup,
 } from '../ui/resizable';
 import { ScrollArea } from '../ui/scroll-area';
+import { Check } from 'lucide-react';
+import { DEFAULT_THEME } from '@/lib/constants';
 
 interface ThemeConfig {
   [key: string]: string;
 }
-
-// Default theme as a constant outside the component to avoid recreating on each render
-const DEFAULT_THEME = `
-      --gradient: #00F5A0;
-
-    --background: 169 65% 3.84%;
-    --foreground: 169 10% 97.4%;
-
-    --muted: 169 50% 14.399999999999999%;
-    --muted-foreground: 169 10% 54.8%;
-
-    --popover: 169 45% 6.24%;
-    --popover-foreground: 169 10% 97.4%;
-
-    --card: 169 45% 6.24%;
-    --card-foreground: 169 10% 97.4%;
-
-    --border: 169 50% 14.399999999999999%;
-    --input: 169 50% 14.399999999999999%;
-
-    --primary: 169 100% 48%;
-    --primary-foreground: 169 10% 4.8%;
-
-    --secondary: 169 50% 14.399999999999999%;
-    --secondary-foreground: 169 10% 97.4%;
-
-    --accent: 169 50% 14.399999999999999%;
-    --accent-foreground: 169 10% 97.4%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 169 10% 97.4%;
-
-    --ring: 169 100% 48%;
-    --radius: 0.5rem;
-    --chart-1: 12 76% 61%;
-    --chart-2: 173 58% 39%;
-    --chart-3: 197 37% 24%;
-    --chart-4: 43 74% 66%;
-    --chart-5: 27 87% 67%;
-`;
 
 // Create a cache to store theme data by ID
 const themeCache = new Map<string, string>();
@@ -86,6 +48,32 @@ function ThemeEditor({ id }: { id: string }) {
   // Memoize the theme config to avoid recalculating on every render
   const themeConfig = useMemo(() => convertThemeToJSON(theme), [theme]);
 
+  // Add state for selected colors
+  const [selectedColors, setSelectedColors] = useState<string[]>([]);
+
+  // Handle color swatch click
+  const handleColorSwatchClick = useCallback((key: string) => {
+    setSelectedColors((prev) => {
+      // If color is already selected, remove it
+      if (prev.includes(key)) {
+        return prev.filter((color) => color !== key);
+      }
+      // If we already have 6 colors selected and trying to add more, replace the oldest one
+      if (prev.length >= 6) {
+        return [...prev.slice(1), key];
+      }
+      // Otherwise add the new color
+      return [...prev, key];
+    });
+  }, []);
+
+  // Get the selected colors data
+  const selectedColorsData = useMemo(() => {
+    return selectedColors.map((key) => ({
+      key,
+      value: themeConfig[key],
+    }));
+  }, [selectedColors, themeConfig]);
   // Handle data fetching and update theme state
   useEffect(() => {
     if (isFetching) {
@@ -174,7 +162,7 @@ function ThemeEditor({ id }: { id: string }) {
   }
 
   return (
-    <div className='mx-4'>
+    <div className='m-4'>
       <ResizablePanelGroup direction='horizontal'>
         <ResizablePanel className='h-fit overflow-scroll'>
           <ScrollArea className='h-screen rounded-md'>
@@ -204,9 +192,45 @@ function ThemeEditor({ id }: { id: string }) {
                     })`,
                   }}
                 >
-                  This component has its own scoped theme configuration.
+                  Click on color swatches to select up to 6 representative
+                  colors.
                 </p>
               </div>
+
+              {/* Selected colors section */}
+              {selectedColors.length > 0 && (
+                <div className='mb-6'>
+                  <h3
+                    className='text-lg font-semibold mb-2'
+                    style={{
+                      color: `hsl(${
+                        themeConfig['--foreground'] || '0 0% 100%'
+                      })`,
+                    }}
+                  >
+                    Selected Colors ({selectedColors.length}/6)
+                  </h3>
+                  <div className='flex gap-2 flex-wrap'>
+                    {selectedColorsData.map(({ key, value }, index) => (
+                      <div
+                        key={`selected-${key}`}
+                        className='p-4 rounded flex flex-col items-center justify-center shadow-md cursor-pointer'
+                        style={{
+                          backgroundColor: value.includes('%')
+                            ? `hsl(${value})`
+                            : value,
+                        }}
+                        onClick={() => handleColorSwatchClick(key)}
+                      >
+                        <div className='flex flex-col bg-black bg-opacity-50 p-2 rounded-md text-white'>
+                          <span className='text-xs font-mono'>{key}</span>
+                          <span className='text-xs'>{value}</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               {/* Color swatches to demonstrate the theme */}
               <div className='flex flex-wrap gap-2 mb-4 justify-self-stretch'>
@@ -217,24 +241,34 @@ function ThemeEditor({ id }: { id: string }) {
                       !key.includes('gradient') &&
                       !key.includes('radius')
                   )
-                  .map(([key, value]) => (
-                    <div
-                      key={key}
-                      className='p-6 rounded flex flex-col items-center justify-center shadow-md'
-                      style={{
-                        backgroundColor: value.includes('%')
-                          ? `hsl(${value})`
-                          : value,
-                      }}
-                    >
-                      <div className='flex flex-col bg-black bg-opacity-50 p-2 rounded-md'>
-                        <span className='text-xs font-mono'>{key}</span>
-                        <span className='text-xs'>{value}</span>
+                  .map(([key, value]) => {
+                    const isSelected = selectedColors.includes(key);
+                    return (
+                      <div
+                        key={key}
+                        className={`p-6 rounded flex flex-col items-center justify-center shadow-md cursor-pointer relative ${
+                          isSelected ? 'ring-2 ring-offset-2 ring-primary' : ''
+                        }`}
+                        style={{
+                          backgroundColor: value.includes('%')
+                            ? `hsl(${value})`
+                            : value,
+                        }}
+                        onClick={() => handleColorSwatchClick(key)}
+                      >
+                        {isSelected && (
+                          <div className='absolute top-1 right-1 bg-primary text-primary-foreground rounded-full p-1'>
+                            <Check size={12} />
+                          </div>
+                        )}
+                        <div className='flex flex-col bg-black bg-opacity-50 p-2 rounded-md text-white'>
+                          <span className='text-xs font-mono'>{key}</span>
+                          <span className='text-xs'>{value}</span>
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    );
+                  })}
               </div>
-
               {/* Main content using the theme */}
               <div
                 className='border rounded-md p-4 mb-4'

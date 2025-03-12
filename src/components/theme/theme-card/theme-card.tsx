@@ -127,7 +127,7 @@ export function ThemeCard({ theme }: { theme: ThemeWithUserActions }) {
     '#355c7d',
   ];
   return (
-    <Card className='relative shadow-none bg-neutral-900'>
+    <Card className='relative shadow-none'>
       <CardHeader>
         <div className='w-full h-[300px] grid grid-cols-6 rounded-md overflow-hidden'>
           {colors?.map((item) => (
