@@ -1,19 +1,19 @@
 'use client';
 
-import { useEffect, useRef, useState, useMemo, useCallback } from 'react';
 import ComponentGrid from '@/components/Editor/ComponentGrid';
-import { EditTheme } from '../Editor/ThemeSettings';
 import { useThemeById } from '@/hooks/get-theme-by-Id';
+import { DEFAULT_THEME } from '@/lib/constants';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { EditTheme } from '../Editor/ThemeSettings/ThemeSettings';
 import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
 } from '../ui/resizable';
 import { ScrollArea } from '../ui/scroll-area';
-import { Check } from 'lucide-react';
-import { DEFAULT_THEME } from '@/lib/constants';
+import ColorSwatches from './ColorSwatches';
 
-interface ThemeConfig {
+export interface ThemeConfig {
   [key: string]: string;
 }
 
@@ -37,6 +37,17 @@ const convertThemeToJSON = (str: string): ThemeConfig => {
   return result;
 };
 
+/**
+ * Converts ThemeConfig object back to CSS variable string
+ */
+const convertJSONToTheme = (config: ThemeConfig): string => {
+  let themeStr = '';
+  for (const [key, value] of Object.entries(config)) {
+    themeStr += `${key}: ${value};\n`;
+  }
+  return themeStr;
+};
+
 function ThemeEditor({ id }: { id: string }) {
   const [theme, setTheme] = useState(() => themeCache.get(id) || DEFAULT_THEME);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -48,6 +59,22 @@ function ThemeEditor({ id }: { id: string }) {
   // Memoize the theme config to avoid recalculating on every render
   const themeConfig = useMemo(() => convertThemeToJSON(theme), [theme]);
 
+  // Handle color change from ColorSwatches
+  const handleColorChange = useCallback((key: string, colorValue: string) => {
+    // Create a new theme by replacing the specific CSS variable
+    setTheme((prevTheme) => {
+      const themeLines = prevTheme.split('\n');
+      const updatedThemeLines = themeLines.map((line) => {
+        const trimmedLine = line.trim();
+        if (trimmedLine.startsWith(key + ':')) {
+          return `${key}: ${colorValue};`;
+        }
+        return line;
+      });
+
+      return updatedThemeLines.join('\n');
+    });
+  }, []);
   // Add state for selected colors
   const [selectedColors, setSelectedColors] = useState<string[]>([]);
 
@@ -192,83 +219,14 @@ function ThemeEditor({ id }: { id: string }) {
                     })`,
                   }}
                 >
-                  Click on color swatches to select up to 6 representative
-                  colors.
+                  Click on color swatches to configure their color values
                 </p>
               </div>
 
-              {/* Selected colors section */}
-              {selectedColors.length > 0 && (
-                <div className='mb-6'>
-                  <h3
-                    className='text-lg font-semibold mb-2'
-                    style={{
-                      color: `hsl(${
-                        themeConfig['--foreground'] || '0 0% 100%'
-                      })`,
-                    }}
-                  >
-                    Selected Colors ({selectedColors.length}/6)
-                  </h3>
-                  <div className='flex gap-2 flex-wrap'>
-                    {selectedColorsData.map(({ key, value }, index) => (
-                      <div
-                        key={`selected-${key}`}
-                        className='p-4 rounded flex flex-col items-center justify-center shadow-md cursor-pointer'
-                        style={{
-                          backgroundColor: value.includes('%')
-                            ? `hsl(${value})`
-                            : value,
-                        }}
-                        onClick={() => handleColorSwatchClick(key)}
-                      >
-                        <div className='flex flex-col bg-black bg-opacity-50 p-2 rounded-md text-white'>
-                          <span className='text-xs font-mono'>{key}</span>
-                          <span className='text-xs'>{value}</span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Color swatches to demonstrate the theme */}
-              <div className='flex flex-wrap gap-2 mb-4 justify-self-stretch'>
-                {Object.entries(themeConfig)
-                  .filter(
-                    ([key]) =>
-                      key.includes('--') &&
-                      !key.includes('gradient') &&
-                      !key.includes('radius')
-                  )
-                  .map(([key, value]) => {
-                    const isSelected = selectedColors.includes(key);
-                    return (
-                      <div
-                        key={key}
-                        className={`p-6 rounded flex flex-col items-center justify-center shadow-md cursor-pointer relative ${
-                          isSelected ? 'ring-2 ring-offset-2 ring-primary' : ''
-                        }`}
-                        style={{
-                          backgroundColor: value.includes('%')
-                            ? `hsl(${value})`
-                            : value,
-                        }}
-                        onClick={() => handleColorSwatchClick(key)}
-                      >
-                        {isSelected && (
-                          <div className='absolute top-1 right-1 bg-primary text-primary-foreground rounded-full p-1'>
-                            <Check size={12} />
-                          </div>
-                        )}
-                        <div className='flex flex-col bg-black bg-opacity-50 p-2 rounded-md text-white'>
-                          <span className='text-xs font-mono'>{key}</span>
-                          <span className='text-xs'>{value}</span>
-                        </div>
-                      </div>
-                    );
-                  })}
-              </div>
+              <ColorSwatches
+                themeConfig={themeConfig}
+                onThemeChange={handleColorChange}
+              />
               {/* Main content using the theme */}
               <div
                 className='border rounded-md p-4 mb-4'
@@ -331,7 +289,11 @@ function ThemeEditor({ id }: { id: string }) {
         <ResizableHandle withHandle />
         <ResizablePanel defaultSize={25}>
           <ScrollArea className='h-screen rounded-md'>
-            <EditTheme theme={data?.theme} setTheme={handleThemeUpdate} />
+            <EditTheme
+              theme={data?.theme}
+              setTheme={handleThemeUpdate}
+              currentTheme={theme} // Pass the current theme to EditTheme
+            />
           </ScrollArea>
         </ResizablePanel>
       </ResizablePanelGroup>

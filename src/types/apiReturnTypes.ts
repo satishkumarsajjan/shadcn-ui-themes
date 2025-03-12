@@ -69,3 +69,15 @@ export interface ThemesResponse {
   themes: ThemeWithUserActions[];
   totalCount: number;
 }
+
+export interface UpdateModeResponse {
+  message: string;
+  mode: {
+    id: string;
+    createdAt: Date;
+    updatedAt: Date;
+    mode: string;
+    themeId: string;
+    content: string;
+  };
+}
