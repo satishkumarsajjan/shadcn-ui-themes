@@ -204,7 +204,7 @@ export const ThemeContentEditor = ({
         placeholder='Type your theme here.'
         className='h-[550px] font-mono text-sm resize-none leading-relaxed'
         spellCheck={false}
-        wrap='off'
+        wrap='on'
       />
     </div>
   );

@@ -7,6 +7,7 @@ import { Input } from '../ui/input';
 interface ColorPickerProps {
   swatchColor: string;
   onChange?: (color: HslColor) => void;
+  isHex?: boolean;
 }
 
 // Parse HSL string to HslColor object
