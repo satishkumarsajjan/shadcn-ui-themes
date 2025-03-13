@@ -1,6 +1,6 @@
 'use client';
 import { useSession } from 'next-auth/react';
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { toast } from 'sonner';
 
 // UI Components
@@ -16,6 +16,7 @@ import { DeleteModeDialog } from './DeleteModeDialog';
 import { ModeSelector } from './ModeSelector';
 import { ThemeContentEditor } from './ThemeContentEditor';
 import { ThemeWithCounts, ThemeWithUserActions } from '@/types/apiReturnTypes';
+import ThemeThumbnail from './ThemeThumbnail';
 
 // Component props
 export interface EditThemeProps {
@@ -36,7 +37,18 @@ export function EditTheme({
 }: EditThemeProps) {
   const { data: session } = useSession();
   const isOwner = session?.user?.id === theme?.userId;
-
+  const [themeColors, setThemeColors] = useState([
+    '#1a5fb4', // Blue
+    '#26a269', // Green
+    '#e66100', // Orange
+    '#c01c28', // Red
+    '#813d9c', // Purple
+    '#2ec27e', // Teal
+    '#f5c211', // Yellow
+    '#3d3846', // Dark Gray
+    '#9a9996', // Light Gray
+    '#241f31', // Dark Purple
+  ]); // Then in your JSX
   const { themeMode, setThemeMode, setOriginalValues, hasChanges } =
     useThemeModeState(theme, currentTheme);
 
@@ -47,7 +59,7 @@ export function EditTheme({
   const debouncedSetTheme = useCallback(
     debounce((content: string) => {
       setTheme(content);
-    }, 300),
+    }, 600),
     [setTheme]
   );
 
@@ -230,15 +242,12 @@ export function EditTheme({
   return (
     <div className='m-2 h-full'>
       <h1 className='font-bold text-xl mb-2'>{theme?.title}</h1>
-
       <ModeSelector
         theme={theme}
         themeMode={themeMode}
         onModeChange={handleModeChange}
       />
-
       <Separator orientation='horizontal' className='my-3' />
-
       <div className='flex flex-col'>
         {isOwner && (
           <div className='flex gap-2'>
@@ -261,6 +270,12 @@ export function EditTheme({
           onFormat={formatContent}
         />
       </div>
+      <Separator orientation='horizontal' className='my-3' />
+
+      <ThemeThumbnail
+        colors={themeColors}
+        onColorsChange={(newColors) => setThemeColors(newColors)}
+      />
     </div>
   );
 }
