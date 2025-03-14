@@ -8,24 +8,67 @@ import {
   HoverCardTrigger,
 } from '@/components/ui/hover-card';
 import { Label } from '@/components/ui/label';
-import { PlusCircleIcon } from 'lucide-react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import axios from 'axios';
+import { PlusCircleIcon, Save } from 'lucide-react';
+import { useState } from 'react';
+import { toast } from 'sonner';
 
 interface ThemeThumbnailProps {
-  colors: string[];
-  onColorsChange?: (newColors: string[]) => void;
+  themeId: string;
+  theme_Colors?: string[];
 }
 
-const ThemeThumbnail = ({ colors, onColorsChange }: ThemeThumbnailProps) => {
+const ThemeThumbnail = ({ themeId, theme_Colors }: ThemeThumbnailProps) => {
+  const [themeColors, setThemeColors] = useState(
+    theme_Colors || [
+      '#1a5fb4', // Blue
+      '#26a269', // Green
+      '#e66100', // Orange
+      '#c01c28', // Red
+      '#813d9c', // Purple
+      '#2ec27e', // Teal
+      '#f5c211', // Yellow
+      '#3d3846', // Dark Gray
+      '#9a9996', // Light Gray
+      '#241f31', // Dark Purple
+    ]
+  ); // Then in your JSX
+  const queryClient = useQueryClient();
+  const mutation = useMutation({
+    mutationFn: (colors: string[]) => {
+      return axios.post('/api/theme/colors', {
+        themeId: themeId,
+        colors: colors,
+      });
+    },
+    onSuccess() {
+      toast.success('Theme colors updated successfully');
+      if (themeId) {
+        // Invalidate the specific theme query to trigger a refetch
+        queryClient.invalidateQueries({
+          queryKey: ['Theme', themeId],
+        });
+      }
+    },
+    onError(error) {
+      toast.error('Failed to update theme colors');
+      console.error(error);
+    },
+  });
+  const onColorsChange = (newColors: string[]) => setThemeColors(newColors);
   const handleColorChange = (newColor: string, index: number) => {
     if (onColorsChange) {
-      const updatedColors = [...colors];
+      const updatedColors = [...themeColors];
       updatedColors[index] = newColor;
       onColorsChange(updatedColors);
     }
   };
 
   const handleRemoveColor = (indexToRemove: number) => {
-    const updatedColors = colors.filter((_, index) => index !== indexToRemove);
+    const updatedColors = themeColors.filter(
+      (_, index) => index !== indexToRemove
+    );
 
     // If parent component provided a callback, use it
     if (onColorsChange) {
@@ -36,8 +79,23 @@ const ThemeThumbnail = ({ colors, onColorsChange }: ThemeThumbnailProps) => {
   const handleAddColor = () => {
     if (onColorsChange) {
       // Add a default color (black)
-      onColorsChange([...colors, '#000000']);
+      onColorsChange([...themeColors, '#000000']);
     }
+  };
+
+  const handleSaveColors = () => {
+    // Validate colors before saving
+    if (themeColors.length < 4) {
+      toast.error('At least 4 colors are required', {});
+      return;
+    }
+    if (themeColors.length > 8) {
+      toast.error('Maximum 8 colors are allowed');
+      return;
+    }
+
+    // Save colors using the mutation
+    mutation.mutate(themeColors);
   };
 
   return (
@@ -49,7 +107,7 @@ const ThemeThumbnail = ({ colors, onColorsChange }: ThemeThumbnailProps) => {
         </Button>
       </span>
       <div className='flex flex-wrap gap-2 mt-2'>
-        {colors.map((color, index) => (
+        {themeColors.map((color, index) => (
           <HoverCard key={index}>
             <HoverCardTrigger>
               <div key={`${color}-${index}`} className='relative group'>
@@ -76,6 +134,17 @@ const ThemeThumbnail = ({ colors, onColorsChange }: ThemeThumbnailProps) => {
             </HoverCardContent>
           </HoverCard>
         ))}
+      </div>
+
+      <div className='mt-4 flex justify-end'>
+        <Button
+          onClick={handleSaveColors}
+          disabled={mutation.isPending}
+          className='flex items-center gap-2'
+        >
+          <Save size={16} />
+          {mutation.isPending ? 'Saving...' : 'Save Colors'}
+        </Button>
       </div>
     </div>
   );

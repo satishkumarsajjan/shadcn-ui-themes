@@ -37,18 +37,7 @@ export function EditTheme({
 }: EditThemeProps) {
   const { data: session } = useSession();
   const isOwner = session?.user?.id === theme?.userId;
-  const [themeColors, setThemeColors] = useState([
-    '#1a5fb4', // Blue
-    '#26a269', // Green
-    '#e66100', // Orange
-    '#c01c28', // Red
-    '#813d9c', // Purple
-    '#2ec27e', // Teal
-    '#f5c211', // Yellow
-    '#3d3846', // Dark Gray
-    '#9a9996', // Light Gray
-    '#241f31', // Dark Purple
-  ]); // Then in your JSX
+
   const { themeMode, setThemeMode, setOriginalValues, hasChanges } =
     useThemeModeState(theme, currentTheme);
 
@@ -270,12 +259,15 @@ export function EditTheme({
           onFormat={formatContent}
         />
       </div>
-      <Separator orientation='horizontal' className='my-3' />
-
-      <ThemeThumbnail
-        colors={themeColors}
-        onColorsChange={(newColors) => setThemeColors(newColors)}
-      />
+      {isOwner && (
+        <>
+          <Separator orientation='horizontal' className='my-3' />
+          <ThemeThumbnail
+            themeId={theme?.id as string}
+            theme_Colors={theme?.colors}
+          />
+        </>
+      )}
     </div>
   );
 }

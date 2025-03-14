@@ -18,6 +18,8 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from '@/components/ui/sidebar';
+import { Dialog, DialogTrigger } from '../ui/dialog';
+import SignInDialogContent from '../auth/SignInDialogContent';
 
 export function NavUser() {
   const { isMobile } = useSidebar();
@@ -27,21 +29,25 @@ export function NavUser() {
     return (
       <SidebarMenu>
         <SidebarMenuItem>
-          <SidebarMenuButton
-            size='lg'
-            className='data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground'
-            onClick={() => signIn('github')}
-          >
-            <Avatar className='h-8 w-8 rounded-lg'>
-              <AvatarFallback className='rounded-lg'>
-                <User />
-              </AvatarFallback>
-            </Avatar>
-            <div className='grid flex-1 text-left text-sm leading-tight'>
-              <span className='truncate font-semibold'>Sign in</span>
-            </div>
-            <LucideLogIn className='ml-auto size-4' />
-          </SidebarMenuButton>
+          <Dialog>
+            <DialogTrigger asChild>
+              <SidebarMenuButton
+                size='lg'
+                className='data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground'
+              >
+                <Avatar className='h-8 w-8 rounded-lg'>
+                  <AvatarFallback className='rounded-lg'>
+                    <User />
+                  </AvatarFallback>
+                </Avatar>
+                <div className='grid flex-1 text-left text-sm leading-tight'>
+                  <span className='truncate font-semibold'>Sign in</span>
+                </div>
+                <LucideLogIn className='ml-auto size-4' />
+              </SidebarMenuButton>
+            </DialogTrigger>
+            <SignInDialogContent />
+          </Dialog>
         </SidebarMenuItem>
       </SidebarMenu>
     );
