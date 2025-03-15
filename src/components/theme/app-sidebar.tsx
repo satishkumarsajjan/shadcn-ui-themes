@@ -19,6 +19,7 @@ import {
 import { useSession } from 'next-auth/react';
 import { NavProjects } from './nav-projects';
 import { NavUser } from './nav-user';
+import Logo from '../Logo';
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { data: session } = useSession();
@@ -54,8 +55,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     <Sidebar collapsible='offcanvas' variant='floating' {...props}>
       <SidebarHeader>
         <div className='flex justify-between items-center gap-2'>
-          <div className='flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground'>
-            <GraduationCap className='size-4' />
+          <div className='flex aspect-square size-8 items-center justify-center rounded-lg'>
+            <Logo />
           </div>
           <div className='grid flex-1 text-left text-sm leading-tight'>
             <span className='truncate font-semibold'>Themes</span>
