@@ -37,16 +37,6 @@ const convertThemeToJSON = (str: string): ThemeConfig => {
   return result;
 };
 
-/**
- * Converts ThemeConfig object back to CSS variable string
- */
-const convertJSONToTheme = (config: ThemeConfig): string => {
-  let themeStr = '';
-  for (const [key, value] of Object.entries(config)) {
-    themeStr += `${key}: ${value};\n`;
-  }
-  return themeStr;
-};
 
 function ThemeEditor({ id }: { id: string }) {
   const [theme, setTheme] = useState(() => themeCache.get(id) || DEFAULT_THEME);
@@ -105,13 +95,7 @@ function ThemeEditor({ id }: { id: string }) {
     });
   }, []);
 
-  // Get the selected colors data
-  const selectedColorsData = useMemo(() => {
-    return selectedColors.map((key) => ({
-      key,
-      value: themeConfig[key],
-    }));
-  }, [selectedColors, themeConfig]);
+
   // Handle data fetching and update theme state
   useEffect(() => {
     if (isFetching) {

@@ -8,6 +8,7 @@ import {
   HoverCardTrigger,
 } from '@/components/ui/hover-card';
 import { Label } from '@/components/ui/label';
+import { DEFAULT_THEME_COLORS } from '@/lib/constants';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 import { PlusCircleIcon, Save } from 'lucide-react';
@@ -21,18 +22,7 @@ interface ThemeThumbnailProps {
 
 const ThemeThumbnail = ({ themeId, theme_Colors }: ThemeThumbnailProps) => {
   const [themeColors, setThemeColors] = useState(
-    theme_Colors || [
-      '#1a5fb4', // Blue
-      '#26a269', // Green
-      '#e66100', // Orange
-      '#c01c28', // Red
-      '#813d9c', // Purple
-      '#2ec27e', // Teal
-      '#f5c211', // Yellow
-      '#3d3846', // Dark Gray
-      '#9a9996', // Light Gray
-      '#241f31', // Dark Purple
-    ]
+    theme_Colors || DEFAULT_THEME_COLORS
   ); // Then in your JSX
   const queryClient = useQueryClient();
   const mutation = useMutation({

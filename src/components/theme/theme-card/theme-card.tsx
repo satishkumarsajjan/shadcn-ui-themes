@@ -123,20 +123,22 @@ export function ThemeCard({ theme }: { theme: ThemeWithUserActions }) {
   return (
     <Card className='relative shadow-none'>
       <CardHeader>
-        <div
-          className={`w-full h-[300px] grid rounded-md overflow-hidden`}
-          style={{
-            gridTemplateColumns: `repeat(${colors.length}, minmax(0, 1fr))`,
-          }}
-        >
-          {colors?.map((item) => (
-            <div
-              key={item}
-              className={`col-span-1 h-full`}
-              style={{ backgroundColor: item }}
-            ></div>
-          ))}
-        </div>
+        <Link href={`/themes/id/${theme.id}`}>
+          <div
+            className={`w-full h-[300px] grid rounded-md overflow-hidden`}
+            style={{
+              gridTemplateColumns: `repeat(${colors.length}, minmax(0, 1fr))`,
+            }}
+          >
+            {colors?.map((item) => (
+              <div
+                key={item}
+                className={`col-span-1 h-full`}
+                style={{ backgroundColor: item }}
+              ></div>
+            ))}
+          </div>
+        </Link>
       </CardHeader>
       <CardContent>
         <Link href={`/themes/id/${theme.id}`}>
