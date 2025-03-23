@@ -33,6 +33,7 @@ export function ThemeCard({ theme }: { theme: ThemeWithUserActions }) {
   const [bookmarkCounts, setBookmarkCounts] = useState<number>(
     theme._count.bookmarks
   );
+  const [colors, setColors] = useState(theme.colors);
 
   const likeMutation = useMutation({
     mutationFn: (themeId: string) =>
@@ -118,26 +119,26 @@ export function ThemeCard({ theme }: { theme: ThemeWithUserActions }) {
       }
     );
   };
-  const colors = [
-    '#ccd5ae',
-    '#f8b595',
-    '#f67280',
-    '#c06c84',
-    '#6c5b7b',
-    '#355c7d',
-  ];
+
   return (
     <Card className='relative shadow-none'>
       <CardHeader>
-        <div className='w-full h-[300px] grid grid-cols-6 rounded-md overflow-hidden'>
-          {colors?.map((item) => (
-            <div
-              key={item}
-              className={`col-span-1 h-full`}
-              style={{ backgroundColor: item }}
-            ></div>
-          ))}
-        </div>
+        <Link href={`/themes/id/${theme.id}`}>
+          <div
+            className={`w-full h-[300px] grid rounded-md overflow-hidden`}
+            style={{
+              gridTemplateColumns: `repeat(${colors.length}, minmax(0, 1fr))`,
+            }}
+          >
+            {colors?.map((item) => (
+              <div
+                key={item}
+                className={`col-span-1 h-full`}
+                style={{ backgroundColor: item }}
+              ></div>
+            ))}
+          </div>
+        </Link>
       </CardHeader>
       <CardContent>
         <Link href={`/themes/id/${theme.id}`}>

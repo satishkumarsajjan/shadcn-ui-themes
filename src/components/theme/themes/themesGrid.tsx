@@ -86,7 +86,7 @@ const ThemesGrid = ({
                   onClick={() => setPage(index + 1)}
                   className={cn(
                     'cursor-pointer',
-                    page === index + 1 && 'bg-cyan-500 text-white'
+                    page === index + 1 && 'bg-primary text-primary-foreground'
                   )}
                 >
                   {index + 1}

@@ -135,6 +135,42 @@
 
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
+
+  .light-bluish {
+    --background: 355 52% 2.64%;
+    --foreground: 355 8% 96.65%;
+    --muted: 355 40% 9.9%;
+    --muted-foreground: 355 8% 53.3%;
+    --popover: 355 49% 4.29%;
+    --popover-foreground: 355 8% 96.65%;
+    --card: 355 49% 4.29%;
+    --card-foreground: 355 8% 96.65%;
+    --border: 355 40% 9.9%;
+    --input: 355 40% 9.9%;
+    --primary: 355 80% 53%;
+    --primary-foreground: 355 8% 96.65%;
+    --secondary: 355 40% 9.9%;
+    --secondary-foreground: 355 8% 96.65%;
+    --accent: 355 40% 9.9%;
+    --accent-foreground: 355 8% 96.65%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 355 8% 96.65%;
+    --ring: 355 80% 53%;
+    --chart-1: 355 80% 53%;
+    --chart-2: 355 70% 60%;
+    --chart-3: 355 60% 45%;
+    --chart-4: 355 50% 65%;
+    --chart-5: 355 40% 55%;
+    --radius: 0.5rem;
+    --sidebar-background: 355 55% 3.5%;
+    --sidebar-foreground: 355 8% 90%;
+    --sidebar-primary: 355 80% 53%;
+    --sidebar-primary-foreground: 355 8% 96.65%;
+    --sidebar-accent: 355 40% 12%;
+    --sidebar-accent-foreground: 355 8% 96.65%;
+    --sidebar-border: 355 45% 12%;
+    --sidebar-ring: 355 80% 53%;
+  }
 }
 
 @layer base {

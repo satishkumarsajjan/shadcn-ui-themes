@@ -40,6 +40,7 @@ export default function RootLayout({
                 defaultTheme='system'
                 enableSystem
                 disableTransitionOnChange
+                themes={['dark', 'light-bluish']}
               >
                 {children}
                 <Toaster />
