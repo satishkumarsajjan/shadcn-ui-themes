@@ -85,7 +85,7 @@ const ColorSwatches = memo(
         <div className='flex justify-between items-center'>
           <h3 className='text-lg font-medium'>Color Swatches</h3>
           <Button
-            variant='outline'
+            variant='secondary'
             size='sm'
             onClick={handleReset}
             disabled={!hasChanges}

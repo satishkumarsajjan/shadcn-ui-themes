@@ -115,6 +115,50 @@ export function useThemeMutations(theme: EditThemeProps['theme']) {
     },
   });
 
+  // Update theme title mutation
+  const updateTitleMutation = useMutation({
+    mutationFn: ({ themeId, title }: { themeId: string; title: string }) => {
+      return axios.post('/api/theme/updatethemetitle', {
+        themeId,
+        title,
+      });
+    },
+    onSuccess() {
+      setIsLoading(false);
+      invalidateQueries();
+      toast.success('Theme title updated successfully');
+    },
+    onError(error) {
+      setIsLoading(false);
+      toast.error(
+        error instanceof Error ? error.message : 'Failed to update theme title'
+      );
+    },
+  });
+
+  // Delete theme mutation
+  const deleteThemeMutation = useMutation({
+    mutationFn: ({ themeId }: { themeId: string }) => {
+      return axios.post('/api/theme/themedelete', {
+        themeId,
+      });
+    },
+    onSuccess() {
+      setIsLoading(false);
+      queryClient.invalidateQueries({
+        queryKey: ['themes'],
+      });
+      window.location.href = '/themes';
+      toast.success('Theme deleted successfully');
+    },
+    onError(error) {
+      setIsLoading(false);
+      toast.error(
+        error instanceof Error ? error.message : 'Failed to delete theme'
+      );
+    },
+  });
+
   // Helper to invalidate queries
   const invalidateQueries = () => {
     if (theme?.id) {
@@ -130,6 +174,8 @@ export function useThemeMutations(theme: EditThemeProps['theme']) {
   return {
     updateMutation,
     deleteMutation,
+    updateTitleMutation,
+    deleteThemeMutation,
     isLoading,
     setIsLoading,
   };

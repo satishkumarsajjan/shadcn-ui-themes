@@ -1,6 +1,6 @@
 'use client';
 import { useSession } from 'next-auth/react';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
 // UI Components
@@ -17,6 +17,7 @@ import { ModeSelector } from './ModeSelector';
 import { ThemeContentEditor } from './ThemeContentEditor';
 import { ThemeWithCounts, ThemeWithUserActions } from '@/types/apiReturnTypes';
 import ThemeThumbnail from './ThemeThumbnail';
+import { ThemeEditDialog } from './Edit/EditDialog';
 
 // Component props
 export interface EditThemeProps {
@@ -25,6 +26,7 @@ export interface EditThemeProps {
   currentTheme?: string;
   onModeChange?: (modeId: string) => void;
   onUpdate?: () => void; // Add this prop for explicit updates
+  onTitleUpdate?: () => Promise<void>; // Add this prop for title updates
 }
 
 // Main component
@@ -34,9 +36,18 @@ export function EditTheme({
   currentTheme,
   onModeChange,
   onUpdate,
+  onTitleUpdate,
 }: EditThemeProps) {
   const { data: session } = useSession();
   const isOwner = session?.user?.id === theme?.userId;
+  const [themeTitle, setThemeTitle] = useState(theme?.title || '');
+
+  // Update themeTitle when theme changes
+  useEffect(() => {
+    if (theme?.title) {
+      setThemeTitle(theme.title);
+    }
+  }, [theme?.title]);
 
   const { themeMode, setThemeMode, setOriginalValues, hasChanges } =
     useThemeModeState(theme, currentTheme);
@@ -228,9 +239,20 @@ export function EditTheme({
     });
   };
 
+  // If theme is undefined, show loading or placeholder
+  if (!theme) {
+    return <div>Loading theme...</div>;
+  }
+
   return (
     <div className='m-2 h-full'>
-      <h1 className='font-bold text-xl mb-2'>{theme?.title}</h1>
+      <div className='flex justify-between items-center'>
+        <h1 className='font-bold text-xl mb-2'>{themeTitle}</h1>
+        {theme?.id && session?.user && (
+          <ThemeEditDialog theme={theme} onTitleUpdate={onTitleUpdate} />
+        )}
+      </div>
+      <Separator orientation='horizontal' className='my-3' />
       <ModeSelector
         theme={theme}
         themeMode={themeMode}
@@ -252,7 +274,7 @@ export function EditTheme({
             <DeleteModeDialog onDelete={handleDelete} isDisabled={isLoading} />
           </div>
         )}
-
+        <Separator orientation='horizontal' className='my-3' />
         <ThemeContentEditor
           content={themeMode.content}
           onChange={handleContentChange}

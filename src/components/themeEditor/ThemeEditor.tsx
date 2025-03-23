@@ -37,12 +37,11 @@ const convertThemeToJSON = (str: string): ThemeConfig => {
   return result;
 };
 
-
 function ThemeEditor({ id }: { id: string }) {
   const [theme, setTheme] = useState(() => themeCache.get(id) || DEFAULT_THEME);
   const containerRef = useRef<HTMLDivElement>(null);
   const styleRef = useRef<HTMLStyleElement | null>(null);
-  const { data, isFetching, error } = useThemeById(id);
+  const { data, isFetching, error, refetch } = useThemeById(id);
   const [isLoading, setIsLoading] = useState(true);
   const [initialLoadDone, setInitialLoadDone] = useState(false);
 
@@ -52,10 +51,19 @@ function ThemeEditor({ id }: { id: string }) {
   // Add a key to force re-mount of ColorSwatches when mode changes or updates happen
   const [colorSwatchesKey, setColorSwatchesKey] = useState(0);
 
+  // Add a key to force re-mount of EditTheme when theme data changes
+  const [editThemeKey, setEditThemeKey] = useState(0);
+
   // Function to explicitly reset the ColorSwatches component
   const resetColorSwatches = useCallback(() => {
     setColorSwatchesKey((prev) => prev + 1);
   }, []);
+
+  // Function to explicitly refetch theme data and force remount of EditTheme
+  const handleRefetchTheme = useCallback(async () => {
+    await refetch();
+    setEditThemeKey((prev) => prev + 1);
+  }, [refetch]);
 
   // Memoize the theme config to avoid recalculating on every render
   const themeConfig = useMemo(() => convertThemeToJSON(theme), [theme]);
@@ -95,7 +103,6 @@ function ThemeEditor({ id }: { id: string }) {
     });
   }, []);
 
-
   // Handle data fetching and update theme state
   useEffect(() => {
     if (isFetching) {
@@ -117,6 +124,11 @@ function ThemeEditor({ id }: { id: string }) {
       // Cache the theme data
       themeCache.set(id, newTheme);
       setInitialLoadDone(true);
+    }
+
+    // Force remount of EditTheme when data changes to refresh the title
+    if (data?.theme) {
+      setEditThemeKey((prev) => prev + 1);
     }
 
     // Set loading to false only after data is processed
@@ -304,11 +316,13 @@ function ThemeEditor({ id }: { id: string }) {
         <ResizablePanel defaultSize={25}>
           <ScrollArea className='h-screen rounded-md'>
             <EditTheme
+              key={editThemeKey} // Force re-mount when theme data changes
               theme={data?.theme}
               setTheme={handleThemeUpdate}
               currentTheme={theme} // Pass the current theme to EditTheme
               onModeChange={handleModeChange} // Pass the mode change handler
               onUpdate={resetColorSwatches} // Pass the reset function for updates
+              onTitleUpdate={handleRefetchTheme} // Pass the refetch function for title updates
             />
           </ScrollArea>
         </ResizablePanel>
