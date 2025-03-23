@@ -12,6 +12,7 @@ import {
 } from '../ui/resizable';
 import { ScrollArea } from '../ui/scroll-area';
 import ColorSwatches from './ColorSwatches';
+import DescriptionTextEditor from './RichTextEditor';
 
 export interface ThemeConfig {
   [key: string]: string;
@@ -44,6 +45,16 @@ function ThemeEditor({ id }: { id: string }) {
   const { data, isFetching, error, refetch } = useThemeById(id);
   const [isLoading, setIsLoading] = useState(true);
   const [initialLoadDone, setInitialLoadDone] = useState(false);
+
+  const [themeDescription, setThemeDescription] = useState<string>(
+    data?.theme?.description || ''
+  );
+
+  const handleSaveDescription = (content: string) => {
+    setThemeDescription(content);
+    console.log('Theme description saved:', content);
+    // Optionally, save the description to a database or API
+  };
 
   // Add state to track the current mode ID
   const [currentModeId, setCurrentModeId] = useState<string>('');
@@ -307,6 +318,15 @@ function ThemeEditor({ id }: { id: string }) {
                     Secondary Button
                   </button>
                 </div>
+              </div>
+              <div className='mt-8'>
+                <h3 className='text-lg text-foreground font-medium'>
+                  Theme Description
+                </h3>
+                <DescriptionTextEditor
+                  initialContent={themeDescription}
+                  onSave={handleSaveDescription}
+                />
               </div>
               <ComponentGrid />
             </div>
