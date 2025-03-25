@@ -1,214 +1,177 @@
 'use client';
 
-import { useState } from 'react';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-import { Camera, UserCircle } from 'lucide-react';
+import { UserCircle } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Textarea } from '@/components/ui/textarea';
 import { Separator } from '@/components/ui/separator';
-import { Switch } from '@/components/ui/switch';
+import { useGetUser } from '@/hooks/get-user-by-id';
+import { useSession } from 'next-auth/react';
+import { Textarea } from '../ui/textarea';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import axios from 'axios';
 import { toast } from 'sonner';
-
-// Define the form schema
-const profileFormSchema = z.object({
-  username: z
-    .string()
-    .min(2, { message: 'Username must be at least 2 characters.' })
-    .max(30, { message: 'Username cannot be longer than 30 characters.' }),
-  email: z.string().email({ message: 'Please enter a valid email address.' }),
-  bio: z
-    .string()
-    .max(160, { message: 'Bio cannot be longer than 160 characters.' })
-    .optional(),
-  name: z
-    .string()
-    .min(2, { message: 'Name must be at least 2 characters.' })
-    .max(50, { message: 'Name cannot be longer than 50 characters.' }),
-  avatarUrl: z.string().optional(),
-  notifications: z.boolean().default(true),
-});
-
-type ProfileFormValues = z.infer<typeof profileFormSchema>;
-
-// This simulates a user profile loaded from a database
-const defaultValues: Partial<ProfileFormValues> = {
-  username: 'johndoe',
-  email: 'john.doe@example.com',
-  bio: 'Software developer with a passion for UI/UX design and building beautiful web applications.',
-  name: 'John Doe',
-  avatarUrl: '',
-  notifications: true,
-};
+import { Skeleton } from '@/components/ui/skeleton';
 
 export function ProfileEditor() {
-  const [avatar, setAvatar] = useState<string | null>(null);
+  const { data: session } = useSession();
+  // Add useState for bio field
+  const { data } = useGetUser(session?.user?.id || '');
+  const [bio, setBio] = useState('');
 
-  // Initialize the form
-  const form = useForm<ProfileFormValues>({
-    resolver: zodResolver(profileFormSchema),
-    defaultValues,
-    mode: 'onChange',
+  useEffect(() => {
+    if (data) setBio(data?.bio || '');
+  }, [data]);
+
+  const queryClient = useQueryClient();
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: async ({ userId, bio }: { userId: string; bio: string }) => {
+      const response = await axios.post('/api/user/updateUserBio', {
+        userId,
+        bio,
+      });
+      return response.data;
+    },
+
+    onSuccess: (data, variables) => {
+      // Invalidate and refetch user queries
+      queryClient.invalidateQueries({ queryKey: ['user', variables.userId] });
+      queryClient.invalidateQueries({ queryKey: ['currentUser'] });
+
+      // Show success toast
+      toast.success(data.message || 'Bio updated successfully');
+    },
+
+    onError: (error) => {
+      // Handle error
+      const errorMessage =
+        error.message || error.message || 'Failed to update bio';
+
+      toast.error(errorMessage);
+      console.error('Error updating user bio:', error);
+    },
   });
 
-  // Form submission handler
-  function onSubmit(data: ProfileFormValues) {
-    // In a real application, you would send this data to your API
-    console.log(data);
+  if (!data) {
+    return (
+      <div className='container max-w-3xl py-10'>
+        <Card className='border-none shadow-lg'>
+          <CardHeader className='space-y-1'>
+            <Separator className='my-2' />
+            <CardTitle className='text-2xl font-bold'>Profile</CardTitle>
+            <CardDescription>Your profile information</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className='space-y-8'>
+              <div className='flex flex-col gap-8 md:flex-row'>
+                <div className='flex flex-col items-center gap-4 md:w-1/3'>
+                  <Skeleton className='h-32 w-32 rounded-full' />
+                </div>
+                <div className='flex-1 space-y-4'>
+                  <div className='space-y-1'>
+                    <p className='text-sm font-medium'>Username</p>
+                    <Skeleton className='h-6 w-32' />
+                  </div>
+
+                  <div className='space-y-1'>
+                    <p className='text-sm font-medium'>Email</p>
+                    <Skeleton className='h-6 w-48' />
+                  </div>
+                </div>
+              </div>
+
+              <Separator />
+
+              <div className='space-y-4'>
+                <div className='space-y-1'>
+                  <p className='text-sm font-medium'>Bio</p>
+                  <Skeleton className='h-24 w-full' />
+                </div>
+              </div>
+
+              <div className='flex justify-end'>
+                <Skeleton className='h-10 w-28' />
+              </div>
+            </div>
+            <Separator className='mt-2' />
+          </CardContent>
+        </Card>
+      </div>
+    );
   }
 
   return (
     <div className='container max-w-3xl py-10'>
       <Card className='border-none shadow-lg'>
         <CardHeader className='space-y-1'>
-          <CardTitle className='text-2xl font-bold'>Edit Profile</CardTitle>
-          <CardDescription>
-            Update your profile information and preferences
-          </CardDescription>
+          <Separator className='my-2' />
+          <CardTitle className='text-2xl font-bold'>Profile</CardTitle>
+          <CardDescription>Your profile information</CardDescription>
         </CardHeader>
         <CardContent>
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8'>
-              <div className='flex flex-col gap-8 md:flex-row'>
-                <div className='flex flex-col items-center gap-4 md:w-1/3'>
-                  <Avatar className='h-32 w-32'>
-                    <AvatarImage src={avatar || ''} alt='Profile picture' />
-                    <AvatarFallback className='bg-zinc-200 text-4xl'>
-                      <UserCircle className='h-20 w-20 text-zinc-400' />
-                    </AvatarFallback>
-                  </Avatar>
-                  <Button variant='outline' className='w-full gap-2'>
-                    <Camera className='h-4 w-4' />
-                    Change Avatar
-                  </Button>
+          <div className='space-y-8'>
+            <div className='flex flex-col gap-8 md:flex-row'>
+              <div className='flex flex-col items-center gap-4 md:w-1/3'>
+                <Avatar className='h-32 w-32'>
+                  <AvatarImage src={data?.image || ''} alt='Profile picture' />
+                  <AvatarFallback className='bg-zinc-200 text-4xl'>
+                    <UserCircle className='h-20 w-20 text-zinc-400' />
+                  </AvatarFallback>
+                </Avatar>
+              </div>
+              <div className='flex-1 space-y-4'>
+                <div className='space-y-1'>
+                  <p className='text-sm font-medium'>Username</p>
+                  <p className='text-base'>{data?.name}</p>
                 </div>
-                <div className='flex-1 space-y-4'>
-                  <FormField
-                    control={form.control}
-                    name='username'
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Username</FormLabel>
-                        <FormControl>
-                          <Input placeholder='username' {...field} />
-                        </FormControl>
-                        <FormDescription>
-                          This is your public display name. It can be your real
-                          name or a pseudonym.
-                        </FormDescription>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name='name'
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Full Name</FormLabel>
-                        <FormControl>
-                          <Input placeholder='Your name' {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name='email'
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Email</FormLabel>
-                        <FormControl>
-                          <Input placeholder='email@example.com' {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+
+                <div className='space-y-1'>
+                  <p className='text-sm font-medium'>Email</p>
+                  <p className='text-base'>{data?.email}</p>
                 </div>
               </div>
+            </div>
 
-              <Separator />
+            <Separator />
 
-              <div className='space-y-4'>
-                <FormField
-                  control={form.control}
-                  name='bio'
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Bio</FormLabel>
-                      <FormControl>
-                        <Textarea
-                          placeholder='Tell us a little bit about yourself'
-                          className='min-h-32 resize-none'
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormDescription>
-                        You can <span>@mention</span> other users and
-                        organizations.
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+            <div className='space-y-4'>
+              <div className='space-y-1'>
+                <p className='text-sm font-medium'>Bio</p>
+                <Textarea
+                  className='text-base whitespace-pre-wrap'
+                  value={bio}
+                  onChange={(e) => setBio(e.target.value)}
+                ></Textarea>
               </div>
+            </div>
 
-              <Separator />
-
-              <div className='space-y-4'>
-                <h3 className='text-lg font-medium'>Preferences</h3>
-                <FormField
-                  control={form.control}
-                  name='notifications'
-                  render={({ field }) => (
-                    <FormItem className='flex flex-row items-center justify-between rounded-lg border p-4'>
-                      <div className='space-y-0.5'>
-                        <FormLabel className='text-base'>
-                          Email Notifications
-                        </FormLabel>
-                        <FormDescription>
-                          Receive emails about updates, features, and activity.
-                        </FormDescription>
-                      </div>
-                      <FormControl>
-                        <Switch
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
-                      </FormControl>
-                    </FormItem>
-                  )}
-                />
-              </div>
-
-              <div className='flex justify-end'>
-                <Button type='submit'>Save Changes</Button>
-              </div>
-            </form>
-          </Form>
+            <div className='flex justify-end'>
+              <Button
+                variant='outline'
+                onClick={() => {
+                  if (data?.id) {
+                    mutate({ userId: data.id, bio: bio });
+                  } else {
+                    // Handle the case where ID is missing
+                    toast.error('Cannot update: User ID is missing');
+                  }
+                }}
+                disabled={isPending}
+              >
+                {isPending ? 'Updating...' : 'Update Bio'}
+              </Button>
+            </div>
+          </div>
+          <Separator className='mt-2' />
         </CardContent>
       </Card>
     </div>
