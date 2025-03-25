@@ -6,11 +6,11 @@
 - [ ] add appsidebar components to the theme preview
 - [ ] Landing page implementation
 - [x] Description and username
-- [ ] personal profile editor
+- [x] personal profile editor
 - [x] Delete Theme
 - [ ] Delete profile
 - [ ] Adjust the theme of the app.
-- [ ] able to edit theme name and description.
+- [x] able to edit theme name and description.
 - [ ] users profile with their themes
 
 ## 🔧 Features & Components

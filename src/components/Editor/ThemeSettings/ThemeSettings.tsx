@@ -248,7 +248,7 @@ export function EditTheme({
     <div className='m-2 h-full'>
       <div className='flex justify-between items-center'>
         <h1 className='font-bold text-xl mb-2'>{themeTitle}</h1>
-        {theme?.id && session?.user && (
+        {theme?.id && session?.user?.id === theme.userId && (
           <ThemeEditDialog theme={theme} onTitleUpdate={onTitleUpdate} />
         )}
       </div>
