@@ -20,6 +20,7 @@ import {
 } from '@/components/ui/sidebar';
 import { Dialog, DialogTrigger } from '../ui/dialog';
 import SignInDialogContent from '../auth/SignInDialogContent';
+import { Link } from 'next-view-transitions';
 
 export function NavUser() {
   const { isMobile } = useSidebar();
@@ -85,29 +86,34 @@ export function NavUser() {
             align='end'
             sideOffset={4}
           >
-            <DropdownMenuLabel className='p-0 font-normal'>
-              <div className='flex items-center gap-2 px-1 py-1.5 text-left text-sm'>
-                <Avatar className='h-8 w-8 rounded-lg'>
-                  <AvatarImage
-                    src={session?.user?.image as string | undefined}
-                    alt={session?.user?.name as string | undefined}
-                  />
-                  <AvatarFallback className='rounded-lg'>
-                    <User />
-                  </AvatarFallback>
-                </Avatar>
-                <div className='grid flex-1 text-left text-sm leading-tight'>
-                  <span className='truncate font-semibold'>
-                    {session?.user?.name}
-                  </span>
-                  <span className='truncate text-xs'>
-                    {session?.user?.email}
-                  </span>
+            <Link href={'/themes/profile'}>
+              <DropdownMenuLabel className='p-0 font-normal'>
+                <div className='flex items-center gap-2 px-1 py-1.5 text-left text-sm'>
+                  <Avatar className='h-8 w-8 rounded-lg'>
+                    <AvatarImage
+                      src={session?.user?.image as string | undefined}
+                      alt={session?.user?.name as string | undefined}
+                    />
+                    <AvatarFallback className='rounded-lg'>
+                      <User />
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className='grid flex-1 text-left text-sm leading-tight'>
+                    <span className='truncate font-semibold'>
+                      {session?.user?.name}
+                    </span>
+                    <span className='truncate text-xs'>
+                      {session?.user?.email}
+                    </span>
+                  </div>
                 </div>
-              </div>
-            </DropdownMenuLabel>
+              </DropdownMenuLabel>
+            </Link>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => signOut()}>
+            <DropdownMenuItem
+              onClick={() => signOut()}
+              className='cursor-pointer'
+            >
               <LogOut />
               Log out
             </DropdownMenuItem>

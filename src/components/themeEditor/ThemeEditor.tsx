@@ -12,6 +12,8 @@ import {
 } from '../ui/resizable';
 import { ScrollArea } from '../ui/scroll-area';
 import ColorSwatches from './ColorSwatches';
+import DescriptionTextEditor from './RichTextEditor';
+import { useSession } from 'next-auth/react';
 
 export interface ThemeConfig {
   [key: string]: string;
@@ -38,12 +40,22 @@ const convertThemeToJSON = (str: string): ThemeConfig => {
 };
 
 function ThemeEditor({ id }: { id: string }) {
+  const { data: session } = useSession();
   const [theme, setTheme] = useState(() => themeCache.get(id) || DEFAULT_THEME);
   const containerRef = useRef<HTMLDivElement>(null);
   const styleRef = useRef<HTMLStyleElement | null>(null);
   const { data, isFetching, error, refetch } = useThemeById(id);
   const [isLoading, setIsLoading] = useState(true);
   const [initialLoadDone, setInitialLoadDone] = useState(false);
+
+  const [themeDescription, setThemeDescription] = useState<string>('');
+
+  // Update themeDescription when data is fetched
+  useEffect(() => {
+    if (data?.theme?.description) {
+      setThemeDescription(data.theme.description);
+    }
+  }, [data?.theme?.description]);
 
   // Add state to track the current mode ID
   const [currentModeId, setCurrentModeId] = useState<string>('');
@@ -82,24 +94,6 @@ function ThemeEditor({ id }: { id: string }) {
       });
 
       return updatedThemeLines.join('\n');
-    });
-  }, []);
-  // Add state for selected colors
-  const [selectedColors, setSelectedColors] = useState<string[]>([]);
-
-  // Handle color swatch click
-  const handleColorSwatchClick = useCallback((key: string) => {
-    setSelectedColors((prev) => {
-      // If color is already selected, remove it
-      if (prev.includes(key)) {
-        return prev.filter((color) => color !== key);
-      }
-      // If we already have 6 colors selected and trying to add more, replace the oldest one
-      if (prev.length >= 6) {
-        return [...prev.slice(1), key];
-      }
-      // Otherwise add the new color
-      return [...prev, key];
     });
   }, []);
 
@@ -307,6 +301,19 @@ function ThemeEditor({ id }: { id: string }) {
                     Secondary Button
                   </button>
                 </div>
+              </div>
+              <div className='mt-8'>
+                <h3 className='text-lg text-foreground font-medium'>
+                  Theme Description
+                </h3>
+                <DescriptionTextEditor
+                  themeId={data?.theme.id}
+                  initialContent={themeDescription}
+                  readonly={!(session?.user?.id === data?.theme.userId)}
+                  onDescriptionUpdate={(updatedDescription: string) =>
+                    setThemeDescription(updatedDescription)
+                  }
+                />
               </div>
               <ComponentGrid />
             </div>

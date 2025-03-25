@@ -5,12 +5,13 @@
 - [ ] A theme preview with mode switching (light/dark)
 - [ ] add appsidebar components to the theme preview
 - [ ] Landing page implementation
-- [ ] Description and username
+- [x] Description and username
 - [ ] personal profile editor
-- [ ] Delete Theme
+- [x] Delete Theme
 - [ ] Delete profile
 - [ ] Adjust the theme of the app.
 - [ ] able to edit theme name and description.
+- [ ] users profile with their themes
 
 ## 🔧 Features & Components
 

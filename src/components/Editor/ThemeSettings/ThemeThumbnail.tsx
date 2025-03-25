@@ -91,10 +91,9 @@ const ThemeThumbnail = ({ themeId, theme_Colors }: ThemeThumbnailProps) => {
   return (
     <div>
       <span className='flex justify-between items-center'>
-        <Label>Colors to represent your theme.</Label>
-        <Button variant={'ghost'} onClick={handleAddColor}>
-          <PlusCircleIcon />
-        </Button>
+        <Label className='text-lg font-semibold'>
+          Colors to represent your theme.
+        </Label>
       </span>
       <div className='flex flex-wrap gap-2 mt-2'>
         {themeColors.map((color, index) => (
@@ -124,6 +123,9 @@ const ThemeThumbnail = ({ themeId, theme_Colors }: ThemeThumbnailProps) => {
             </HoverCardContent>
           </HoverCard>
         ))}
+        <Button variant={'secondary'} onClick={handleAddColor}>
+          <PlusCircleIcon />
+        </Button>
       </div>
 
       <div className='mt-4 flex justify-end'>
