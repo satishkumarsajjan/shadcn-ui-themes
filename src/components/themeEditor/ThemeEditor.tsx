@@ -14,6 +14,7 @@ import { ScrollArea } from '../ui/scroll-area';
 import ColorSwatches from './ColorSwatches';
 import DescriptionTextEditor from './RichTextEditor';
 import { useSession } from 'next-auth/react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
 
 export interface ThemeConfig {
   [key: string]: string;
@@ -312,7 +313,24 @@ function ThemeEditor({ id }: { id: string }) {
                   }
                 />
               </div>
-              <ComponentGrid />
+              <Tabs defaultValue='account' className='w-full'>
+                <TabsList className='w-full'>
+                  <TabsTrigger value='components' className='w-full'>
+                    Components
+                  </TabsTrigger>
+                  <TabsTrigger value='sidebar' className='w-full'>
+                    Sidebar Blocks
+                  </TabsTrigger>
+                  <TabsTrigger value='charts' className='w-full'>
+                    Charts
+                  </TabsTrigger>
+                </TabsList>
+                <TabsContent value='components'>
+                  <ComponentGrid />
+                </TabsContent>
+                <TabsContent value='sidebar'>Sidebar</TabsContent>
+                <TabsContent value='charts'>Charts </TabsContent>
+              </Tabs>
             </div>
           </ScrollArea>
         </ResizablePanel>

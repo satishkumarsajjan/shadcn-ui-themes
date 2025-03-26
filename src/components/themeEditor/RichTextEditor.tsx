@@ -65,7 +65,6 @@ const DescriptionTextEditor: React.FC<RichTextEditorProps> = ({
   const onChangeContent = (value: any) => {
     setContent(value);
   };
-  console.log(content);
 
   const mutation = useMutation({
     mutationFn: (description: string) => {

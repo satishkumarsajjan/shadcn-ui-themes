@@ -70,7 +70,7 @@ const ComponentGrid = () => {
   return (
     <div
       ref={containerRef}
-      className={`grid gap-4 m-2 overflow-hidden`}
+      className={`grid gap-4 my-2 overflow-hidden`}
       style={{
         gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))`,
       }}
