@@ -321,14 +321,17 @@ function ThemeEditor({ id }: { id: string }) {
                 </div>
               </div>
               <div className='my-4'>
-                <DescriptionTextEditor
-                  themeId={data?.theme.id}
-                  initialContent={themeDescription}
-                  readonly={!(session?.user?.id === data?.theme.userId)}
-                  onDescriptionUpdate={(updatedDescription: string) =>
-                    setThemeDescription(updatedDescription)
-                  }
-                />
+                {!themeDescription &&
+                !(session?.user?.id === data?.theme.userId) ? null : (
+                  <DescriptionTextEditor
+                    themeId={data?.theme.id}
+                    initialContent={themeDescription}
+                    readonly={!(session?.user?.id === data?.theme.userId)}
+                    onDescriptionUpdate={(updatedDescription: string) =>
+                      setThemeDescription(updatedDescription)
+                    }
+                  />
+                )}
               </div>
               <Tabs defaultValue='components' className='w-full'>
                 <TabsList className='w-full'>

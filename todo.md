@@ -3,7 +3,7 @@
 ## 🚀 High Priority
 
 - [ ] A theme preview with mode switching (light/dark)
-- [ ] add appsidebar components to the theme preview
+- [x] add charts components to the theme preview
 - [ ] Landing page implementation
 - [x] Description and username
 - [x] personal profile editor
