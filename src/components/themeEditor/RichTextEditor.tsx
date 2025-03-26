@@ -109,7 +109,7 @@ const DescriptionTextEditor: React.FC<RichTextEditorProps> = ({
           Theme Description
         </AccordionTrigger>
         <AccordionContent>
-          <div className='space-y-4'>
+          <div className='space-y-4 mt-2'>
             <div className='bg-white bg-opacity-25 backdrop-blur-lg rounded-md p-4 drop-shadow-lg'>
               <RichTextEditor
                 content={content}

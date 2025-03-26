@@ -3,7 +3,10 @@
 import ComponentGrid from '@/components/Editor/ComponentGrid';
 import { useThemeById } from '@/hooks/get-theme-by-Id';
 import { DEFAULT_THEME } from '@/lib/constants';
+import { useSession } from 'next-auth/react';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { AllAreaChartsObject } from '../displayComponents/charts/area-chart/AllAreaCharts';
+import ChartsGrid from '../displayComponents/charts/ChartsGrid';
 import { EditTheme } from '../Editor/ThemeSettings/ThemeSettings';
 import {
   ResizableHandle,
@@ -11,10 +14,16 @@ import {
   ResizablePanelGroup,
 } from '../ui/resizable';
 import { ScrollArea } from '../ui/scroll-area';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
 import ColorSwatches from './ColorSwatches';
 import DescriptionTextEditor from './RichTextEditor';
-import { useSession } from 'next-auth/react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
+import { Separator } from '../ui/separator';
+import { AllBarCharsObject } from '../displayComponents/charts/bar-chart/AllBarCharts';
+import { AllLineChartsObject } from '../displayComponents/charts/line-chart/AllLineCharts';
+import { AllPieChartsObject } from '../displayComponents/charts/pie-chart/AllPieCharts';
+import { AllRadarChartsObject } from '../displayComponents/charts/radar-chart/AllRadarCharts';
+import { AllRadialChartsObject } from '../displayComponents/charts/radial-chart/AllRadialCharts';
+import { AllTooltipChartObject } from '../displayComponents/charts/tooltip/AllTooltipCharts';
 
 export interface ThemeConfig {
   [key: string]: string;
@@ -39,7 +48,15 @@ const convertThemeToJSON = (str: string): ThemeConfig => {
 
   return result;
 };
-
+const chartComponents = [
+  AllAreaChartsObject,
+  AllBarCharsObject,
+  AllLineChartsObject,
+  AllPieChartsObject,
+  AllRadarChartsObject,
+  AllRadialChartsObject,
+  AllTooltipChartObject,
+];
 function ThemeEditor({ id }: { id: string }) {
   const { data: session } = useSession();
   const [theme, setTheme] = useState(() => themeCache.get(id) || DEFAULT_THEME);
@@ -313,13 +330,10 @@ function ThemeEditor({ id }: { id: string }) {
                   }
                 />
               </div>
-              <Tabs defaultValue='account' className='w-full'>
+              <Tabs defaultValue='components' className='w-full'>
                 <TabsList className='w-full'>
                   <TabsTrigger value='components' className='w-full'>
                     Components
-                  </TabsTrigger>
-                  <TabsTrigger value='sidebar' className='w-full'>
-                    Sidebar Blocks
                   </TabsTrigger>
                   <TabsTrigger value='charts' className='w-full'>
                     Charts
@@ -328,8 +342,21 @@ function ThemeEditor({ id }: { id: string }) {
                 <TabsContent value='components'>
                   <ComponentGrid />
                 </TabsContent>
-                <TabsContent value='sidebar'>Sidebar</TabsContent>
-                <TabsContent value='charts'>Charts </TabsContent>
+
+                <TabsContent value='charts'>
+                  <div className='flex flex-col gap-4'>
+                    {chartComponents.map((chartObject, key) => (
+                      <div key={key}>
+                        <ChartsGrid
+                          Components={chartObject.Components}
+                          title={chartObject.title}
+                          Additional={chartObject.Additional}
+                        />
+                        <Separator className='mt-4' />
+                      </div>
+                    ))}
+                  </div>
+                </TabsContent>
               </Tabs>
             </div>
           </ScrollArea>
