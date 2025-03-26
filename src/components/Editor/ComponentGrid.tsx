@@ -1,7 +1,6 @@
 'use client';
 
-import Editor from './Editor';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { CardsActivityGoal } from '../displayComponents/activity-goal';
 import { CardsCalendar } from '../displayComponents/calendar';
 import { CardsChat } from '../displayComponents/chat';
@@ -71,7 +70,7 @@ const ComponentGrid = () => {
   return (
     <div
       ref={containerRef}
-      className={`grid gap-4 m-4 overflow-hidden`}
+      className={`grid gap-4 m-2 overflow-hidden`}
       style={{
         gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))`,
       }}

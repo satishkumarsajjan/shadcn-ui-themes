@@ -22,6 +22,12 @@ import {
 } from 'reactjs-tiptap-editor/extension-bundle';
 import 'reactjs-tiptap-editor/style.css';
 import { toast } from 'sonner';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/ui/accordion';
 
 const extensions = [
   BaseKit,
@@ -98,29 +104,38 @@ const DescriptionTextEditor: React.FC<RichTextEditorProps> = ({
   };
 
   return (
-    <div className='space-y-4'>
-      <div className='bg-white bg-opacity-25 backdrop-blur-lg rounded-md p-4 drop-shadow-lg'>
-        <RichTextEditor
-          content={content}
-          output='html'
-          extensions={extensions}
-          onChangeContent={onChangeContent}
-          disabled={readonly}
-          hideToolbar={readonly}
-          removeDefaultWrapper
-          contentClass={'bg-background text-foreground'}
-          hideBubble={readonly}
-          label='Theme Description'
-        />
-      </div>
-      {!readonly && (
-        <div className='flex items-center justify-end mr-4'>
-          <Button onClick={handleSave} disabled={mutation.isPending}>
-            {mutation.isPending ? 'Saving...' : 'Save Description'}
-          </Button>
-        </div>
-      )}
-    </div>
+    <Accordion type='single' collapsible>
+      <AccordionItem value='item-1'>
+        <AccordionTrigger className='text-foreground border rounded-md drop-shadow-lg p-4 text-xl'>
+          Theme Description
+        </AccordionTrigger>
+        <AccordionContent>
+          <div className='space-y-4'>
+            <div className='bg-white bg-opacity-25 backdrop-blur-lg rounded-md p-4 drop-shadow-lg'>
+              <RichTextEditor
+                content={content}
+                output='html'
+                extensions={extensions}
+                onChangeContent={onChangeContent}
+                disabled={readonly}
+                hideToolbar={readonly}
+                removeDefaultWrapper
+                contentClass={'bg-background text-foreground'}
+                hideBubble={readonly}
+                label='Theme Description'
+              />
+            </div>
+            {!readonly && (
+              <div className='flex items-center justify-end mr-4'>
+                <Button onClick={handleSave} disabled={mutation.isPending}>
+                  {mutation.isPending ? 'Saving...' : 'Save Description'}
+                </Button>
+              </div>
+            )}
+          </div>
+        </AccordionContent>
+      </AccordionItem>
+    </Accordion>
   );
 };
 export default DescriptionTextEditor;

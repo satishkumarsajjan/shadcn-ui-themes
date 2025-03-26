@@ -302,10 +302,7 @@ function ThemeEditor({ id }: { id: string }) {
                   </button>
                 </div>
               </div>
-              <div className='mt-8'>
-                <h3 className='text-lg text-foreground font-medium'>
-                  Theme Description
-                </h3>
+              <div className='my-4'>
                 <DescriptionTextEditor
                   themeId={data?.theme.id}
                   initialContent={themeDescription}
