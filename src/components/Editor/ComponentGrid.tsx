@@ -1,9 +1,34 @@
 'use client';
 
-import { components } from '@/lib/components';
 import Editor from './Editor';
 import { useEffect, useState, useRef } from 'react';
+import { CardsActivityGoal } from '../displayComponents/activity-goal';
+import { CardsCalendar } from '../displayComponents/calendar';
+import { CardsChat } from '../displayComponents/chat';
+import { CardsCookieSettings } from '../displayComponents/cookie-settings';
+import { CardsCreateAccount } from '../displayComponents/create-account';
+import { CardsDataTable } from '../displayComponents/data-table';
+import { CardsMetric } from '../displayComponents/metric';
+import { CardsPaymentMethod } from '../displayComponents/payment-method';
+import { CardsReportIssue } from '../displayComponents/report-issue';
+import { CardsShare } from '../displayComponents/share';
+import { CardsStats } from '../displayComponents/stats';
+import { CardsTeamMembers } from '../displayComponents/team-members';
 
+const components = [
+  <CardsActivityGoal />,
+  <CardsCalendar />,
+  <CardsStats />,
+  <CardsTeamMembers />,
+  <CardsMetric />,
+  <CardsDataTable />,
+  <CardsPaymentMethod />,
+  <CardsCreateAccount />,
+  <CardsChat />,
+  <CardsReportIssue />,
+  <CardsCookieSettings />,
+  <CardsShare />,
+];
 const ComponentGrid = () => {
   const [mounted, setMounted] = useState(false);
   const [columns, setColumns] = useState(3);
@@ -62,7 +87,7 @@ const ComponentGrid = () => {
             transitionDelay: `${index * 50}ms`,
           }}
         >
-          <Editor initialCode={component.initialCode} scope={component.scope} />
+          {component}
         </div>
       ))}
     </div>
