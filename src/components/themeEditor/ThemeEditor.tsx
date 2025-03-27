@@ -318,16 +318,28 @@ function ThemeEditor({ id }: { id: string }) {
 
                 <TabsContent value='charts'>
                   <div className='flex flex-col gap-4'>
-                    {chartComponents.map((chartObject, key) => (
-                      <div key={key}>
-                        <ChartsGrid
-                          Components={chartObject.Components}
-                          title={chartObject.title}
-                          Additional={chartObject.Additional}
-                        />
-                        <Separator className='mt-4' />
-                      </div>
-                    ))}
+                    <Tabs defaultValue='Area Charts' className='w-full'>
+                      <TabsList className='w-full'>
+                        {chartComponents.map((chartObject, key) => (
+                          <TabsTrigger
+                            value={chartObject.title}
+                            className='w-full'
+                            key={key}
+                          >
+                            {chartObject.title}
+                          </TabsTrigger>
+                        ))}
+                      </TabsList>
+                      {chartComponents.map((chartObject, key) => (
+                        <TabsContent value={chartObject.title} key={key}>
+                          <ChartsGrid
+                            Components={chartObject.Components}
+                            title={chartObject.title}
+                            Additional={chartObject.Additional}
+                          />
+                        </TabsContent>
+                      ))}
+                    </Tabs>
                   </div>
                 </TabsContent>
               </Tabs>
