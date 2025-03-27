@@ -2,7 +2,6 @@
 
 ## 🚀 High Priority
 
-- [ ] A theme preview with mode switching (light/dark)
 - [x] add charts components to the theme preview
 - [ ] Landing page implementation
 - [x] Description and username

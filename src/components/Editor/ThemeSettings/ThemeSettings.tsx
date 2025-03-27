@@ -258,7 +258,7 @@ export function EditTheme({
         themeMode={themeMode}
         onModeChange={handleModeChange}
       />
-      <Separator orientation='horizontal' className='my-3' />
+      {isOwner && <Separator orientation='horizontal' className='my-3' />}
       <div className='flex flex-col'>
         {isOwner && (
           <div className='flex gap-2'>

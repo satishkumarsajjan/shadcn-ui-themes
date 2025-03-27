@@ -252,24 +252,8 @@ function ThemeEditor({ id }: { id: string }) {
               }}
             >
               {/* Example of using Tailwind with the theme config */}
-              <div className='mb-4'>
-                <h2
-                  className='text-xl font-bold'
-                  style={{
-                    color: `hsl(${themeConfig['--foreground'] || '0 0% 100%'})`,
-                  }}
-                >
-                  Theme Preview
-                </h2>
-                <p
-                  style={{
-                    color: `hsl(${
-                      themeConfig['--muted-foreground'] || '0 0% 70%'
-                    })`,
-                  }}
-                >
-                  Click on color swatches to configure their color values
-                </p>
+              <div className='my-4 flex items-center justify-center'>
+                <h2 className='text-2xl font-bold'>Theme Preview</h2>
               </div>
 
               <ColorSwatches
@@ -277,9 +261,12 @@ function ThemeEditor({ id }: { id: string }) {
                 themeConfig={themeConfig}
                 onThemeChange={handleColorChange}
               />
-
+              <Separator className='my-4' />
+              <span className='w-full flex items-center justify-center font-semibold text-2xl mt-4 p-4'>
+                <h1>Basic components</h1>
+              </span>
               <div
-                className='grid gap-4 my-4'
+                className='grid gap-4'
                 style={{
                   gridTemplateColumns:
                     'repeat(auto-fit, minmax(min(100%, 500px), 1fr))',
@@ -312,6 +299,10 @@ function ThemeEditor({ id }: { id: string }) {
                   />
                 )}
               </div>
+              <Separator className='my-4' />
+              <span className='w-full flex items-center justify-center font-semibold text-2xl mt-4 p-4'>
+                <h1>Components & Charts</h1>
+              </span>
               <Tabs defaultValue='components' className='w-full'>
                 <TabsList className='w-full'>
                   <TabsTrigger value='components' className='w-full'>
