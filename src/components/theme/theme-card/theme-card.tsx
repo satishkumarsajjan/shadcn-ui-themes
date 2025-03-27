@@ -1,4 +1,5 @@
 'use client';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -7,8 +8,10 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { useGetUser } from '@/hooks/get-user-by-id';
 import { cn } from '@/lib/utils';
 import { ThemeWithUserActions } from '@/types/apiReturnTypes';
+import { User } from '@prisma/client';
 import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 import {
@@ -33,11 +36,19 @@ export function ThemeCard({ theme }: { theme: ThemeWithUserActions }) {
   const [bookmarkCounts, setBookmarkCounts] = useState<number>(
     theme._count.bookmarks
   );
-  const [colors, setColors] = useState(theme.colors);
+  const [user, setUser] = useState<User | null>(null);
+
+  // Call the hook directly in the component body
+  const { data, error } = useGetUser(theme.userId);
 
   useEffect(() => {
-    setColors(theme.colors || []); // Update colors when theme.colors changes
-  }, [theme.colors]);
+    if (error) {
+      console.error('Failed to fetch user:', error);
+      setUser(null);
+    } else {
+      setUser(data || null);
+    }
+  }, [data, error]);
 
   const likeMutation = useMutation({
     mutationFn: (themeId: string) =>
@@ -131,14 +142,14 @@ export function ThemeCard({ theme }: { theme: ThemeWithUserActions }) {
           <div
             className={`w-full h-[300px] grid rounded-md overflow-hidden`}
             style={{
-              gridTemplateColumns: `repeat(${colors.length}, minmax(0, 1fr))`,
+              gridTemplateColumns: `repeat(${theme.colors.length}, minmax(0, 1fr))`,
             }}
           >
-            {colors?.map((item, key) => (
+            {theme.colors.map((color, index) => (
               <div
-                key={key}
-                className={`col-span-1 h-full`}
-                style={{ backgroundColor: item }}
+                key={index}
+                className='col-span-1 h-full'
+                style={{ backgroundColor: color }}
               ></div>
             ))}
           </div>
@@ -148,6 +159,26 @@ export function ThemeCard({ theme }: { theme: ThemeWithUserActions }) {
         <Link href={`/themes/id/${theme.id}`}>
           <CardTitle className='text-2xl'>{theme.title}</CardTitle>
         </Link>
+        <span className='flex my-2 items-center justify-start gap-2'>
+          <Avatar className='size-6'>
+            <AvatarImage src={user?.image || ''} alt={user?.name || 'User'} />
+            <AvatarFallback>
+              {user?.name
+                ? user.name
+                    .split(' ')
+                    .map((n) => n[0])
+                    .join('')
+                    .toUpperCase()
+                : 'CN'}
+            </AvatarFallback>
+          </Avatar>
+          <Link
+            href={`/themes/user/${user?.id}`}
+            className='text-sm hover:underline'
+          >
+            {user?.name}
+          </Link>
+        </span>
       </CardContent>
       <CardFooter className='flex justify-between'>
         <div className='flex items-center gap-0'>

@@ -15,3 +15,18 @@ export const useMyThemes = (page: number, pageSize: number) => {
     queryFn: () => fetchMyThemes(page, pageSize),
   });
 };
+
+const fetchUserThemes = async (userId: string, page: number, pageSize: number) => {
+  const response = await axios.get(
+    `/api/theme/getuserthemesbyid?userId=${userId}&page=${page}&pageSize=${pageSize}`
+  );
+  return response.data;
+};
+
+export const useUserThemes = (userId: string, page: number, pageSize: number) => {
+  return useQuery<ThemesResponse>({
+    queryKey: ['userThemes', userId, page, pageSize],
+    queryFn: () => fetchUserThemes(userId, page, pageSize),
+    enabled: !!userId, // Only run the query if userId is provided
+  });
+};

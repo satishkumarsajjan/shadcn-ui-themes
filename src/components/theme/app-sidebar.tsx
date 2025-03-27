@@ -45,7 +45,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       },
       {
         name: 'My themes',
-        url: '/themes/my-themes',
+        url: '/themes/user',
         icon: SwatchBook,
         enabled: !!session,
       },
