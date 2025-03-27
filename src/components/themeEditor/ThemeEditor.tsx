@@ -253,7 +253,9 @@ function ThemeEditor({ id }: { id: string }) {
             >
               {/* Example of using Tailwind with the theme config */}
               <div className='my-4 flex items-center justify-center'>
-                <h2 className='text-2xl font-bold'>Theme Preview</h2>
+                <h2 className='text-2xl font-bold text-foreground'>
+                  Theme Preview
+                </h2>
               </div>
 
               <ColorSwatches
