@@ -19,7 +19,7 @@ import {
   ThumbsUp,
 } from 'lucide-react';
 import { Link } from 'next-view-transitions';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
 export function ThemeCard({ theme }: { theme: ThemeWithUserActions }) {
@@ -33,7 +33,11 @@ export function ThemeCard({ theme }: { theme: ThemeWithUserActions }) {
   const [bookmarkCounts, setBookmarkCounts] = useState<number>(
     theme._count.bookmarks
   );
-  const [colors] = useState(theme.colors);
+  const [colors, setColors] = useState(theme.colors);
+
+  useEffect(() => {
+    setColors(theme.colors || []); // Update colors when theme.colors changes
+  }, [theme.colors]);
 
   const likeMutation = useMutation({
     mutationFn: (themeId: string) =>
