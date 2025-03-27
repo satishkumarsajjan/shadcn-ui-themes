@@ -24,6 +24,18 @@ import { AllPieChartsObject } from '../displayComponents/charts/pie-chart/AllPie
 import { AllRadarChartsObject } from '../displayComponents/charts/radar-chart/AllRadarCharts';
 import { AllRadialChartsObject } from '../displayComponents/charts/radial-chart/AllRadialCharts';
 import { AllTooltipChartObject } from '../displayComponents/charts/tooltip/AllTooltipCharts';
+import Buttons from '../displayComponents/simpletons/Buttons';
+import Alerts from '../displayComponents/simpletons/Alerts';
+import Badges from '../displayComponents/simpletons/Badges';
+import { CommandDemo } from '../displayComponents/simpletons/CommandDemo';
+import { MenubarDemo } from '../displayComponents/simpletons/MenubarDemo';
+import { PaginationDemo } from '../displayComponents/simpletons/PaginationDemo';
+import { ProgressDemo } from '../displayComponents/simpletons/ProgressDemo';
+import { RadioGroupDemo } from '../displayComponents/simpletons/RadioGroupDemo';
+import { ScrollAreaHorizontalDemo } from '../displayComponents/simpletons/ScrollareaDemo';
+import { SeparatorDemo } from '../displayComponents/simpletons/SeparatorDemo';
+import { SliderDemo } from '../displayComponents/simpletons/SliderDemo';
+import { ToggleGroupDemo } from '../displayComponents/simpletons/ToggleGroupDemo';
 
 export interface ThemeConfig {
   [key: string]: string;
@@ -265,61 +277,28 @@ function ThemeEditor({ id }: { id: string }) {
                 themeConfig={themeConfig}
                 onThemeChange={handleColorChange}
               />
-              {/* Main content using the theme */}
+
               <div
-                className='border rounded-md p-4 mb-4'
+                className='grid gap-4 my-4'
                 style={{
-                  borderColor: `hsl(${themeConfig['--border'] || '0 0% 20%'})`,
+                  gridTemplateColumns:
+                    'repeat(auto-fit, minmax(min(100%, 500px), 1fr))',
                 }}
               >
-                <h3
-                  className='text-lg font-medium'
-                  style={{
-                    color: `hsl(${themeConfig['--foreground'] || '0 0% 100%'})`,
-                  }}
-                >
-                  Component with Themed Styles
-                </h3>
-                <p
-                  style={{
-                    color: `hsl(${
-                      themeConfig['--muted-foreground'] || '0 0% 70%'
-                    })`,
-                  }}
-                >
-                  This component inherits styles from the theme configuration.
-                </p>
-
-                <div className='mt-2 flex gap-2'>
-                  <button
-                    className='px-3 py-1 rounded-md text-sm font-medium'
-                    style={{
-                      backgroundColor: `hsl(${
-                        themeConfig['--primary'] || '0 0% 50%'
-                      })`,
-                      color: `hsl(${
-                        themeConfig['--primary-foreground'] || '0 0% 100%'
-                      })`,
-                    }}
-                  >
-                    Primary Button
-                  </button>
-
-                  <button
-                    className='px-3 py-1 rounded-md text-sm font-medium'
-                    style={{
-                      backgroundColor: `hsl(${
-                        themeConfig['--secondary'] || '0 0% 30%'
-                      })`,
-                      color: `hsl(${
-                        themeConfig['--secondary-foreground'] || '0 0% 100%'
-                      })`,
-                    }}
-                  >
-                    Secondary Button
-                  </button>
-                </div>
+                <Buttons />
+                <Badges />
+                <MenubarDemo />
+                <PaginationDemo />
+                <ProgressDemo />
+                <SliderDemo />
+                <SeparatorDemo />
+                <ToggleGroupDemo />
+                <RadioGroupDemo />
+                <Alerts />
+                <CommandDemo />
+                <ScrollAreaHorizontalDemo />
               </div>
+
               <div className='my-4'>
                 {!themeDescription &&
                 !(session?.user?.id === data?.theme.userId) ? null : (
