@@ -22,7 +22,7 @@ export function MenubarDemo() {
       <div className='flex items-center justify-center'>
         <Menubar>
           <MenubarMenu>
-            <MenubarTrigger>File</MenubarTrigger>
+            <MenubarTrigger className='text-foreground'>File</MenubarTrigger>
             <MenubarContent>
               <MenubarItem>
                 New Tab <MenubarShortcut>⌘T</MenubarShortcut>
@@ -47,7 +47,7 @@ export function MenubarDemo() {
             </MenubarContent>
           </MenubarMenu>
           <MenubarMenu>
-            <MenubarTrigger>Edit</MenubarTrigger>
+            <MenubarTrigger className='text-foreground'>Edit</MenubarTrigger>
             <MenubarContent>
               <MenubarItem>
                 Undo <MenubarShortcut>⌘Z</MenubarShortcut>
@@ -73,7 +73,7 @@ export function MenubarDemo() {
             </MenubarContent>
           </MenubarMenu>
           <MenubarMenu>
-            <MenubarTrigger>View</MenubarTrigger>
+            <MenubarTrigger className='text-foreground'>View</MenubarTrigger>
             <MenubarContent>
               <MenubarCheckboxItem>
                 Always Show Bookmarks Bar
@@ -95,7 +95,9 @@ export function MenubarDemo() {
             </MenubarContent>
           </MenubarMenu>
           <MenubarMenu>
-            <MenubarTrigger>Profiles</MenubarTrigger>
+            <MenubarTrigger className='text-foreground'>
+              Profiles
+            </MenubarTrigger>
             <MenubarContent>
               <MenubarRadioGroup value='benoit'>
                 <MenubarRadioItem value='andy'>Andy</MenubarRadioItem>

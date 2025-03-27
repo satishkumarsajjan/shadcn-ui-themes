@@ -19,24 +19,31 @@ export function PaginationDemo() {
         <Pagination>
           <PaginationContent>
             <PaginationItem>
-              <PaginationPrevious className='cursor-pointer' />
+              <PaginationPrevious className='cursor-pointer text-foreground' />
             </PaginationItem>
             <PaginationItem>
-              <PaginationLink className='cursor-pointer'>1</PaginationLink>
+              <PaginationLink className='cursor-pointer text-foreground'>
+                1
+              </PaginationLink>
             </PaginationItem>
             <PaginationItem>
-              <PaginationLink isActive className='cursor-pointer'>
+              <PaginationLink
+                isActive
+                className='cursor-pointer text-foreground'
+              >
                 2
               </PaginationLink>
             </PaginationItem>
             <PaginationItem>
-              <PaginationLink className='cursor-pointer'>3</PaginationLink>
+              <PaginationLink className='cursor-pointer text-foreground'>
+                3
+              </PaginationLink>
             </PaginationItem>
             <PaginationItem>
-              <PaginationEllipsis />
+              <PaginationEllipsis className='text-foreground' />
             </PaginationItem>
             <PaginationItem>
-              <PaginationNext className='cursor-pointer' />
+              <PaginationNext className='cursor-pointer text-foreground' />
             </PaginationItem>
           </PaginationContent>
         </Pagination>

@@ -11,15 +11,21 @@ export function RadioGroupDemo() {
         <RadioGroup defaultValue='comfortable'>
           <div className='flex items-center space-x-2'>
             <RadioGroupItem value='default' id='r1' />
-            <Label htmlFor='r1'>Default</Label>
+            <Label htmlFor='r1' className='text-foreground'>
+              Default
+            </Label>
           </div>
           <div className='flex items-center space-x-2'>
             <RadioGroupItem value='comfortable' id='r2' />
-            <Label htmlFor='r2'>Comfortable</Label>
+            <Label htmlFor='r2' className='text-foreground'>
+              Comfortable
+            </Label>
           </div>
           <div className='flex items-center space-x-2'>
             <RadioGroupItem value='compact' id='r3' />
-            <Label htmlFor='r3'>Compact</Label>
+            <Label htmlFor='r3' className='text-foreground'>
+              Compact
+            </Label>
           </div>
         </RadioGroup>
       </div>

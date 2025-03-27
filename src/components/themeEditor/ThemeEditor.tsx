@@ -263,7 +263,7 @@ function ThemeEditor({ id }: { id: string }) {
               />
               <Separator className='my-4' />
               <span className='w-full flex items-center justify-center font-semibold text-2xl mt-4 p-4'>
-                <h1>Basic components</h1>
+                <h1 className='text-foreground'>Basic components</h1>
               </span>
               <div
                 className='grid gap-4'
