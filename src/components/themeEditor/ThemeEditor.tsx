@@ -303,7 +303,7 @@ function ThemeEditor({ id }: { id: string }) {
               </div>
               <Separator className='my-4' />
               <span className='w-full flex items-center justify-center font-semibold text-2xl mt-4 p-4'>
-                <h1>Components & Charts</h1>
+                <h1 className='text-foreground'>Components & Charts</h1>
               </span>
               <Tabs defaultValue='components' className='w-full'>
                 <TabsList className='w-full'>

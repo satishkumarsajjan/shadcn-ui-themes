@@ -33,7 +33,7 @@ export function ThemeCard({ theme }: { theme: ThemeWithUserActions }) {
   const [bookmarkCounts, setBookmarkCounts] = useState<number>(
     theme._count.bookmarks
   );
-  const [colors, setColors] = useState(theme.colors);
+  const [colors] = useState(theme.colors);
 
   const likeMutation = useMutation({
     mutationFn: (themeId: string) =>
@@ -130,9 +130,9 @@ export function ThemeCard({ theme }: { theme: ThemeWithUserActions }) {
               gridTemplateColumns: `repeat(${colors.length}, minmax(0, 1fr))`,
             }}
           >
-            {colors?.map((item) => (
+            {colors?.map((item, key) => (
               <div
-                key={item}
+                key={key}
                 className={`col-span-1 h-full`}
                 style={{ backgroundColor: item }}
               ></div>
@@ -150,6 +150,8 @@ export function ThemeCard({ theme }: { theme: ThemeWithUserActions }) {
           <Button
             variant={'ghost'}
             onClick={() => likeMutation.mutate(theme.id)}
+            aria-label={isLiked ? 'Unlike theme' : 'Like theme'}
+            aria-pressed={isLiked}
           >
             <ThumbsUp className={cn(isLiked && 'font-bold text-cyan-500')} />
             <p>{likeCounts}</p>
@@ -157,6 +159,8 @@ export function ThemeCard({ theme }: { theme: ThemeWithUserActions }) {
           <Button
             variant='ghost'
             onClick={() => dislikeMutation.mutate(theme.id)}
+            aria-label={isDisliked ? 'Remove dislike' : 'Dislike theme'}
+            aria-pressed={isDisliked}
           >
             <ThumbsDown
               className={cn(isDisliked && 'font-bold text-red-500')}
@@ -168,6 +172,8 @@ export function ThemeCard({ theme }: { theme: ThemeWithUserActions }) {
           <Button
             variant='ghost'
             onClick={() => bookmarkMutation.mutate(theme.id)}
+            aria-label={isBookmarked ? 'Remove bookmark' : 'Bookmark theme'}
+            aria-pressed={isBookmarked}
           >
             {isBookmarked ? (
               <>
@@ -184,7 +190,11 @@ export function ThemeCard({ theme }: { theme: ThemeWithUserActions }) {
             )}
             <p>{bookmarkCounts}</p>
           </Button>
-          <Button variant='ghost' onClick={() => handleShare(theme.id)}>
+          <Button
+            variant='ghost'
+            onClick={() => handleShare(theme.id)}
+            aria-label='Share theme'
+          >
             <Share2 />
           </Button>
         </div>
