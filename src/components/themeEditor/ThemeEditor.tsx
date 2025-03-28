@@ -36,6 +36,7 @@ import { ScrollAreaHorizontalDemo } from '../displayComponents/simpletons/Scroll
 import { SeparatorDemo } from '../displayComponents/simpletons/SeparatorDemo';
 import { SliderDemo } from '../displayComponents/simpletons/SliderDemo';
 import { ToggleGroupDemo } from '../displayComponents/simpletons/ToggleGroupDemo';
+import ImportThemeButton from '../theme/themes/ImportThemeButton';
 
 export interface ThemeConfig {
   [key: string]: string;
@@ -252,10 +253,11 @@ function ThemeEditor({ id }: { id: string }) {
               }}
             >
               {/* Example of using Tailwind with the theme config */}
-              <div className='my-4 flex items-center justify-center'>
+              <div className='my-4 flex items-center justify-between'>
                 <h2 className='text-2xl font-bold text-foreground'>
                   Theme Preview
                 </h2>
+                <ImportThemeButton themeId={id} userId={data?.theme.userId} />
               </div>
 
               <ColorSwatches
