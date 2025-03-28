@@ -5,7 +5,6 @@ import {
   UserProfileHeroSkeleton,
 } from '@/components/profile/UserProfileHero';
 import ThemesGrid from '@/components/theme/themes/themesGrid';
-import { Skeleton } from '@/components/ui/skeleton';
 import { useUserThemes } from '@/hooks/get-myThemes';
 import { useGetUser } from '@/hooks/get-user-by-id';
 import { useParams } from 'next/navigation';
