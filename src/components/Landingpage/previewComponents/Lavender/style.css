@@ -1,0 +1,35 @@
+.lavender {
+  --background: 285 30% 8%;
+  --foreground: 270 50% 94%;
+  --card: 285 30% 10%;
+  --card-foreground: 270 50% 94%;
+  --popover: 285 30% 10%;
+  --popover-foreground: 270 50% 94%;
+  --primary: 270 94% 60%;
+  --primary-foreground: 270 9.1% 97.8%;
+  --secondary: 285 20% 16%;
+  --secondary-foreground: 270 50% 94%;
+  --muted: 285 20% 16%;
+  --muted-foreground: 270 30% 70%;
+  --accent: 275 30% 18%;
+  --accent-foreground: 270 50% 94%;
+  --destructive: 0 70% 45%;
+  --destructive-foreground: 270 9.1% 97.8%;
+  --border: 285 25% 20%;
+  --input: 285 25% 20%;
+  --ring: 270 94% 60%;
+  --chart-1: 270 94% 60%;
+  --chart-2: 290 60% 40%;
+  --chart-3: 260 65% 65%;
+  --chart-4: 260 70% 50%;
+  --chart-5: 250 67% 47%;
+  --sidebar-background: 285 30% 6%;
+  --sidebar-foreground: 270 50% 92%;
+  --sidebar-primary: 270 94% 60%;
+  --sidebar-primary-foreground: 270 9.1% 97.8%;
+  --sidebar-accent: 275 30% 16%;
+  --sidebar-accent-foreground: 270 50% 94%;
+  --sidebar-border: 285 25% 18%;
+  --sidebar-ring: 270 94% 60%;
+  --radius: 0.5rem;
+}

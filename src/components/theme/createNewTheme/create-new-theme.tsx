@@ -3,6 +3,7 @@
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -70,8 +71,8 @@ const CreateNewTheme = ({ className }: { className?: string }) => {
       <DialogTrigger asChild>
         <Button
           variant='outline'
-          size='icon'
-          className={cn('flex w-full justify-between px-2', className)}
+          size='lg'
+          className={cn('flex justify-between px-2', className)}
         >
           <LucidePlusSquare className='' />
           <span>Create theme</span>
@@ -105,9 +106,11 @@ const CreateNewTheme = ({ className }: { className?: string }) => {
                 )}
               />
               <DialogFooter>
-                <Button type='submit' disabled={mutation.isPending}>
-                  Create
-                </Button>
+                <DialogClose asChild>
+                  <Button type='submit' disabled={mutation.isPending}>
+                    Create
+                  </Button>
+                </DialogClose>
               </DialogFooter>
             </form>
           </Form>

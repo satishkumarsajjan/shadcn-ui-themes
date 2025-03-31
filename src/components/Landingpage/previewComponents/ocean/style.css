@@ -1,0 +1,35 @@
+.ocean {
+  --background: 195 30% 94%;
+  --foreground: 195 100% 12%;
+  --card: 195 20% 98%;
+  --card-foreground: 195 100% 12%;
+  --popover: 195 20% 98%;
+  --popover-foreground: 195 100% 12%;
+  --primary: 195 100% 50%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 195 60% 85%;
+  --secondary-foreground: 195 100% 25%;
+  --muted: 195 40% 90%;
+  --muted-foreground: 195 60% 35%;
+  --accent: 195 70% 80%;
+  --accent-foreground: 195 100% 25%;
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 195 50% 85%;
+  --input: 195 50% 85%;
+  --ring: 195 100% 50%;
+  --chart-1: 195 100% 50%;
+  --chart-2: 220 90% 55%;
+  --chart-3: 180 80% 40%;
+  --chart-4: 165 70% 45%;
+  --chart-5: 235 80% 55%;
+  --radius: 0.5rem;
+  --sidebar-background: 195 40% 92%;
+  --sidebar-foreground: 195 100% 20%;
+  --sidebar-primary: 195 100% 50%;
+  --sidebar-primary-foreground: 0 0% 100%;
+  --sidebar-accent: 195 70% 80%;
+  --sidebar-accent-foreground: 195 100% 25%;
+  --sidebar-border: 195 50% 85%;
+  --sidebar-ring: 195 100% 50%;
+}
