@@ -30,10 +30,6 @@ const ThemesGrid = ({
   setPage,
   pageSize,
 }: ThemesGridProps) => {
-  //   const [page, setPage] = useState(1);
-  //   const pageSize = 9;
-  // const { data, isFetching, error } = useMyThemes(page, pageSize);
-
   const totalPages = data ? Math.ceil(data.totalCount / pageSize) : 1;
 
   const handleNextPage = () => {
@@ -57,8 +53,8 @@ const ThemesGrid = ({
       )}
       {error && <p>Error: {error.message}</p>}
       <div className='grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-3 gap-4'>
-        {data?.themes.map((item) => (
-          <div key={item.id}>
+        {data?.themes.map((item, index) => (
+          <div key={index}>
             <ThemeCard theme={item} />
           </div>
         ))}

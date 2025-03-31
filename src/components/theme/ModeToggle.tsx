@@ -33,8 +33,12 @@ export function ModeToggle() {
         <DropdownMenuItem onClick={() => setTheme('light')}>
           Light
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme('light-bluish')}>
-          Light Bluish
+
+        <DropdownMenuItem onClick={() => setTheme('nautical-sunset')}>
+          Nautical Sunset
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => setTheme('hasiru')}>
+          Hasiru
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => setTheme('dark')}>
           Dark

@@ -3,7 +3,10 @@
 import ComponentGrid from '@/components/Editor/ComponentGrid';
 import { useThemeById } from '@/hooks/get-theme-by-Id';
 import { DEFAULT_THEME } from '@/lib/constants';
+import { useSession } from 'next-auth/react';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { AllAreaChartsObject } from '../displayComponents/charts/area-chart/AllAreaCharts';
+import ChartsGrid from '../displayComponents/charts/ChartsGrid';
 import { EditTheme } from '../Editor/ThemeSettings/ThemeSettings';
 import {
   ResizableHandle,
@@ -11,9 +14,32 @@ import {
   ResizablePanelGroup,
 } from '../ui/resizable';
 import { ScrollArea } from '../ui/scroll-area';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
 import ColorSwatches from './ColorSwatches';
 import DescriptionTextEditor from './RichTextEditor';
-import { useSession } from 'next-auth/react';
+import { Separator } from '../ui/separator';
+import { AllBarCharsObject } from '../displayComponents/charts/bar-chart/AllBarCharts';
+import { AllLineChartsObject } from '../displayComponents/charts/line-chart/AllLineCharts';
+import { AllPieChartsObject } from '../displayComponents/charts/pie-chart/AllPieCharts';
+import { AllRadarChartsObject } from '../displayComponents/charts/radar-chart/AllRadarCharts';
+import { AllRadialChartsObject } from '../displayComponents/charts/radial-chart/AllRadialCharts';
+import { AllTooltipChartObject } from '../displayComponents/charts/tooltip/AllTooltipCharts';
+import Buttons from '../displayComponents/simpletons/Buttons';
+import Alerts from '../displayComponents/simpletons/Alerts';
+import Badges from '../displayComponents/simpletons/Badges';
+import { CommandDemo } from '../displayComponents/simpletons/CommandDemo';
+import { MenubarDemo } from '../displayComponents/simpletons/MenubarDemo';
+import { PaginationDemo } from '../displayComponents/simpletons/PaginationDemo';
+import { ProgressDemo } from '../displayComponents/simpletons/ProgressDemo';
+import { RadioGroupDemo } from '../displayComponents/simpletons/RadioGroupDemo';
+import { ScrollAreaHorizontalDemo } from '../displayComponents/simpletons/ScrollareaDemo';
+import { SeparatorDemo } from '../displayComponents/simpletons/SeparatorDemo';
+import { SliderDemo } from '../displayComponents/simpletons/SliderDemo';
+import { ToggleGroupDemo } from '../displayComponents/simpletons/ToggleGroupDemo';
+import ImportThemeButton from '../theme/themes/ImportThemeButton';
+import { Dialog, DialogTrigger } from '../ui/dialog';
+import { Button } from '../ui/button';
+import SignInDialogContent from '../auth/SignInDialogContent';
 
 export interface ThemeConfig {
   [key: string]: string;
@@ -38,7 +64,15 @@ const convertThemeToJSON = (str: string): ThemeConfig => {
 
   return result;
 };
-
+const chartComponents = [
+  AllAreaChartsObject,
+  AllBarCharsObject,
+  AllLineChartsObject,
+  AllPieChartsObject,
+  AllRadarChartsObject,
+  AllRadialChartsObject,
+  AllTooltipChartObject,
+];
 function ThemeEditor({ id }: { id: string }) {
   const { data: session } = useSession();
   const [theme, setTheme] = useState(() => themeCache.get(id) || DEFAULT_THEME);
@@ -222,24 +256,21 @@ function ThemeEditor({ id }: { id: string }) {
               }}
             >
               {/* Example of using Tailwind with the theme config */}
-              <div className='mb-4'>
-                <h2
-                  className='text-xl font-bold'
-                  style={{
-                    color: `hsl(${themeConfig['--foreground'] || '0 0% 100%'})`,
-                  }}
-                >
-                  Theme Preview
-                </h2>
-                <p
-                  style={{
-                    color: `hsl(${
-                      themeConfig['--muted-foreground'] || '0 0% 70%'
-                    })`,
-                  }}
-                >
-                  Click on color swatches to configure their color values
-                </p>
+              <div className='my-4 flex items-center justify-between'>
+                <h1 className='text-foreground'>{data?.theme.title}</h1>
+                {session ? (
+                  <ImportThemeButton themeId={id} userId={data?.theme.userId} />
+                ) : (
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <Button>
+                        <span>Import theme</span>
+                        <span className='sr-only'>Import theme</span>
+                      </Button>
+                    </DialogTrigger>
+                    <SignInDialogContent />
+                  </Dialog>
+                )}
               </div>
 
               <ColorSwatches
@@ -247,75 +278,88 @@ function ThemeEditor({ id }: { id: string }) {
                 themeConfig={themeConfig}
                 onThemeChange={handleColorChange}
               />
-              {/* Main content using the theme */}
+              <Separator className='my-4' />
+              <span className='w-full flex items-center justify-center font-semibold text-2xl mt-4 p-4'>
+                <h1 className='text-foreground'>Basic components</h1>
+              </span>
               <div
-                className='border rounded-md p-4 mb-4'
+                className='grid gap-4'
                 style={{
-                  borderColor: `hsl(${themeConfig['--border'] || '0 0% 20%'})`,
+                  gridTemplateColumns:
+                    'repeat(auto-fit, minmax(min(100%, 500px), 1fr))',
                 }}
               >
-                <h3
-                  className='text-lg font-medium'
-                  style={{
-                    color: `hsl(${themeConfig['--foreground'] || '0 0% 100%'})`,
-                  }}
-                >
-                  Component with Themed Styles
-                </h3>
-                <p
-                  style={{
-                    color: `hsl(${
-                      themeConfig['--muted-foreground'] || '0 0% 70%'
-                    })`,
-                  }}
-                >
-                  This component inherits styles from the theme configuration.
-                </p>
-
-                <div className='mt-2 flex gap-2'>
-                  <button
-                    className='px-3 py-1 rounded-md text-sm font-medium'
-                    style={{
-                      backgroundColor: `hsl(${
-                        themeConfig['--primary'] || '0 0% 50%'
-                      })`,
-                      color: `hsl(${
-                        themeConfig['--primary-foreground'] || '0 0% 100%'
-                      })`,
-                    }}
-                  >
-                    Primary Button
-                  </button>
-
-                  <button
-                    className='px-3 py-1 rounded-md text-sm font-medium'
-                    style={{
-                      backgroundColor: `hsl(${
-                        themeConfig['--secondary'] || '0 0% 30%'
-                      })`,
-                      color: `hsl(${
-                        themeConfig['--secondary-foreground'] || '0 0% 100%'
-                      })`,
-                    }}
-                  >
-                    Secondary Button
-                  </button>
-                </div>
+                <Buttons />
+                <Badges />
+                <MenubarDemo />
+                <PaginationDemo />
+                <ProgressDemo />
+                <SliderDemo />
+                <SeparatorDemo />
+                <ToggleGroupDemo />
+                <RadioGroupDemo />
+                <Alerts />
+                <CommandDemo />
+                <ScrollAreaHorizontalDemo />
               </div>
-              <div className='mt-8'>
-                <h3 className='text-lg text-foreground font-medium'>
-                  Theme Description
-                </h3>
-                <DescriptionTextEditor
-                  themeId={data?.theme.id}
-                  initialContent={themeDescription}
-                  readonly={!(session?.user?.id === data?.theme.userId)}
-                  onDescriptionUpdate={(updatedDescription: string) =>
-                    setThemeDescription(updatedDescription)
-                  }
-                />
+
+              <div className='my-4'>
+                {!themeDescription &&
+                !(session?.user?.id === data?.theme.userId) ? null : (
+                  <DescriptionTextEditor
+                    themeId={data?.theme.id}
+                    initialContent={themeDescription}
+                    readonly={!(session?.user?.id === data?.theme.userId)}
+                    onDescriptionUpdate={(updatedDescription: string) =>
+                      setThemeDescription(updatedDescription)
+                    }
+                  />
+                )}
               </div>
-              <ComponentGrid />
+              <Separator className='my-4' />
+              <span className='w-full flex items-center justify-center font-semibold text-2xl mt-4 p-4'>
+                <h1 className='text-foreground'>Components & Charts</h1>
+              </span>
+              <Tabs defaultValue='components' className='w-full'>
+                <TabsList className='w-full'>
+                  <TabsTrigger value='components' className='w-full'>
+                    Components
+                  </TabsTrigger>
+                  <TabsTrigger value='charts' className='w-full'>
+                    Charts
+                  </TabsTrigger>
+                </TabsList>
+                <TabsContent value='components'>
+                  <ComponentGrid />
+                </TabsContent>
+
+                <TabsContent value='charts'>
+                  <div className='flex flex-col gap-4'>
+                    <Tabs defaultValue='Area Charts' className='w-full'>
+                      <TabsList className='w-full'>
+                        {chartComponents.map((chartObject, key) => (
+                          <TabsTrigger
+                            value={chartObject.title}
+                            className='w-full'
+                            key={key}
+                          >
+                            {chartObject.title}
+                          </TabsTrigger>
+                        ))}
+                      </TabsList>
+                      {chartComponents.map((chartObject, key) => (
+                        <TabsContent value={chartObject.title} key={key}>
+                          <ChartsGrid
+                            Components={chartObject.Components}
+                            title={chartObject.title}
+                            Additional={chartObject.Additional}
+                          />
+                        </TabsContent>
+                      ))}
+                    </Tabs>
+                  </div>
+                </TabsContent>
+              </Tabs>
             </div>
           </ScrollArea>
         </ResizablePanel>

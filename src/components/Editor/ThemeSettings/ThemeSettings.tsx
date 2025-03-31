@@ -248,7 +248,7 @@ export function EditTheme({
     <div className='m-2 h-full'>
       <div className='flex justify-between items-center'>
         <h1 className='font-bold text-xl mb-2'>{themeTitle}</h1>
-        {theme?.id && session?.user && (
+        {theme?.id && session?.user?.id === theme.userId && (
           <ThemeEditDialog theme={theme} onTitleUpdate={onTitleUpdate} />
         )}
       </div>
@@ -258,7 +258,7 @@ export function EditTheme({
         themeMode={themeMode}
         onModeChange={handleModeChange}
       />
-      <Separator orientation='horizontal' className='my-3' />
+      {isOwner && <Separator orientation='horizontal' className='my-3' />}
       <div className='flex flex-col'>
         {isOwner && (
           <div className='flex gap-2'>

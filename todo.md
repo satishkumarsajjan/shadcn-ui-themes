@@ -2,23 +2,15 @@
 
 ## 🚀 High Priority
 
-- [ ] A theme preview with mode switching (light/dark)
-- [ ] add appsidebar components to the theme preview
+- [x] add charts components to the theme preview
 - [ ] Landing page implementation
 - [x] Description and username
-- [ ] personal profile editor
+- [x] personal profile editor
 - [x] Delete Theme
-- [ ] Delete profile
-- [ ] Adjust the theme of the app.
-- [ ] able to edit theme name and description.
-- [ ] users profile with their themes
-
-## 🔧 Features & Components
-
-- [ ] Component editing functionality
-- [ ] Basic editing interface
-- [ ] Property controls
-- [ ] Preview capability
+- [x] Adjust the theme of the app.
+- [x] able to edit theme name and description.
+- [x] users profile with their themes
+- [ ] Analytics
 
 ## 📋 Backlog
 

@@ -7,7 +7,7 @@ export async function GET(req: Request) {
     // Extract themeId from URL parameters instead of request body
     const url = new URL(req.url);
     const themeId = url.searchParams.get('themeId');
-    console.log(themeId);
+
 
     if (!themeId) {
       return new NextResponse('Theme ID is required', { status: 400 });

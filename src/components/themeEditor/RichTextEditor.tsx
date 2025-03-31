@@ -1,6 +1,7 @@
 'use client';
-
 import { Button } from '@/components/ui/button'; // ShadCN UI Button
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import axios from 'axios';
 import React, { useState } from 'react';
 import RichTextEditor from 'reactjs-tiptap-editor';
 import {
@@ -20,23 +21,16 @@ import {
   Italic,
 } from 'reactjs-tiptap-editor/extension-bundle';
 import 'reactjs-tiptap-editor/style.css';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import axios from 'axios';
 import { toast } from 'sonner';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/ui/accordion';
 
 const extensions = [
-  BaseKit.configure({
-    // Show placeholder
-    placeholder: {
-      showOnlyCurrent: true,
-    },
-
-    // Character count
-    characterCount: {
-      limit: 10_000,
-    },
-  }),
-
+  BaseKit,
   Heading,
   Italic,
   Bold,
@@ -44,7 +38,7 @@ const extensions = [
   Blockquote,
   Clear,
   Code,
-  CodeBlock,
+  CodeBlock.configure({ defaultTheme: 'andromeeda' }),
   Color,
   FontFamily,
   FontSize,
@@ -71,7 +65,6 @@ const DescriptionTextEditor: React.FC<RichTextEditorProps> = ({
   const onChangeContent = (value: any) => {
     setContent(value);
   };
-  console.log(content);
 
   const mutation = useMutation({
     mutationFn: (description: string) => {
@@ -110,24 +103,38 @@ const DescriptionTextEditor: React.FC<RichTextEditorProps> = ({
   };
 
   return (
-    <div className='space-y-4'>
-      <div className='bg-white bg-opacity-25 backdrop-blur-lg rounded-md p-4'>
-        <RichTextEditor
-          content={content}
-          output='html'
-          extensions={extensions}
-          onChangeContent={onChangeContent}
-          disabled={readonly}
-        />
-      </div>
-      {!readonly && (
-        <div className='flex items-center justify-end mr-4'>
-          <Button onClick={handleSave} disabled={mutation.isPending}>
-            {mutation.isPending ? 'Saving...' : 'Save Description'}
-          </Button>
-        </div>
-      )}
-    </div>
+    <Accordion type='single' collapsible>
+      <AccordionItem value='item-1'>
+        <AccordionTrigger className='text-foreground border rounded-md drop-shadow-lg p-4 text-xl'>
+          Theme Description
+        </AccordionTrigger>
+        <AccordionContent>
+          <div className='space-y-4 mt-2'>
+            <div className='bg-white bg-opacity-25 backdrop-blur-lg rounded-md p-4 drop-shadow-lg'>
+              <RichTextEditor
+                content={content}
+                output='html'
+                extensions={extensions}
+                onChangeContent={onChangeContent}
+                disabled={readonly}
+                hideToolbar={readonly}
+                removeDefaultWrapper
+                contentClass={'bg-background text-foreground'}
+                hideBubble={readonly}
+                label='Theme Description'
+              />
+            </div>
+            {!readonly && (
+              <div className='flex items-center justify-end mr-4'>
+                <Button onClick={handleSave} disabled={mutation.isPending}>
+                  {mutation.isPending ? 'Saving...' : 'Save Description'}
+                </Button>
+              </div>
+            )}
+          </div>
+        </AccordionContent>
+      </AccordionItem>
+    </Accordion>
   );
 };
 export default DescriptionTextEditor;

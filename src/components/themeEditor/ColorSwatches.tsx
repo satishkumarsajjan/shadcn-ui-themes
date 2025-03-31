@@ -83,7 +83,12 @@ const ColorSwatches = memo(
     return (
       <div className='space-y-4'>
         <div className='flex justify-between items-center'>
-          <h3 className='text-lg font-medium'>Color Swatches</h3>
+          <span>
+            <h3 className='font-medium text-primary'>Color Swatches</h3>
+            <p className='text-muted-foreground'>
+              Click on color swatches to configure their color values
+            </p>
+          </span>
           <Button
             variant='secondary'
             size='sm'
@@ -114,7 +119,7 @@ const ColorSwatches = memo(
                 <HoverCard key={key}>
                   <HoverCardTrigger>
                     <div
-                      className={`p-6 rounded flex flex-col items-center justify-center shadow-md cursor-pointer relative ${
+                      className={`p-6 border rounded flex flex-col items-center justify-center shadow-md cursor-pointer relative ${
                         isChanged ? 'ring-2 ring-primary' : ''
                       }`}
                       style={{
