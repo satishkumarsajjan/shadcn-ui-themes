@@ -1,9 +1,9 @@
 'use client';
 
-import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Facebook, Github, Instagram, Linkedin, Twitter } from 'lucide-react';
 import { useTheme } from 'next-themes';
+import Link from 'next/link';
 
 export function Footer() {
   const currentYear = new Date().getFullYear();

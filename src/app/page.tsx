@@ -1,5 +1,3 @@
-import { auth } from '@/auth';
-import SignIn from '@/components/auth/sign-in';
 import { CommunitySection } from '@/components/Landingpage/CommunitySection';
 import { CtaSection } from '@/components/Landingpage/CtaSection';
 import { FeaturesSection } from '@/components/Landingpage/FeaturesSection';
@@ -10,9 +8,8 @@ import { ThemeShowcaseSection } from '@/components/Landingpage/ThemeShowcaseSect
 import { ThemesShowcase } from '@/components/Landingpage/ThemesShowcase';
 
 export default async function Home() {
-  const session = await auth();
   return (
-    <main className='relative'>
+    <main className='overflow-x-hidden'>
       <Navbar />
       <HeroSection />
       <FeaturesSection />

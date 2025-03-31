@@ -1,20 +1,21 @@
 'use client';
 
-import Link from 'next/link';
-import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { useTheme } from 'next-themes';
 import { ModeToggle } from '../theme/ModeToggle';
+import { useSession } from 'next-auth/react';
+import { Dialog, DialogTrigger } from '../ui/dialog';
+import SignInDialogContent from '../auth/SignInDialogContent';
+import CreateNewTheme from '../theme/createNewTheme/create-new-theme';
 
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
-  const { theme } = useTheme();
-  const isDark = theme === 'dark';
-
+  const { data: session } = useSession();
   // Update scroll state
   useEffect(() => {
     const handleScroll = () => {
@@ -30,7 +31,7 @@ export function Navbar() {
       initial={{ opacity: 0, y: -10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
-      className={`fixed top-0 left-0 right-0 z-50 flex h-16 items-center justify-between px-4 transition-all duration-200 md:px-6 lg:px-8 ${
+      className={`fixed overflow-x-hidden top-0 left-0 right-0 z-50 flex h-16 items-center justify-between px-4 transition-all duration-200 md:px-6 lg:px-8 ${
         isScrolled
           ? 'bg-background/90 backdrop-blur-lg shadow-sm'
           : 'bg-transparent'
@@ -49,12 +50,22 @@ export function Navbar() {
           <NavLinks className='mr-4' />
           <div className='flex items-center gap-3'>
             <ModeToggle />
-            <Button variant='outline' size='sm'>
-              Sign In
-            </Button>
-            <Button size='sm' className='btn-glow'>
-              Get Started
-            </Button>
+            {!session?.user && (
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button
+                    variant='outline'
+                    size='sm'
+                    className='flex w-full justify-between px-2'
+                  >
+                    <span>Sign in</span>
+                    <span className='sr-only'>Sign in</span>
+                  </Button>
+                </DialogTrigger>
+                <SignInDialogContent />
+              </Dialog>
+            )}
+            <CreateNewTheme className='bg-primary' />
           </div>
         </div>
 
@@ -98,9 +109,7 @@ export function Navbar() {
                       >
                         Sign In
                       </Button>
-                      <Button className='w-full justify-center btn-glow'>
-                        Get Started
-                      </Button>
+                      <CreateNewTheme />
                     </div>
                   </div>
                 </div>
@@ -123,7 +132,6 @@ function NavLinks({ className = '', mobileNav = false }: NavLinksProps) {
     { href: '#features', label: 'Features' },
     { href: '#themes', label: 'Themes' },
     { href: '#community', label: 'Community' },
-    { href: '#pricing', label: 'Pricing' },
   ];
 
   return (

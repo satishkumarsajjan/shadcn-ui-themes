@@ -1,12 +1,11 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, Check, Sparkles } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { useTheme } from 'next-themes';
 import { ScrollAnimation } from './ScrollAnimation';
 
 // Sample theme color schemes to showcase
@@ -55,14 +54,12 @@ const themeExamples = [
 
 export function HeroSection() {
   const [currentTheme, setCurrentTheme] = useState(0);
-  const { theme: appTheme } = useTheme();
-  const isDark = appTheme === 'dark';
 
   // Choose a different theme every 3 seconds
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentTheme((prev) => (prev + 1) % themeExamples.length);
-    }, 3000);
+    }, 5000);
     return () => clearInterval(interval);
   }, []);
 
@@ -137,10 +134,10 @@ export function HeroSection() {
             <div className='relative'>
               <motion.div
                 key={theme.name}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.5 }}
+                initial={{ opacity: 0, x: 50 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -50 }}
+                transition={{ duration: 0.8 }}
                 className='relative z-10 overflow-hidden rounded-xl border shadow-xl'
                 style={{
                   backgroundColor: theme.background,

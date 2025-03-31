@@ -2,14 +2,13 @@
 
 ## 🚀 High Priority
 
-- [x] add charts components to the theme preview
 - [ ] Landing page implementation
-- [x] Description and username
-- [x] personal profile editor
-- [x] Delete Theme
-- [x] Adjust the theme of the app.
-- [x] able to edit theme name and description.
-- [x] users profile with their themes
+- [ ] Polish Landing Page
+- [ ] Landing page sign in problem
+- [ ] Adjust landing page modes
+- [ ] Adjust theme cards
+- [ ] Adjust clickable link to their appropriate routes.
+- [ ] community section
 - [ ] Analytics
 
 ## 📋 Backlog
@@ -22,6 +21,13 @@
 
 <!-- Move items here when done -->
 
+- [x] add charts components to the theme preview
+- [x] Description and username
+- [x] personal profile editor
+- [x] Delete Theme
+- [x] Adjust the theme of the app.
+- [x] able to edit theme name and description.
+- [x] users profile with their themes
 - [x] Initial project setup
 
 ---
