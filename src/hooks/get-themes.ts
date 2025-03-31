@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { SortOption, TimeframeOption } from './useThemeFilter';
+import { ThemesResponse } from '@/types/apiReturnTypes';
 
 interface ThemesParams {
   page: number;
@@ -37,7 +38,7 @@ const fetchThemes = async ({
 };
 
 export function useThemes({ page, pageSize, sortBy, timeframe }: ThemesParams) {
-  return useQuery({
+  return useQuery<ThemesResponse>({
     queryKey: ['themes', { page, pageSize, sortBy, timeframe }],
     queryFn: () => fetchThemes({ page, pageSize, sortBy, timeframe }),
   });

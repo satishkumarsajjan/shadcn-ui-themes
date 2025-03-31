@@ -36,7 +36,7 @@ const features = [
     icon: <Share2Icon className='h-5 w-5' />,
     title: 'Easy Sharing',
     description:
-      'Generate shareable links and export themes directly to your projects.',
+      'Generate shareable links and copy themes directly to your projects.',
     color: 'bg-purple-500/10 text-purple-500',
   },
   {
@@ -84,6 +84,7 @@ export function FeaturesSection() {
         </div>
 
         {/* Features grid */}
+
         <div className='grid gap-8 md:grid-cols-2 lg:grid-cols-3'>
           {features.map((feature, index) => {
             // Calculate the delay (1, 2, 3 or 4)
@@ -112,7 +113,6 @@ export function FeaturesSection() {
                       {feature.description}
                     </p>
 
-                    {/* Subtle decorative element */}
                     <div
                       className='absolute bottom-0 right-0 h-16 w-16 -z-10 opacity-20 rounded-br-xl'
                       style={{
@@ -129,7 +129,7 @@ export function FeaturesSection() {
         </div>
 
         {/* Stats section */}
-        <ScrollAnimation
+        {/* <ScrollAnimation
           className='mt-24 rounded-xl border bg-card/50 p-8 backdrop-blur-sm'
           animationType='fade-up'
         >
@@ -159,7 +159,7 @@ export function FeaturesSection() {
               );
             })}
           </div>
-        </ScrollAnimation>
+        </ScrollAnimation> */}
       </div>
     </section>
   );
