@@ -30,7 +30,7 @@ export default function RootLayout({
   return (
     <html lang='en'>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased transition-transform duration-200 ease-out transform`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased `}
       >
         <ViewTransitions>
           <SessionProvider>

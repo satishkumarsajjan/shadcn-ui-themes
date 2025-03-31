@@ -106,11 +106,9 @@ const CreateNewTheme = ({ className }: { className?: string }) => {
                 )}
               />
               <DialogFooter>
-                <DialogClose asChild>
-                  <Button type='submit' disabled={mutation.isPending}>
-                    Create
-                  </Button>
-                </DialogClose>
+                <Button type='submit' disabled={mutation.isPending}>
+                  Create
+                </Button>
               </DialogFooter>
             </form>
           </Form>

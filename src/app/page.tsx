@@ -12,16 +12,13 @@ export default async function Home() {
   return (
     <main>
       <Navbar />
-
-      <div className='overflow-x-hidden'>
-        <HeroSection />
-        <FeaturesSection />
-        <ThemesShowcase />
-        <ThemeShowcaseSection />
-        <CommunitySection />
-        <CtaSection />
-        <Footer />
-      </div>
+      <HeroSection />
+      <FeaturesSection />
+      <ThemesShowcase />
+      <ThemeShowcaseSection />
+      <CommunitySection />
+      <CtaSection />
+      <Footer />
     </main>
   );
 }

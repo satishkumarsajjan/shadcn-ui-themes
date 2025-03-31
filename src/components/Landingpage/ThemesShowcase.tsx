@@ -136,11 +136,7 @@ export function ThemesShowcase() {
         </div>
 
         {/* Tabs and themes display */}
-        <ScrollAnimation
-          animationType='fade-up'
-          delay={3}
-          className='relative z-10'
-        >
+        <ScrollAnimation animationType='fade-up' delay={3} className='relative'>
           <Tabs
             defaultValue='trending'
             onValueChange={setCurrentCategory}

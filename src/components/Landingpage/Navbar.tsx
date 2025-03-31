@@ -12,6 +12,7 @@ import { useSession } from 'next-auth/react';
 import { Dialog, DialogTrigger } from '../ui/dialog';
 import SignInDialogContent from '../auth/SignInDialogContent';
 import CreateNewTheme from '../theme/createNewTheme/create-new-theme';
+import Logo from '../Logo';
 
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -42,11 +43,16 @@ export function Navbar() {
           }`}
         >
           <div className='flex items-center justify-between h-16'>
-            <Link href='/' className='flex items-center gap-2 outline-none'>
-              <div className='flex h-8 w-8 items-center justify-center rounded-md bg-primary text-primary-foreground font-semibold'>
-                TM
+            <Link href={'/'}>
+              <div className='flex justify-between items-center gap-2'>
+                <div className='flex aspect-square size-8 items-center justify-center rounded-lg'>
+                  <Logo />
+                </div>
+                <div className='grid flex-1 text-left text-sm leading-tight'>
+                  <span className='truncate font-semibold'>Themes</span>
+                  <span className='truncate text-xs'>For Shadcn UI</span>
+                </div>
               </div>
-              <span className='font-semibold text-lg'>ThemeManager</span>
             </Link>
 
             {/* Desktop Navigation */}
@@ -91,13 +97,20 @@ export function Navbar() {
                   <SheetContent side='right'>
                     <div className='flex h-full flex-col'>
                       <div className='flex items-center justify-between py-4'>
-                        <Link href='/' className='flex items-center gap-2'>
-                          <div className='flex h-8 w-8 items-center justify-center rounded-md bg-primary text-primary-foreground font-semibold'>
-                            TM
+                        <Link href={'/'}>
+                          <div className='flex justify-between items-center gap-2'>
+                            <div className='flex aspect-square size-8 items-center justify-center rounded-lg'>
+                              <Logo />
+                            </div>
+                            <div className='grid flex-1 text-left text-sm leading-tight'>
+                              <span className='truncate font-semibold'>
+                                Themes
+                              </span>
+                              <span className='truncate text-xs'>
+                                For Shadcn UI
+                              </span>
+                            </div>
                           </div>
-                          <span className='font-semibold text-lg'>
-                            ThemeManager
-                          </span>
                         </Link>
                         <SheetTrigger asChild>
                           <Button

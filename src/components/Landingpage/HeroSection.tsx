@@ -1,15 +1,14 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { ArrowRight, Check, Sparkles } from 'lucide-react';
+import { Check, Sparkles } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
-import { ScrollAnimation } from './ScrollAnimation';
-import CreateNewTheme from '../theme/createNewTheme/create-new-theme';
 import { Link } from 'next-view-transitions';
+import CreateNewTheme from '../theme/createNewTheme/create-new-theme';
 import { previewThemes } from './previewComponents/previewThemes';
+import { ScrollAnimation } from './ScrollAnimation';
 
 // Sample theme color schemes to showcase
 const themeExamples = [
@@ -69,7 +68,7 @@ export function HeroSection() {
   const theme = previewThemes[currentTheme];
 
   return (
-    <section className='relative min-h-[90vh] pt-20 pb-12 md:pt-24 lg:pt-28'>
+    <section className='min-h-[90vh] pt-20 pb-12 md:pt-24 lg:pt-28'>
       <div className='container mx-auto'>
         <div className='grid items-center gap-12 lg:grid-cols-2'>
           {/* Left side: Text content */}
