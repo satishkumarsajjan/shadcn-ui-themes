@@ -37,6 +37,9 @@ import { SeparatorDemo } from '../displayComponents/simpletons/SeparatorDemo';
 import { SliderDemo } from '../displayComponents/simpletons/SliderDemo';
 import { ToggleGroupDemo } from '../displayComponents/simpletons/ToggleGroupDemo';
 import ImportThemeButton from '../theme/themes/ImportThemeButton';
+import { Dialog, DialogTrigger } from '../ui/dialog';
+import { Button } from '../ui/button';
+import SignInDialogContent from '../auth/SignInDialogContent';
 
 export interface ThemeConfig {
   [key: string]: string;
@@ -254,10 +257,20 @@ function ThemeEditor({ id }: { id: string }) {
             >
               {/* Example of using Tailwind with the theme config */}
               <div className='my-4 flex items-center justify-between'>
-                <h2 className='text-2xl font-bold text-foreground'>
-                  Theme Preview
-                </h2>
-                <ImportThemeButton themeId={id} userId={data?.theme.userId} />
+                <h1 className='text-foreground'>{data?.theme.title}</h1>
+                {session ? (
+                  <ImportThemeButton themeId={id} userId={data?.theme.userId} />
+                ) : (
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <Button>
+                        <span>Import theme</span>
+                        <span className='sr-only'>Import theme</span>
+                      </Button>
+                    </DialogTrigger>
+                    <SignInDialogContent />
+                  </Dialog>
+                )}
               </div>
 
               <ColorSwatches

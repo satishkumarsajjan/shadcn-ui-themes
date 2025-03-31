@@ -84,7 +84,7 @@ const ColorSwatches = memo(
       <div className='space-y-4'>
         <div className='flex justify-between items-center'>
           <span>
-            <h3 className='text-lg font-medium'>Color Swatches</h3>
+            <h3 className='font-medium text-primary'>Color Swatches</h3>
             <p className='text-muted-foreground'>
               Click on color swatches to configure their color values
             </p>

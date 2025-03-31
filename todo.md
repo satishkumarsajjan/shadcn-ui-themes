@@ -7,17 +7,10 @@
 - [x] Description and username
 - [x] personal profile editor
 - [x] Delete Theme
-- [ ] Delete profile
-- [ ] Adjust the theme of the app.
+- [x] Adjust the theme of the app.
 - [x] able to edit theme name and description.
-- [ ] users profile with their themes
-
-## 🔧 Features & Components
-
-- [ ] Component editing functionality
-- [ ] Basic editing interface
-- [ ] Property controls
-- [ ] Preview capability
+- [x] users profile with their themes
+- [ ] Analytics
 
 ## 📋 Backlog
 
