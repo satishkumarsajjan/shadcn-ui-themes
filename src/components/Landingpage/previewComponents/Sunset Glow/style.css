@@ -1,0 +1,35 @@
+.sunset-glow {
+  --background: 20 40% 15%;
+  --foreground: 33 60% 92%;
+  --card: 20 40% 18%;
+  --card-foreground: 33 60% 92%;
+  --popover: 20 40% 18%;
+  --popover-foreground: 33 60% 92%;
+  --primary: 24 94% 54%;
+  --primary-foreground: 60 9.1% 97.8%;
+  --secondary: 20 25% 25%;
+  --secondary-foreground: 33 60% 92%;
+  --muted: 20 25% 25%;
+  --muted-foreground: 33 40% 75%;
+  --accent: 15 40% 30%;
+  --accent-foreground: 33 60% 92%;
+  --destructive: 0 70% 50%;
+  --destructive-foreground: 60 9.1% 97.8%;
+  --border: 20 30% 30%;
+  --input: 20 30% 30%;
+  --ring: 24 94% 54%;
+  --chart-1: 24 94% 54%;
+  --chart-2: 15 65% 45%;
+  --chart-3: 33 70% 70%;
+  --chart-4: 33 75% 55%;
+  --chart-5: 27 72% 52%;
+  --sidebar-background: 20 40% 13%;
+  --sidebar-foreground: 33 60% 90%;
+  --sidebar-primary: 24 94% 54%;
+  --sidebar-primary-foreground: 60 9.1% 97.8%;
+  --sidebar-accent: 15 40% 28%;
+  --sidebar-accent-foreground: 33 60% 92%;
+  --sidebar-border: 20 30% 28%;
+  --sidebar-ring: 24 94% 54%;
+  --radius: 0.5rem;
+}

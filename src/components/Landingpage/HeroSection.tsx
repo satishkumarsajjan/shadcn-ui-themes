@@ -1,12 +1,13 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowRight, Check, Sparkles } from 'lucide-react';
+import { Check, Sparkles } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
-import { useTheme } from 'next-themes';
+import { Link } from 'next-view-transitions';
+import CreateNewTheme from '../theme/createNewTheme/create-new-theme';
+import { previewThemes } from './previewComponents/previewThemes';
 import { ScrollAnimation } from './ScrollAnimation';
 
 // Sample theme color schemes to showcase
@@ -55,21 +56,19 @@ const themeExamples = [
 
 export function HeroSection() {
   const [currentTheme, setCurrentTheme] = useState(0);
-  const { theme: appTheme } = useTheme();
-  const isDark = appTheme === 'dark';
 
   // Choose a different theme every 3 seconds
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentTheme((prev) => (prev + 1) % themeExamples.length);
-    }, 3000);
+    }, 5000);
     return () => clearInterval(interval);
   }, []);
 
-  const theme = themeExamples[currentTheme];
+  const theme = previewThemes[currentTheme];
 
   return (
-    <section className='relative min-h-[90vh] pt-20 pb-12 md:pt-24 lg:pt-28'>
+    <section id='hero' className='min-h-[90vh] pt-20 pb-12 md:pt-24 lg:pt-28'>
       <div className='container mx-auto'>
         <div className='grid items-center gap-12 lg:grid-cols-2'>
           {/* Left side: Text content */}
@@ -98,13 +97,12 @@ export function HeroSection() {
 
             <ScrollAnimation animationType='fade-up' delay={3}>
               <div className='flex flex-wrap gap-4'>
-                <Button size='lg' className='btn-glow'>
-                  Get Started
-                  <ArrowRight className='ml-2 h-4 w-4 transition-transform group-hover:translate-x-1' />
-                </Button>
-                <Button variant='outline' size='lg'>
-                  Browse Themes
-                </Button>
+                <CreateNewTheme className='bg-primary text-primary-foreground' />
+                <Link href={'/themes'}>
+                  <Button variant='outline' size='lg'>
+                    Browse Themes
+                  </Button>
+                </Link>
               </div>
             </ScrollAnimation>
 
@@ -116,7 +114,7 @@ export function HeroSection() {
                   'Active community & sharing',
                 ].map((feature, index) => (
                   <div
-                    key={feature}
+                    key={index}
                     className='flex items-center gap-2 text-muted-foreground'
                   >
                     <span className='flex h-5 w-5 items-center justify-center rounded-full bg-primary/10'>
@@ -136,150 +134,18 @@ export function HeroSection() {
           >
             <div className='relative'>
               <motion.div
-                key={theme.name}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.5 }}
+                key={
+                  typeof theme === 'string'
+                    ? theme
+                    : `theme-${Math.random().toString(36).substr(2, 9)}`
+                }
+                initial={{ opacity: 0, x: 50 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -50 }}
+                transition={{ duration: 0.8 }}
                 className='relative z-10 overflow-hidden rounded-xl border shadow-xl'
-                style={{
-                  backgroundColor: theme.background,
-                  color: theme.foreground,
-                  borderColor: `${theme.muted}80`,
-                }}
               >
-                {/* Theme preview header with window controls */}
-                <div
-                  className='flex items-center justify-between border-b p-4'
-                  style={{ borderColor: `${theme.muted}80` }}
-                >
-                  <div className='flex items-center gap-2'>
-                    <div
-                      className='flex h-7 w-7 items-center justify-center rounded-full'
-                      style={{ backgroundColor: theme.primary }}
-                    >
-                      <span className='text-xs font-semibold text-white'>
-                        TM
-                      </span>
-                    </div>
-                    <span className='text-sm font-medium'>
-                      {theme.name} Theme
-                    </span>
-                  </div>
-                  <div className='flex gap-1.5'>
-                    <div className='h-3 w-3 rounded-full bg-red-500' />
-                    <div className='h-3 w-3 rounded-full bg-yellow-500' />
-                    <div className='h-3 w-3 rounded-full bg-green-500' />
-                  </div>
-                </div>
-
-                {/* Theme preview content */}
-                <div className='p-5'>
-                  <div className='space-y-4'>
-                    {/* Card component preview */}
-                    <Card
-                      className='overflow-hidden'
-                      style={{
-                        backgroundColor: theme.card,
-                        color: theme.foreground,
-                      }}
-                    >
-                      <div
-                        className='h-1.5 w-full'
-                        style={{ backgroundColor: theme.primary }}
-                      />
-                      <div className='p-4'>
-                        <h3 className='mb-1 text-base font-medium'>
-                          Component Preview
-                        </h3>
-                        <p className='mb-3 text-sm opacity-80'>
-                          Beautiful UI components with your theme
-                        </p>
-                        <div className='flex gap-2'>
-                          <motion.button
-                            className='rounded-md px-3 py-1 text-xs'
-                            style={{
-                              backgroundColor: theme.primary,
-                              color: 'white',
-                            }}
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
-                          >
-                            Primary
-                          </motion.button>
-                          <motion.button
-                            className='rounded-md border px-3 py-1 text-xs'
-                            style={{
-                              backgroundColor: 'transparent',
-                              borderColor: theme.primary,
-                              color: theme.primary,
-                            }}
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
-                          >
-                            Secondary
-                          </motion.button>
-                        </div>
-                      </div>
-                    </Card>
-
-                    {/* Color palette preview */}
-                    <div
-                      className='rounded-md border p-4'
-                      style={{ borderColor: `${theme.muted}80` }}
-                    >
-                      <div className='mb-3 flex items-center justify-between'>
-                        <h4 className='text-sm font-medium'>Color System</h4>
-                        <span className='text-xs opacity-70'>Customizable</span>
-                      </div>
-
-                      <div className='flex flex-wrap gap-2'>
-                        {[
-                          theme.primary,
-                          theme.muted,
-                          theme.card,
-                          theme.foreground,
-                        ].map((color, index) => (
-                          <motion.div
-                            key={index}
-                            className='group flex flex-col items-center'
-                            whileHover={{ y: -2 }}
-                          >
-                            <div
-                              className='h-8 w-8 rounded-md'
-                              style={{
-                                backgroundColor: color,
-                                opacity: index === 3 ? 0.5 : 1,
-                              }}
-                            />
-                            <span className='mt-1 text-xs opacity-70'>
-                              {index === 0
-                                ? 'Primary'
-                                : index === 1
-                                ? 'Muted'
-                                : index === 2
-                                ? 'Card'
-                                : 'Text'}
-                            </span>
-                          </motion.div>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* Theme name tag */}
-                    <div
-                      className='inline-flex items-center rounded-md px-3 py-1'
-                      style={{
-                        backgroundColor: theme.primary + '20',
-                        color: theme.primary,
-                      }}
-                    >
-                      <span className='text-xs font-medium'>
-                        {theme.name} Theme
-                      </span>
-                    </div>
-                  </div>
-                </div>
+                {theme}
               </motion.div>
             </div>
 

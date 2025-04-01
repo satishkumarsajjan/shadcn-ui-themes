@@ -15,6 +15,9 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ScrollAnimation } from './ScrollAnimation';
+import { useThemes } from '@/hooks/get-themes';
+import { ThemeCard } from '../theme/theme-card/theme-card';
+import { Link } from 'next-view-transitions';
 
 // List of sample themes to showcase
 const showcaseThemes = {
@@ -109,7 +112,12 @@ const showcaseThemes = {
 
 export function ThemesShowcase() {
   const [currentCategory, setCurrentCategory] = useState('trending');
-
+  const { data, isFetching, error } = useThemes({
+    page: 1,
+    pageSize: 6,
+    sortBy: 'popular',
+    timeframe: 'all',
+  });
   return (
     <section id='themes' className='section-container'>
       <div className='container'>
@@ -136,55 +144,23 @@ export function ThemesShowcase() {
         </div>
 
         {/* Tabs and themes display */}
-        <ScrollAnimation
-          animationType='fade-up'
-          delay={3}
-          className='relative z-10'
-        >
-          <Tabs
-            defaultValue='trending'
-            onValueChange={setCurrentCategory}
-            className='w-full'
-          >
-            <div className='mx-auto mb-12 max-w-sm'>
-              <TabsList className='grid w-full grid-cols-3 p-1'>
-                <TabsTrigger value='trending'>Trending</TabsTrigger>
-                <TabsTrigger value='popular'>Popular</TabsTrigger>
-                <TabsTrigger value='new'>New</TabsTrigger>
-              </TabsList>
-            </div>
 
-            {Object.entries(showcaseThemes).map(([category, themes]) => (
-              <TabsContent
-                key={category}
-                value={category}
-                className='mt-0 focus-visible:outline-none'
-              >
-                <div className='grid gap-8 md:grid-cols-2 lg:grid-cols-3'>
-                  {themes.map((theme, index) => {
-                    // Calculate the delay (1, 2, 3 or 4)
-                    const delayValue = ((index % 3) + 1) as 1 | 2 | 3 | 4;
-
-                    return (
-                      <ScrollAnimation
-                        key={theme.id}
-                        animationType='scale'
-                        delay={delayValue}
-                      >
-                        <ThemeCard theme={theme} />
-                      </ScrollAnimation>
-                    );
-                  })}
-                </div>
-              </TabsContent>
+        <ScrollAnimation animationType='fade-up' delay={3} className='relative'>
+          <div className='grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-3 gap-4'>
+            {data?.themes.map((item, index) => (
+              <div key={index}>
+                <ThemeCard theme={item} />
+              </div>
             ))}
-          </Tabs>
+          </div>
 
           <div className='mt-16 text-center'>
-            <Button size='lg' variant='outline' className='btn-glow group'>
-              Browse All Themes
-              <ChevronRight className='ml-2 h-4 w-4 transition-all group-hover:translate-x-1' />
-            </Button>
+            <Link href={'/themes'}>
+              <Button size='lg' variant='outline' className='btn-glow group'>
+                Browse All Themes
+                <ChevronRight className='ml-2 h-4 w-4 transition-all group-hover:translate-x-1' />
+              </Button>
+            </Link>
           </div>
         </ScrollAnimation>
       </div>
@@ -204,106 +180,106 @@ interface ThemeCardProps {
   };
 }
 
-function ThemeCard({ theme }: ThemeCardProps) {
-  return (
-    <motion.div
-      whileHover={{ y: -8 }}
-      transition={{ type: 'spring', stiffness: 300, damping: 25 }}
-    >
-      <Card className='overflow-hidden border shadow-sm card-hover'>
-        {/* Theme color preview */}
-        <div className='relative h-36 overflow-hidden'>
-          <div
-            className='absolute inset-0'
-            style={{
-              background: `linear-gradient(135deg, ${theme.colors[0]} 0%, ${theme.colors[1]} 100%)`,
-            }}
-          />
+// function ThemeCard({ theme }: ThemeCardProps) {
+//   return (
+//     <motion.div
+//       whileHover={{ y: -8 }}
+//       transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+//     >
+//       <Card className='overflow-hidden border shadow-sm card-hover'>
+//         {/* Theme color preview */}
+//         <div className='relative h-36 overflow-hidden'>
+//           <div
+//             className='absolute inset-0'
+//             style={{
+//               background: `linear-gradient(135deg, ${theme.colors[0]} 0%, ${theme.colors[1]} 100%)`,
+//             }}
+//           />
 
-          {/* Color pallette dots */}
-          <div className='absolute bottom-4 left-4 flex gap-2'>
-            {theme.colors.map((color, i) => (
-              <motion.div
-                key={i}
-                className='h-6 w-6 rounded-full border-2 border-white/30'
-                style={{ backgroundColor: color }}
-                whileHover={{ scale: 1.2, y: -4 }}
-                transition={{ type: 'spring', stiffness: 400 }}
-              />
-            ))}
-          </div>
+//           {/* Color pallette dots */}
+//           <div className='absolute bottom-4 left-4 flex gap-2'>
+//             {theme.colors.map((color, i) => (
+//               <motion.div
+//                 key={i}
+//                 className='h-6 w-6 rounded-full border-2 border-white/30'
+//                 style={{ backgroundColor: color }}
+//                 whileHover={{ scale: 1.2, y: -4 }}
+//                 transition={{ type: 'spring', stiffness: 400 }}
+//               />
+//             ))}
+//           </div>
 
-          {/* Theme name tag */}
-          <div className='absolute right-3 top-3 rounded-full px-2.5 py-1 text-xs font-medium backdrop-blur-md bg-black/20 text-white'>
-            {theme.name}
-          </div>
-        </div>
+//           {/* Theme name tag */}
+//           <div className='absolute right-3 top-3 rounded-full px-2.5 py-1 text-xs font-medium backdrop-blur-md bg-black/20 text-white'>
+//             {theme.name}
+//           </div>
+//         </div>
 
-        <div className='p-5'>
-          {/* Creator info */}
-          <div className='mb-3 flex items-center justify-between'>
-            <div className='flex items-center gap-2'>
-              <Avatar className='h-7 w-7 border border-border'>
-                <AvatarFallback className='text-xs'>
-                  {theme.avatar}
-                </AvatarFallback>
-              </Avatar>
-              <div>
-                <p className='text-sm font-medium'>{theme.creator}</p>
-                <p className='text-xs text-muted-foreground'>Designer</p>
-              </div>
-            </div>
-          </div>
+//         <div className='p-5'>
+//           {/* Creator info */}
+//           <div className='mb-3 flex items-center justify-between'>
+//             <div className='flex items-center gap-2'>
+//               <Avatar className='h-7 w-7 border border-border'>
+//                 <AvatarFallback className='text-xs'>
+//                   {theme.avatar}
+//                 </AvatarFallback>
+//               </Avatar>
+//               <div>
+//                 <p className='text-sm font-medium'>{theme.creator}</p>
+//                 <p className='text-xs text-muted-foreground'>Designer</p>
+//               </div>
+//             </div>
+//           </div>
 
-          {/* Interaction buttons */}
-          <div className='mt-3 flex items-center justify-between border-t pt-3'>
-            <div className='flex items-center gap-3'>
-              <Button
-                variant='ghost'
-                size='icon'
-                className='h-8 w-8 text-muted-foreground hover:text-red-500'
-              >
-                <Heart className='h-4 w-4' />
-                <span className='sr-only'>Like</span>
-              </Button>
-              <span className='text-xs font-medium text-muted-foreground'>
-                {theme.likes.toLocaleString()}
-              </span>
+//           {/* Interaction buttons */}
+//           <div className='mt-3 flex items-center justify-between border-t pt-3'>
+//             <div className='flex items-center gap-3'>
+//               <Button
+//                 variant='ghost'
+//                 size='icon'
+//                 className='h-8 w-8 text-muted-foreground hover:text-red-500'
+//               >
+//                 <Heart className='h-4 w-4' />
+//                 <span className='sr-only'>Like</span>
+//               </Button>
+//               <span className='text-xs font-medium text-muted-foreground'>
+//                 {theme.likes.toLocaleString()}
+//               </span>
 
-              <Button
-                variant='ghost'
-                size='icon'
-                className='h-8 w-8 text-muted-foreground hover:text-primary'
-              >
-                <MessageSquare className='h-4 w-4' />
-                <span className='sr-only'>Comment</span>
-              </Button>
-              <span className='text-xs font-medium text-muted-foreground'>
-                {theme.comments}
-              </span>
-            </div>
+//               <Button
+//                 variant='ghost'
+//                 size='icon'
+//                 className='h-8 w-8 text-muted-foreground hover:text-primary'
+//               >
+//                 <MessageSquare className='h-4 w-4' />
+//                 <span className='sr-only'>Comment</span>
+//               </Button>
+//               <span className='text-xs font-medium text-muted-foreground'>
+//                 {theme.comments}
+//               </span>
+//             </div>
 
-            <div className='flex gap-1'>
-              <Button
-                variant='ghost'
-                size='icon'
-                className='h-8 w-8 text-muted-foreground hover:text-amber-500'
-              >
-                <Bookmark className='h-4 w-4' />
-                <span className='sr-only'>Bookmark</span>
-              </Button>
-              <Button
-                variant='ghost'
-                size='icon'
-                className='h-8 w-8 text-muted-foreground hover:text-blue-500'
-              >
-                <Share2 className='h-4 w-4' />
-                <span className='sr-only'>Share</span>
-              </Button>
-            </div>
-          </div>
-        </div>
-      </Card>
-    </motion.div>
-  );
-}
+//             <div className='flex gap-1'>
+//               <Button
+//                 variant='ghost'
+//                 size='icon'
+//                 className='h-8 w-8 text-muted-foreground hover:text-amber-500'
+//               >
+//                 <Bookmark className='h-4 w-4' />
+//                 <span className='sr-only'>Bookmark</span>
+//               </Button>
+//               <Button
+//                 variant='ghost'
+//                 size='icon'
+//                 className='h-8 w-8 text-muted-foreground hover:text-blue-500'
+//               >
+//                 <Share2 className='h-4 w-4' />
+//                 <span className='sr-only'>Share</span>
+//               </Button>
+//             </div>
+//           </div>
+//         </div>
+//       </Card>
+//     </motion.div>
+//   );
+// }

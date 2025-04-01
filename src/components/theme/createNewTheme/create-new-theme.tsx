@@ -3,6 +3,7 @@
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -15,11 +16,12 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 import { LucidePlusSquare } from 'lucide-react';
-import { signIn, useSession } from 'next-auth/react';
+import { useSession } from 'next-auth/react';
 import { useTransitionRouter } from 'next-view-transitions';
 
 import { useForm } from 'react-hook-form';
-import { BsGithub, BsGoogle } from 'react-icons/bs';
+
+import SignInDialogContent from '@/components/auth/SignInDialogContent';
 import { toast } from 'sonner';
 import { z } from 'zod';
 import {
@@ -31,14 +33,14 @@ import {
   FormLabel,
   FormMessage,
 } from '../../ui/form';
-import SignInDialogContent from '@/components/auth/SignInDialogContent';
+import { cn } from '@/lib/utils';
 
 const formSchema = z.object({
   theme_name: z.string().min(3, {
     message: 'Theme name must be at least 3 characters.',
   }),
 });
-const CreateNewTheme = () => {
+const CreateNewTheme = ({ className }: { className?: string }) => {
   const { data: session } = useSession();
   // if (!session) return <NotSignedIn />;
   const router = useTransitionRouter();
@@ -69,8 +71,8 @@ const CreateNewTheme = () => {
       <DialogTrigger asChild>
         <Button
           variant='outline'
-          size='icon'
-          className='flex w-full justify-between px-2'
+          size='lg'
+          className={cn('flex justify-between px-2', className)}
         >
           <LucidePlusSquare className='' />
           <span>Create theme</span>

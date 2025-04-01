@@ -1,24 +1,27 @@
 'use client';
 
-import Link from 'next/link';
-import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { useTheme } from 'next-themes';
 import { ModeToggle } from '../theme/ModeToggle';
+import { useSession } from 'next-auth/react';
+import { Dialog, DialogTrigger } from '../ui/dialog';
+import SignInDialogContent from '../auth/SignInDialogContent';
+import CreateNewTheme from '../theme/createNewTheme/create-new-theme';
+import Logo from '../Logo';
 
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
-  const { theme } = useTheme();
-  const isDark = theme === 'dark';
+  const { data: session } = useSession();
 
   // Update scroll state
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
+      setIsScrolled(window.scrollY > 100);
     };
 
     window.addEventListener('scroll', handleScroll);
@@ -26,90 +29,126 @@ export function Navbar() {
   }, []);
 
   return (
-    <motion.nav
-      initial={{ opacity: 0, y: -10 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3 }}
-      className={`fixed top-0 left-0 right-0 z-50 flex h-16 items-center justify-between px-4 transition-all duration-200 md:px-6 lg:px-8 ${
-        isScrolled
-          ? 'bg-background/90 backdrop-blur-lg shadow-sm'
-          : 'bg-transparent'
-      }`}
-    >
-      <div className='container mx-auto flex items-center justify-between'>
-        <Link href='/' className='flex items-center gap-2 outline-none'>
-          <div className='flex h-8 w-8 items-center justify-center rounded-md bg-primary text-primary-foreground font-semibold'>
-            TM
-          </div>
-          <span className='font-semibold text-lg'>ThemeManager</span>
-        </Link>
+    <header className='sticky top-0 z-[100] w-full'>
+      <div
+        className={`w-full transition-all duration-300 ${
+          isScrolled ? 'py-4' : ''
+        }`}
+      >
+        <div
+          className={`container mx-auto ${
+            isScrolled
+              ? 'bg-background/55 backdrop-blur-md border rounded-md'
+              : ''
+          }`}
+        >
+          <div className='flex items-center justify-between h-16'>
+            <Link href={'#hero'}>
+              <div className='flex justify-between items-center gap-2'>
+                <div className='flex aspect-square size-8 items-center justify-center rounded-lg'>
+                  <Logo />
+                </div>
+                <div className='grid flex-1 text-left text-sm leading-tight'>
+                  <span className='truncate font-semibold'>Themes</span>
+                  <span className='truncate text-xs'>For Shadcn UI</span>
+                </div>
+              </div>
+            </Link>
 
-        {/* Desktop Navigation */}
-        <div className='hidden items-center gap-1 md:flex'>
-          <NavLinks className='mr-4' />
-          <div className='flex items-center gap-3'>
-            <ModeToggle />
-            <Button variant='outline' size='sm'>
-              Sign In
-            </Button>
-            <Button size='sm' className='btn-glow'>
-              Get Started
-            </Button>
-          </div>
-        </div>
-
-        {/* Mobile Navigation */}
-        <div className='flex md:hidden'>
-          <div className='flex items-center gap-3'>
-            <ModeToggle />
-            <Sheet>
-              <SheetTrigger asChild>
-                <Button
-                  variant='ghost'
-                  size='icon'
-                  className='h-8 w-8 text-foreground'
-                >
-                  <Menu className='h-5 w-5' />
-                  <span className='sr-only'>Toggle Menu</span>
-                </Button>
-              </SheetTrigger>
-              <SheetContent side='right'>
-                <div className='flex h-full flex-col'>
-                  <div className='flex items-center justify-between py-4'>
-                    <Link href='/' className='flex items-center gap-2'>
-                      <div className='flex h-8 w-8 items-center justify-center rounded-md bg-primary text-primary-foreground font-semibold'>
-                        TM
-                      </div>
-                      <span className='font-semibold text-lg'>
-                        ThemeManager
-                      </span>
-                    </Link>
-                    <Button variant='ghost' size='icon' className='h-8 w-8'>
-                      <X className='h-5 w-5' />
-                    </Button>
-                  </div>
-
-                  <div className='flex flex-col gap-8 py-4'>
-                    <NavLinks mobileNav />
-                    <div className='flex flex-col gap-3'>
+            {/* Desktop Navigation */}
+            <div className='hidden items-center gap-1 md:flex'>
+              <NavLinks className='mr-4' />
+              <div className='flex items-center gap-3'>
+                <ModeToggle />
+                {!session?.user && (
+                  <Dialog>
+                    <DialogTrigger asChild>
                       <Button
                         variant='outline'
-                        className='w-full justify-center'
+                        size='sm'
+                        className='flex w-full justify-between px-2'
                       >
-                        Sign In
+                        <span>Sign in</span>
+                        <span className='sr-only'>Sign in</span>
                       </Button>
-                      <Button className='w-full justify-center btn-glow'>
-                        Get Started
-                      </Button>
+                    </DialogTrigger>
+                    <SignInDialogContent />
+                  </Dialog>
+                )}
+                <CreateNewTheme className='bg-primary text-primary-foreground' />
+              </div>
+            </div>
+
+            {/* Mobile Navigation */}
+            <div className='flex md:hidden'>
+              <div className='flex items-center gap-3'>
+                <ModeToggle />
+                <Sheet>
+                  <SheetTrigger asChild>
+                    <Button
+                      variant='ghost'
+                      size='icon'
+                      className='h-8 w-8 text-foreground'
+                    >
+                      <Menu className='h-5 w-5' />
+                      <span className='sr-only'>Toggle Menu</span>
+                    </Button>
+                  </SheetTrigger>
+                  <SheetContent side='right'>
+                    <div className='flex h-full flex-col'>
+                      <div className='flex items-center justify-between py-4'>
+                        <Link href={'#hero'}>
+                          <div className='flex justify-between items-center gap-2'>
+                            <div className='flex aspect-square size-8 items-center justify-center rounded-lg'>
+                              <Logo />
+                            </div>
+                            <div className='grid flex-1 text-left text-sm leading-tight'>
+                              <span className='truncate font-semibold'>
+                                Themes
+                              </span>
+                              <span className='truncate text-xs'>
+                                For Shadcn UI
+                              </span>
+                            </div>
+                          </div>
+                        </Link>
+                        <SheetTrigger asChild>
+                          <Button
+                            variant='ghost'
+                            size='icon'
+                            className='h-8 w-8'
+                          >
+                            <X className='h-5 w-5' />
+                          </Button>
+                        </SheetTrigger>
+                      </div>
+
+                      <div className='flex flex-col gap-8 py-4'>
+                        <NavLinks mobileNav />
+                        <div className='flex flex-col gap-3'>
+                          <Dialog>
+                            <DialogTrigger asChild>
+                              <Button
+                                variant='outline'
+                                className='w-full justify-center'
+                              >
+                                Sign In
+                              </Button>
+                            </DialogTrigger>
+                            <SignInDialogContent />
+                          </Dialog>
+                          <CreateNewTheme />
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
-              </SheetContent>
-            </Sheet>
+                  </SheetContent>
+                </Sheet>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    </motion.nav>
+    </header>
   );
 }
 
@@ -123,7 +162,6 @@ function NavLinks({ className = '', mobileNav = false }: NavLinksProps) {
     { href: '#features', label: 'Features' },
     { href: '#themes', label: 'Themes' },
     { href: '#community', label: 'Community' },
-    { href: '#pricing', label: 'Pricing' },
   ];
 
   return (

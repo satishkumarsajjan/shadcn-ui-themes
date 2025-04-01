@@ -1,16 +1,35 @@
 'use client';
 
-import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { SunIcon, MoonIcon, MonitorIcon, ArrowRightIcon } from 'lucide-react';
+import { MonitorIcon } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
-import { Button } from '@/components/ui/button';
+import { customThemes, customThemeType } from '@/lib/themes';
 import { useTheme } from 'next-themes';
+import Logo from '../Logo';
+import CreateNewTheme from '../theme/createNewTheme/create-new-theme';
+import { CarouselofThemes } from './CarouselofThemes';
 import { ScrollAnimation } from './ScrollAnimation';
 
 export function ThemeShowcaseSection() {
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
+
+  const [currentTheme, setCurrentTheme] = useState<customThemeType | null>(
+    customThemes[0] || {}
+  );
+
+  // Find and update the current theme whenever the theme changes
+  useEffect(() => {
+    if (theme) {
+      const themeIndex = customThemes.findIndex((t) => t.mode === theme);
+      if (themeIndex !== -1) {
+        setCurrentTheme(customThemes[themeIndex]);
+      } else {
+        setCurrentTheme(null);
+      }
+    }
+  }, [theme]);
 
   useEffect(() => {
     setMounted(true);
@@ -44,14 +63,15 @@ export function ThemeShowcaseSection() {
           <ScrollAnimation animationType='fade-up' delay={1}>
             <h2 className='mb-4 text-3xl font-bold tracking-tight sm:text-4xl'>
               Switch between{' '}
-              <span className='gradient-text'>light and dark</span> with ease
+              <span className='gradient-text'>light, dark and much more</span>{' '}
+              with ease
             </h2>
           </ScrollAnimation>
 
           <ScrollAnimation animationType='fade-up' delay={2}>
             <p className='text-lg text-muted-foreground'>
-              All themes automatically adapt between light and dark mode.
-              Perfect for any time of day or user preference.
+              Some of the themes have more than just two modes. Why two when you
+              can have more. 😉
             </p>
           </ScrollAnimation>
         </div>
@@ -74,27 +94,21 @@ export function ThemeShowcaseSection() {
             </p>
 
             <div className='grid gap-4 max-w-sm'>
-              <ThemeModeButton
-                mode='light'
-                currentTheme={theme}
-                onSelect={() => setTheme('light')}
-                icon={<SunIcon className='h-5 w-5' />}
-                label='Light Mode'
-                description='Clean, bright interface for daytime use'
-              />
-
-              <ThemeModeButton
-                mode='dark'
-                currentTheme={theme}
-                onSelect={() => setTheme('dark')}
-                icon={<MoonIcon className='h-5 w-5' />}
-                label='Dark Mode'
-                description='Easy on the eyes for nighttime viewing'
-              />
+              {customThemes.map((currtheme, index) => (
+                <ThemeModeButton
+                  key={index}
+                  mode={currtheme.mode}
+                  currentTheme={theme as string}
+                  onSelect={() => setTheme(currtheme.mode)}
+                  icon={currtheme.icon}
+                  label={currtheme.label}
+                  description={currtheme.description}
+                />
+              ))}
 
               <ThemeModeButton
                 mode='system'
-                currentTheme={theme}
+                currentTheme={theme as string}
                 onSelect={() => setTheme('system')}
                 icon={<MonitorIcon className='h-5 w-5' />}
                 label='System Preference'
@@ -103,10 +117,7 @@ export function ThemeShowcaseSection() {
             </div>
 
             <div className='py-4'>
-              <Button className='group'>
-                Create Your Own Theme
-                <ArrowRightIcon className='ml-2 h-4 w-4 transition-transform group-hover:translate-x-1' />
-              </Button>
+              <CreateNewTheme className='bg-primary text-primary-foreground hover:bg-primary/50 hover:scale-105 transition-all' />
             </div>
           </ScrollAnimation>
 
@@ -116,10 +127,9 @@ export function ThemeShowcaseSection() {
             <div className='relative glass-effect rounded-xl border shadow-lg p-6 z-10'>
               <div className='mb-6 flex justify-between items-center'>
                 <div className='flex items-center gap-2'>
-                  <div className='h-8 w-8 rounded-md bg-primary flex items-center justify-center text-white font-semibold text-sm'>
-                    TM
-                  </div>
-                  <h4 className='font-medium'>ThemeManager Preview</h4>
+                  <Logo />
+
+                  <h4 className='font-medium'>Theme Preview</h4>
                 </div>
                 <div className='flex gap-1'>
                   <div className='w-3 h-3 rounded-full bg-red-500' />
@@ -127,42 +137,10 @@ export function ThemeShowcaseSection() {
                   <div className='w-3 h-3 rounded-full bg-green-500' />
                 </div>
               </div>
-
-              <div className='mb-6 rounded-lg border p-4 bg-card'>
-                <h5 className='text-md font-medium mb-1'>Component Preview</h5>
-                <p className='text-sm text-muted-foreground mb-3'>
-                  This card adapts to your selected theme mode
-                </p>
-                <div className='flex gap-2 mb-1'>
-                  <button className={previewContent.button}>
-                    Primary Button
-                  </button>
-                  <button className={previewContent.outlineButton}>
-                    Secondary
-                  </button>
-                </div>
-              </div>
-
+              <CarouselofThemes />
               <div className='flex justify-between items-center'>
-                <div className='flex gap-4'>
-                  <div className='flex flex-col items-center'>
-                    <div className='h-6 w-6 rounded-full bg-primary mb-1' />
-                    <span className='text-xs text-muted-foreground'>
-                      Primary
-                    </span>
-                  </div>
-                  <div className='flex flex-col items-center'>
-                    <div className='h-6 w-6 rounded-full bg-muted mb-1' />
-                    <span className='text-xs text-muted-foreground'>Muted</span>
-                  </div>
-                </div>
-
                 <div className='py-1 px-3 rounded-full bg-muted text-xs font-medium'>
-                  {theme === 'light'
-                    ? '🌞 Light Mode'
-                    : theme === 'dark'
-                    ? '🌙 Dark Mode'
-                    : '💻 System Mode'}
+                  {currentTheme?.icon} {currentTheme?.label}
                 </div>
               </div>
             </div>
@@ -208,7 +186,7 @@ export function ThemeShowcaseSection() {
 }
 
 interface ThemeModeButtonProps {
-  mode: 'light' | 'dark' | 'system';
+  mode: string;
   currentTheme: string;
   onSelect: () => void;
   icon: React.ReactNode;
