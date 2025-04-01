@@ -1,23 +1,12 @@
 'use client';
 
-import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowRight, CheckCircle2, ChevronRight } from 'lucide-react';
+import { CheckCircle2, ChevronRight } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog';
 import { Link } from 'next-view-transitions';
 
 export function CtaSection() {
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-
   return (
     <section className='relative py-20 md:py-32'>
       {/* Background gradient */}

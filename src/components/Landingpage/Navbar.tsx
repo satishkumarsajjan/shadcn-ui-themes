@@ -43,7 +43,7 @@ export function Navbar() {
           }`}
         >
           <div className='flex items-center justify-between h-16'>
-            <Link href={'/'}>
+            <Link href={'#hero'}>
               <div className='flex justify-between items-center gap-2'>
                 <div className='flex aspect-square size-8 items-center justify-center rounded-lg'>
                   <Logo />
@@ -97,7 +97,7 @@ export function Navbar() {
                   <SheetContent side='right'>
                     <div className='flex h-full flex-col'>
                       <div className='flex items-center justify-between py-4'>
-                        <Link href={'/'}>
+                        <Link href={'#hero'}>
                           <div className='flex justify-between items-center gap-2'>
                             <div className='flex aspect-square size-8 items-center justify-center rounded-lg'>
                               <Logo />

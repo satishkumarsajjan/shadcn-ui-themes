@@ -68,7 +68,7 @@ export function HeroSection() {
   const theme = previewThemes[currentTheme];
 
   return (
-    <section className='min-h-[90vh] pt-20 pb-12 md:pt-24 lg:pt-28'>
+    <section id='hero' className='min-h-[90vh] pt-20 pb-12 md:pt-24 lg:pt-28'>
       <div className='container mx-auto'>
         <div className='grid items-center gap-12 lg:grid-cols-2'>
           {/* Left side: Text content */}
