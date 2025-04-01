@@ -10,6 +10,7 @@ import {
   HoverCardTrigger,
 } from '@/components/ui/hover-card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { toast } from 'sonner';
 
 // Sample community members
 const communityMembers = [
@@ -125,7 +126,7 @@ export function CommunitySection() {
         </div>
 
         {/* Community members grid */}
-        <motion.div
+        {/* <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
@@ -194,7 +195,7 @@ export function CommunitySection() {
               </HoverCard>
             ))}
           </div>
-        </motion.div>
+        </motion.div> */}
 
         {/* Community benefits */}
         <div className='mx-auto max-w-5xl'>
@@ -213,7 +214,7 @@ export function CommunitySection() {
               {
                 title: 'Get recognized',
                 description:
-                  'Gain followers and recognition for your contributions to the ecosystem.',
+                  'Gain recognition for your contributions to the ecosystem.',
               },
             ].map((benefit, index) => (
               <motion.div
@@ -239,19 +240,16 @@ export function CommunitySection() {
           viewport={{ once: true }}
           className='mx-auto mt-16 max-w-lg text-center'
         >
-          <Button size='lg' className='group'>
+          <Button
+            size='lg'
+            className='group'
+            onClick={() => {
+              toast.error('Discord community soon');
+            }}
+          >
             Join Our Community
             <ArrowRight className='ml-2 h-4 w-4 transition-transform group-hover:translate-x-1' />
           </Button>
-          <p className='mt-3 text-sm text-muted-foreground'>
-            Already a member?{' '}
-            <a
-              href='#'
-              className='font-medium text-primary underline-offset-4 hover:underline'
-            >
-              Sign in to your account
-            </a>
-          </p>
         </motion.div>
       </div>
     </section>
