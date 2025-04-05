@@ -3,7 +3,6 @@
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -22,6 +21,7 @@ import { useTransitionRouter } from 'next-view-transitions';
 import { useForm } from 'react-hook-form';
 
 import SignInDialogContent from '@/components/auth/SignInDialogContent';
+import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 import { z } from 'zod';
 import {
@@ -33,7 +33,6 @@ import {
   FormLabel,
   FormMessage,
 } from '../../ui/form';
-import { cn } from '@/lib/utils';
 
 const formSchema = z.object({
   theme_name: z.string().min(3, {

@@ -37,14 +37,15 @@ export async function POST(req: Request) {
     const theme = await prisma.theme.create({
      data: {
         title: theme_name,
-        description: '',
+        description: 'Light Mode for the bright days',
         userId: session.user?.id as string,
         modes: {
           create: {
-            mode: "orange_dark",
+            mode: "Light Mode",
             content: DEFAULT_THEME
           }
-        }
+        },
+        colors:['#f97316', '#7c2d12', '#fff7ed', '#c2410c'],
       }
     })
 

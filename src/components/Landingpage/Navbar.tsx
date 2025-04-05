@@ -43,17 +43,7 @@ export function Navbar() {
           }`}
         >
           <div className='flex items-center justify-between h-16'>
-            <Link href={'#hero'}>
-              <div className='flex justify-between items-center gap-2'>
-                <div className='flex aspect-square size-8 items-center justify-center rounded-lg'>
-                  <Logo />
-                </div>
-                <div className='grid flex-1 text-left text-sm leading-tight'>
-                  <span className='truncate font-semibold'>Themes</span>
-                  <span className='truncate text-xs'>For Shadcn UI</span>
-                </div>
-              </div>
-            </Link>
+            <Logo />
 
             {/* Desktop Navigation */}
             <div className='hidden items-center gap-1 md:flex'>
@@ -97,21 +87,7 @@ export function Navbar() {
                   <SheetContent side='right'>
                     <div className='flex h-full flex-col'>
                       <div className='flex items-center justify-between py-4'>
-                        <Link href={'#hero'}>
-                          <div className='flex justify-between items-center gap-2'>
-                            <div className='flex aspect-square size-8 items-center justify-center rounded-lg'>
-                              <Logo />
-                            </div>
-                            <div className='grid flex-1 text-left text-sm leading-tight'>
-                              <span className='truncate font-semibold'>
-                                Themes
-                              </span>
-                              <span className='truncate text-xs'>
-                                For Shadcn UI
-                              </span>
-                            </div>
-                          </div>
-                        </Link>
+                        <Logo />
                         <SheetTrigger asChild>
                           <Button
                             variant='ghost'

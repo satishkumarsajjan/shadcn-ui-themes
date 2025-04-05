@@ -126,11 +126,8 @@ export function ThemeShowcaseSection() {
             {/* Preview card with current theme */}
             <div className='relative glass-effect rounded-xl border shadow-lg p-6 z-10'>
               <div className='mb-6 flex justify-between items-center'>
-                <div className='flex items-center gap-2'>
-                  <Logo />
+                <Logo />
 
-                  <h4 className='font-medium'>Theme Preview</h4>
-                </div>
                 <div className='flex gap-1'>
                   <div className='w-3 h-3 rounded-full bg-red-500' />
                   <div className='w-3 h-3 rounded-full bg-yellow-500' />

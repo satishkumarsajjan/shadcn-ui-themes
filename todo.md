@@ -2,14 +2,8 @@
 
 ## 🚀 High Priority
 
-- [ ] Landing page implementation
-- [ ] Polish Landing Page
-- [ ] Landing page sign in problem
-- [ ] Adjust landing page modes
-- [ ] Adjust theme cards
-- [ ] Adjust clickable link to their appropriate routes.
-- [ ] community section
 - [ ] Analytics
+- [ ] Seo
 
 ## 📋 Backlog
 
@@ -21,6 +15,13 @@
 
 <!-- Move items here when done -->
 
+- [x] Landing page implementation
+- [x] Polish Landing Page
+- [x] Landing page sign in problem
+- [x] Adjust landing page modes
+- [x] Adjust theme cards
+- [x] Adjust clickable link to their appropriate routes.
+- [x] community section
 - [x] add charts components to the theme preview
 - [x] Description and username
 - [x] personal profile editor
