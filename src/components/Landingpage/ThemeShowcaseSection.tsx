@@ -39,16 +39,6 @@ export function ThemeShowcaseSection() {
     return null;
   }
 
-  // Preview card content
-  const previewContent = {
-    card: 'bg-card border rounded-lg p-4',
-    title: 'text-lg font-medium mb-2',
-    text: 'text-muted-foreground text-sm mb-4',
-    button: 'bg-primary text-primary-foreground text-sm px-3 py-1.5 rounded-md',
-    outlineButton:
-      'border border-primary text-primary px-3 py-1.5 rounded-md text-sm',
-  };
-
   return (
     <section id='themes-toggle' className='section-container bg-muted/5'>
       <div className='container'>
@@ -159,7 +149,7 @@ export function ThemeShowcaseSection() {
 
                 return (
                   <ScrollAnimation
-                    key={benefit.title}
+                    key={i}
                     animationType='fade-up'
                     delay={delayValue}
                   >

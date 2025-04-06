@@ -1,17 +1,28 @@
 import UserProfile from '@/components/theme/themes/UserProfile';
 import { prisma } from '@/db/prisma';
 import { Metadata, ResolvingMetadata } from 'next';
-// Import your Prisma client
+
+interface PageProps {
+  params: Promise<{ userId: string }>;
+}
+
+type Props = {
+  params: Promise<{ userId: string }>;
+};
 
 // Generate metadata for the page
 export async function generateMetadata(
-  { params }: { params: { userId: string } },
+  { params }: Props,
   parent: ResolvingMetadata
 ): Promise<Metadata> {
-  const userId = params.userId;
+  const { userId } = await params;
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://yourapp.com/';
 
   try {
+    if (!userId) {
+      console.error('No userId provided');
+      throw new Error('No userId provided');
+    }
     console.log(`Fetching user data from database for userId: ${userId}`);
 
     // Fetch user directly from the database
@@ -127,8 +138,12 @@ export async function generateMetadata(
   }
 }
 
-const UserThemesPage = ({ params }: { params: { userId: string } }) => {
-  return <UserProfile userId={params.userId as string} />;
-};
+export default async function UserPage({ params }: PageProps) {
+  const { userId } = await params;
 
-export default UserThemesPage;
+  return (
+    <div>
+      <UserProfile userId={userId} />
+    </div>
+  );
+}

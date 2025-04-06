@@ -1,41 +1,10 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { useTheme } from 'next-themes';
-import { Link } from 'next-view-transitions';
 import { BsGithub, BsTwitterX } from 'react-icons/bs';
 import Logo from '../Logo';
 
 export function Footer() {
-  const currentYear = new Date().getFullYear();
-  const { theme } = useTheme();
-  const isDark = theme === 'dark';
-
-  // Animation variants
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.2,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        type: 'spring',
-        stiffness: 260,
-        damping: 20,
-      },
-    },
-  };
-
   return (
     <footer className='relative border-t bg-card/50'>
       <div className='mx-auto px-4 pb-12 md:px-6 lg:px-8'>

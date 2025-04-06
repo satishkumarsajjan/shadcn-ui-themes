@@ -62,7 +62,7 @@ const DescriptionTextEditor: React.FC<RichTextEditorProps> = ({
   const [content, setContent] = useState(initialContent);
   const queryClient = useQueryClient();
 
-  const onChangeContent = (value: any) => {
+  const onChangeContent = (value: string) => {
     setContent(value);
   };
 
@@ -73,7 +73,7 @@ const DescriptionTextEditor: React.FC<RichTextEditorProps> = ({
         description: description,
       });
     },
-    onSuccess(data) {
+    onSuccess() {
       toast.success('Description updated successfully');
 
       if (themeId) {

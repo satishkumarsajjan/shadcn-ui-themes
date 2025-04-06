@@ -8,7 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { useGetUser } from '@/hooks/get-user-by-id';
+import { useGetUserInfo } from '@/hooks/get-user-by-id';
 import { cn } from '@/lib/utils';
 import { ThemeWithUserActions } from '@/types/apiReturnTypes';
 import { User } from '@prisma/client';
@@ -39,7 +39,7 @@ export function ThemeCard({ theme }: { theme: ThemeWithUserActions }) {
   const [user, setUser] = useState<User | null>(null);
 
   // Call the hook directly in the component body
-  const { data, error } = useGetUser(theme.userId);
+  const { data, error } = useGetUserInfo(theme.userId);
 
   useEffect(() => {
     if (error) {

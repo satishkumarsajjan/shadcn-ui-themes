@@ -1,31 +1,44 @@
-import { MetadataRoute } from 'next';
+import { prisma } from '@/db/prisma';
 
-export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://yourdomain.com';
+export default async function generateSitemap() {
+  try {
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://yourapp.com/';
 
-  return [
-    {
-      url: `${baseUrl}`,
+    // Fetch data for sitemap
+    const users = await prisma.user.findMany({
+      select: { id: true },
+    });
+
+    const themes = await prisma.theme.findMany({
+      select: { id: true },
+    });
+
+
+    if ((!users || users.length === 0) && (!themes || themes.length === 0) ) {
+      console.error('No data found for sitemap generation');
+      return [];
+    }
+
+    // Generate sitemap entries
+    const userSitemap = users.map((user) => ({
+      url: `${baseUrl}themes/user/${user.id}`,
       lastModified: new Date().toISOString(),
-      changefreq: 'daily',
-      priority: 1.0,
-    },
-    {
-      url: `${baseUrl}/themes`,
+    }));
+
+    const themeSitemap = themes.map((theme) => ({
+      url: `${baseUrl}themes/${theme.id}`,
       lastModified: new Date().toISOString(),
-      changefreq: 'weekly',
-      priority: 0.8,
-    },
-    // Add dynamic routes for themes
-    ...(await fetch(`${baseUrl}/api/themes`)
-      .then((res) => res.json())
-      .then((themes) =>
-        themes.map((theme: { id: string }) => ({
-          url: `${baseUrl}/themes/${theme.id}`,
-          lastModified: new Date().toISOString(),
-          changefreq: 'weekly',
-          priority: 0.6,
-        }))
-      )),
-  ];
+    }));
+
+ 
+
+    const sitemap = [...userSitemap, ...themeSitemap];
+
+    console.log('Sitemap generated successfully:', sitemap);
+
+    return sitemap;
+  } catch (error) {
+    console.error('Error generating sitemap:', error);
+    return [];
+  }
 }

@@ -10,15 +10,15 @@ import { AreaChartStackedExpandedComponent } from './AreaChartStackedExpanded';
 import { AreaChartStepComponent } from './AreaChartStep';
 
 const AreaChartComponents = [
-  <AreaChartComponent />,
-  <AreaChartAxesComponent />,
-  <AreaChartGradientComponent />,
-  <AreaChartIconsComponent />,
-  <AreaChartLegendComponent />,
-  <AreaChartLinearComponent />,
-  <AreaChartStackedComponent />,
-  <AreaChartStackedExpandedComponent />,
-  <AreaChartStepComponent />,
+  <AreaChartComponent key='area-chart' />,
+  <AreaChartAxesComponent key='area-chart-axes' />,
+  <AreaChartGradientComponent key='area-chart-gradient' />,
+  <AreaChartIconsComponent key='area-chart-icons' />,
+  <AreaChartLegendComponent key='area-chart-legend' />,
+  <AreaChartLinearComponent key='area-chart-linear' />,
+  <AreaChartStackedComponent key='area-chart-stacked' />,
+  <AreaChartStackedExpandedComponent key='area-chart-stacked-expanded' />,
+  <AreaChartStepComponent key='area-chart-step' />,
 ];
 
 export const AllAreaChartsObject = {

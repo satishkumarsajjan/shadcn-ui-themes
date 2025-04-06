@@ -15,7 +15,7 @@ export async function GET(request: NextRequest) {
     let joinDate = '';
     let bio = '';
     let borderColor = '#4f46e5';
-    let userDescription = siteConfig.description;
+    // Removed unused userDescription variable
     let themeColors = convertArrayToString([
       '#4f46e5',
       '#9333ea',
@@ -49,6 +49,7 @@ export async function GET(request: NextRequest) {
           month: 'short',
         });
       } catch (e) {
+        console.error('Error formatting date:', e);
         return '';
       }
     }
@@ -88,9 +89,7 @@ export async function GET(request: NextRequest) {
             themeColors = convertArrayToString(userThemes[0].colors);
           }
 
-          userDescription = `Designer with ${themeCount} theme${
-            themeCount !== 1 ? 's' : ''
-          } on ${siteConfig.name}`;
+          // Removed assignment to unused userDescription variable
         }
       } catch (error) {
         console.error('Error fetching user data:', error);
@@ -100,9 +99,7 @@ export async function GET(request: NextRequest) {
       // Fallback to URL parameters if no userId
       userName = truncateText(searchParams.get('name') ?? userName, 30);
       themeCount = parseInt(searchParams.get('themeCount') ?? '0');
-      userDescription = `Designer with ${themeCount} theme${
-        themeCount !== 1 ? 's' : ''
-      } on ${siteConfig.name}`;
+      // Removed assignment to unused userDescription variable
     }
 
     // Generate the image using JSX
@@ -328,7 +325,7 @@ export async function GET(request: NextRequest) {
                     }}
                   >
                     <img
-                      src={`${process.env.NEXT_PUBLIC_BASE_URL}/assets/logo.png`} // Replace with the absolute URL of the logo
+                      src={`${process.env.NEXT_PUBLIC_BASE_URL}/assets/logo.png`}
                       alt='logo'
                       style={{
                         height: '4rem',
@@ -351,7 +348,7 @@ export async function GET(request: NextRequest) {
                         whiteSpace: 'nowrap',
                         fontWeight: 900,
                         fontSize: '2.25rem',
-                        color: '#ffffff', // Smooth white color
+                        color: '#ffffff',
                       }}
                       className='text-4xl'
                     >
@@ -363,7 +360,7 @@ export async function GET(request: NextRequest) {
                         textOverflow: 'ellipsis',
                         whiteSpace: 'nowrap',
                         fontSize: '1.5rem',
-                        color: '#ffffff', // Smooth white color
+                        color: '#ffffff',
                       }}
                     >
                       For Shadcn UI
@@ -391,8 +388,10 @@ export async function GET(request: NextRequest) {
         height: 630,
       }
     );
-  } catch (e: any) {
-    console.error(`${e.message}`);
+  } catch (e: Error | unknown) {
+    console.error(
+      `${e instanceof Error ? e.message : 'An unknown error occurred'}`
+    );
     return new Response(`Failed to generate the image`, { status: 500 });
   }
 }

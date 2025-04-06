@@ -2,6 +2,7 @@
 
 import { Icons } from '@/components/icons';
 
+import { Button } from '../ui/button';
 import {
   Card,
   CardContent,
@@ -10,6 +11,9 @@ import {
   CardHeader,
   CardTitle,
 } from '../ui/card';
+import { Input } from '../ui/input';
+import { Label } from '../ui/label';
+import { RadioGroup } from '../ui/radio-group';
 import {
   Select,
   SelectContent,
@@ -17,10 +21,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '../ui/select';
-import { RadioGroup, RadioGroupItem } from '../ui/radio-group';
-import { Label } from '../ui/label';
-import { Input } from '../ui/input';
-import { Button } from '../ui/button';
 
 export function CardsPaymentMethod() {
   return (

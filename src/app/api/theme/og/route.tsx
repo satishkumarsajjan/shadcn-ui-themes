@@ -10,7 +10,7 @@ export async function GET(request: NextRequest) {
     const themeId = searchParams.get('themeId');
 
     let themeName = 'Shadcn UI Themes';
-    let themeDescription = siteConfig.description;
+    const themeDescription = siteConfig.description;
     let authorName = 'Anonymous';
     let authorImage = `${process.env.NEXT_PUBLIC_BASE_URL}/assets/default-avatar.png`;
     let themeColors = convertArrayToString([
@@ -281,8 +281,10 @@ export async function GET(request: NextRequest) {
         height: 630,
       }
     );
-  } catch (e: any) {
-    console.error(`${e.message}`);
+  } catch (e: Error | unknown) {
+    console.error(
+      `${e instanceof Error ? e.message : 'An unknown error occurred'}`
+    );
     return new Response(`Failed to generate the image`, { status: 500 });
   }
 }

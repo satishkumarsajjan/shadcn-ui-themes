@@ -1,7 +1,8 @@
 import React from 'react';
 
+// Use a more specific type instead of Record<string, any>
 interface JsonLdProps {
-  data: Record<string, any>;
+  data: Record<string, unknown>;
 }
 
 export default function JsonLd({ data }: JsonLdProps) {

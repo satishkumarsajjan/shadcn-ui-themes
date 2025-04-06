@@ -1,15 +1,16 @@
 import ThemeEditor from '@/components/themeEditor/ThemeEditor';
 import { Metadata } from 'next';
 
+// Update the interface to match the expected type from Next.js in this project
 interface PageProps {
-  params: Promise<{ id: string }> | { id: string };
+  params: Promise<{ id: string }>;
 }
 
 // Enhanced metadata generation with OG image support
 export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
-  // Await the params object before accessing its properties
+  // Resolve the params promise
   const resolvedParams = await params;
   const id = resolvedParams.id;
 
@@ -90,9 +91,9 @@ export async function generateMetadata({
   }
 }
 
-// Page component with properly awaited params
+// Page component with params as a Promise
 const ThemePage = async ({ params }: PageProps) => {
-  // Await the params object before accessing its properties
+  // Resolve the params promise
   const resolvedParams = await params;
   const id = resolvedParams.id;
 

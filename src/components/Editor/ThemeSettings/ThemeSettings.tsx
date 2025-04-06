@@ -1,3 +1,4 @@
+// ... existing imports remain unchanged
 'use client';
 import { useSession } from 'next-auth/react';
 import { useCallback, useEffect, useState } from 'react';
@@ -57,9 +58,14 @@ export function EditTheme({
 
   // Create a debounced function for theme updates
   const debouncedSetTheme = useCallback(
-    debounce((content: string) => {
-      setTheme(content);
-    }, 600),
+    (content: string) => {
+      const debouncedFn = debounce((...args: unknown[]) => {
+        // Since we know the first argument should be a string in this context
+        const value = args[0] as string;
+        setTheme(value);
+      }, 600);
+      debouncedFn(content);
+    },
     [setTheme]
   );
 
@@ -132,7 +138,8 @@ export function EditTheme({
       if (matches.length > 0) {
         // Format CSS variables
         const formattedLines = matches.map((match) => {
-          const [_, variable, value] = match;
+          // Skip the first element (full match) and only use variable and value
+          const [, variable, value] = match;
           return `${variable}: ${value.trim()};`;
         });
 

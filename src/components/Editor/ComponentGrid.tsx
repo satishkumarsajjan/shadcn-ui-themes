@@ -14,20 +14,22 @@ import { CardsShare } from '../displayComponents/share';
 import { CardsStats } from '../displayComponents/stats';
 import { CardsTeamMembers } from '../displayComponents/team-members';
 
+// Define components with keys to fix the react/jsx-key error
 const components = [
-  <CardsActivityGoal />,
-  <CardsCalendar />,
-  <CardsStats />,
-  <CardsTeamMembers />,
-  <CardsMetric />,
-  <CardsDataTable />,
-  <CardsPaymentMethod />,
-  <CardsCreateAccount />,
-  <CardsChat />,
-  <CardsReportIssue />,
-  <CardsCookieSettings />,
-  <CardsShare />,
+  <CardsActivityGoal key='activity-goal' />,
+  <CardsCalendar key='calendar' />,
+  <CardsStats key='stats' />,
+  <CardsTeamMembers key='team-members' />,
+  <CardsMetric key='metric' />,
+  <CardsDataTable key='data-table' />,
+  <CardsPaymentMethod key='payment-method' />,
+  <CardsCreateAccount key='create-account' />,
+  <CardsChat key='chat' />,
+  <CardsReportIssue key='report-issue' />,
+  <CardsCookieSettings key='cookie-settings' />,
+  <CardsShare key='share' />,
 ];
+
 const ComponentGrid = () => {
   const [mounted, setMounted] = useState(false);
   const [columns, setColumns] = useState(3);

@@ -5,7 +5,7 @@ import {
   UserProfileHeroSkeleton,
 } from '@/components/profile/UserProfileHero';
 import { useUserThemes } from '@/hooks/get-myThemes';
-import { useGetUser } from '@/hooks/get-user-by-id';
+import { useGetUserInfo } from '@/hooks/get-user-by-id';
 import { useMemo, useState } from 'react';
 import ThemesGrid from './themesGrid';
 
@@ -19,15 +19,17 @@ const UserProfile = ({ userId }: UserProfileProps) => {
 
   const validUserId = typeof userId === 'string' ? userId : '';
 
-  if (!validUserId) {
-    return <div className='p-8 text-center'>No user selected</div>;
-  }
-
+  // Move all hooks to the top level before any conditional returns
   const {
     data: user,
     isFetching: isUserFetching,
     error: userError,
-  } = useGetUser(validUserId);
+  } = useGetUserInfo(validUserId);
+
+  // Memoize the date formatting for user.createdAt
+  const formattedJoinDate = useMemo(() => {
+    return user?.createdAt ? new Date(user.createdAt).toLocaleDateString() : '';
+  }, [user?.createdAt]);
 
   const { data, isFetching, error } = useUserThemes(
     validUserId,
@@ -35,15 +37,15 @@ const UserProfile = ({ userId }: UserProfileProps) => {
     pageSize
   );
 
+  // Handle invalid userId after hooks are called
+  if (!validUserId) {
+    return <div className='p-8 text-center'>No user selected</div>;
+  }
+
   const errorMessage = userError?.message || error?.message;
   if (errorMessage) {
     return <p>Error: {errorMessage}</p>;
   }
-
-  // Memoize the date formatting for user.createdAt
-  const formattedJoinDate = useMemo(() => {
-    return user?.createdAt ? new Date(user.createdAt).toLocaleDateString() : '';
-  }, [user?.createdAt]);
 
   return (
     <div>

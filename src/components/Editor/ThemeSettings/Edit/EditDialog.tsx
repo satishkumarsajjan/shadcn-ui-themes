@@ -1,4 +1,3 @@
-import { Copy, Pencil } from 'lucide-react';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -22,10 +21,11 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useState } from 'react';
 import { useThemeMutations } from '@/hooks/ThemeSettings/themeSettings';
 import { ThemeWithCounts, ThemeWithUserActions } from '@/types/apiReturnTypes';
 import { useQueryClient } from '@tanstack/react-query';
+import { Pencil } from 'lucide-react';
+import { useState } from 'react';
 
 interface props {
   theme: ThemeWithCounts | ThemeWithUserActions;

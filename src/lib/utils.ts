@@ -13,7 +13,7 @@ export function cn(...inputs: ClassValue[]) {
  * @param wait The number of milliseconds to delay
  * @returns A debounced version of the provided function
  */
-export function debounce<T extends (...args: any[]) => any>(
+export function debounce<T extends (...args: unknown[]) => unknown>(
   func: T,
   wait: number
 ): (...args: Parameters<T>) => void {
@@ -41,7 +41,7 @@ export function debounce<T extends (...args: any[]) => any>(
  * @param wait The number of milliseconds to throttle invocations to
  * @returns A throttled version of the provided function
  */
-export function throttle<T extends (...args: any[]) => any>(
+export function throttle<T extends (...args: unknown[]) => unknown>(
   func: T,
   wait: number
 ): (...args: Parameters<T>) => void {
