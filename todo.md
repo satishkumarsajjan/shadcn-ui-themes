@@ -3,7 +3,7 @@
 ## 🚀 High Priority
 
 - [ ] Analytics
-- [ ] Seo
+- [x] Seo
 
 ## 📋 Backlog
 

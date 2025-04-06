@@ -169,6 +169,11 @@ export default function RootLayout({
           </SessionProvider>
         </ViewTransitions>
       </body>
+
+      <script
+        async
+        src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
+      ></script>
     </html>
   );
 }
