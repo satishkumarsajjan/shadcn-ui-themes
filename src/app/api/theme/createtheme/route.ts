@@ -45,7 +45,7 @@ export async function POST(req: Request) {
             content: DEFAULT_THEME
           }
         },
-        colors:['#f97316', '#7c2d12', '#fff7ed', '#c2410c'],
+        colors:['#ffa344','#ffe0bf','#552008','#fb923c','#f97316', '#7c2d12', '#fff7ed', '#c2410c'],
       }
     })
 

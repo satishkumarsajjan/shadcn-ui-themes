@@ -22,7 +22,7 @@ const TooltipChartComponents = [
 
 // Export the components array for use in other files
 export const AllTooltipChartObject = {
-  title: 'Radial Charts',
+  title: 'Tooltip Charts',
   Components: TooltipChartComponents,
   Additional: null,
 };
