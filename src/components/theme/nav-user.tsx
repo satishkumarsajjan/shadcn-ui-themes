@@ -1,5 +1,5 @@
 'use client';
-import { signIn, signOut, useSession } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
 
 import { ChevronsUpDown, LogOut, LucideLogIn, User } from 'lucide-react';
 
@@ -18,9 +18,9 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from '@/components/ui/sidebar';
-import { Dialog, DialogTrigger } from '../ui/dialog';
-import SignInDialogContent from '../auth/SignInDialogContent';
 import { Link } from 'next-view-transitions';
+import SignInDialogContent from '../auth/SignInDialogContent';
+import { Dialog, DialogTrigger } from '../ui/dialog';
 
 export function NavUser() {
   const { isMobile } = useSidebar();

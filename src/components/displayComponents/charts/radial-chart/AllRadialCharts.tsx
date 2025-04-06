@@ -6,12 +6,12 @@ import { RadialChartStackedComponent } from './RadialChartStacked';
 import { RadialChartTextComponent } from './RadialChartText';
 
 const RadialChartComponents = [
-  <RadialChartComponent />,
-  <RadialChartGridComponent />,
-  <RadialChartLabelComponent />,
-  <RadialChartShapeComponent />,
-  <RadialChartStackedComponent />,
-  <RadialChartTextComponent />,
+  <RadialChartComponent key='radial-chart' />,
+  <RadialChartGridComponent key='radial-chart-grid' />,
+  <RadialChartLabelComponent key='radial-chart-label' />,
+  <RadialChartShapeComponent key='radial-chart-shape' />,
+  <RadialChartStackedComponent key='radial-chart-stacked' />,
+  <RadialChartTextComponent key='radial-chart-text' />,
 ];
 
 export const AllRadialChartsObject = {

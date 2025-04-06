@@ -1,12 +1,6 @@
 'use client';
 
-import {
-  BookMarked,
-  GraduationCap,
-  SwatchBook,
-  Telescope,
-  ThumbsUp,
-} from 'lucide-react';
+import { BookMarked, SwatchBook, Telescope, ThumbsUp } from 'lucide-react';
 import * as React from 'react';
 
 import {
@@ -17,10 +11,10 @@ import {
   SidebarRail,
 } from '@/components/ui/sidebar';
 import { useSession } from 'next-auth/react';
+import { Link } from 'next-view-transitions';
+import Logo from '../Logo';
 import { NavProjects } from './nav-projects';
 import { NavUser } from './nav-user';
-import Logo from '../Logo';
-import { Link } from 'next-view-transitions';
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { data: session } = useSession();

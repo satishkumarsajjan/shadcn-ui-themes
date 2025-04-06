@@ -1,67 +1,149 @@
-'use client';
+import UserProfile from '@/components/theme/themes/UserProfile';
+import { prisma } from '@/db/prisma';
+import { Metadata, ResolvingMetadata } from 'next';
 
-import {
-  UserProfileHero,
-  UserProfileHeroSkeleton,
-} from '@/components/profile/UserProfileHero';
-import ThemesGrid from '@/components/theme/themes/themesGrid';
-import { useUserThemes } from '@/hooks/get-myThemes';
-import { useGetUser } from '@/hooks/get-user-by-id';
-import { useParams } from 'next/navigation';
-import { useState } from 'react';
-interface pageProps {}
+interface PageProps {
+  params: Promise<{ userId: string }>;
+}
 
-const page = ({}: pageProps) => {
-  const [page, setPage] = useState(1);
-  const pageSize = 9;
-  const { userId } = useParams(); // Extract userId from the dynamic route
-  const validUserId = typeof userId === 'string' ? userId : ''; // Ensure userId is a string
-  const {
-    data: user,
-    isFetching: isUserFetching,
-    error: userError,
-  } = useGetUser(validUserId); // Call the hook directly in the component body
-  const { data, isFetching, error } = useUserThemes(
-    validUserId,
-    page,
-    pageSize
-  );
+type Props = {
+  params: Promise<{ userId: string }>;
+};
+
+// Generate metadata for the page
+export async function generateMetadata(
+  { params }: Props,
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  const { userId } = await params;
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://yourapp.com/';
+
+  try {
+    if (!userId) {
+      console.error('No userId provided');
+      throw new Error('No userId provided');
+    }
+    console.log(`Fetching user data from database for userId: ${userId}`);
+
+    // Fetch user directly from the database
+    const userData = await prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+      select: {
+        id: true,
+        name: true,
+        image: true,
+        bio: true,
+        createdAt: true,
+      },
+    });
+
+    if (!userData) {
+      console.error(`User not found for ID: ${userId}`);
+      throw new Error('User not found');
+    }
+
+    console.log('User data fetched successfully from DB:', userData);
+
+    // Count user's themes directly from the database
+    const themesCount = await prisma.theme.count({
+      where: {
+        userId: userId,
+      },
+    });
+
+    console.log('Themes count fetched successfully from DB:', themesCount);
+
+    // Generate dynamic OG image URL
+    const ogImageUrl = `${baseUrl}api/user/og?userId=${userId}`;
+
+    // Get metadata from parent (if needed)
+    const previousImages = (await parent).openGraph?.images || [];
+
+    const title = userData.name
+      ? `${userData.name}'s Themes | MyApp`
+      : 'User Themes | MyApp';
+
+    const description = userData.bio
+      ? `${userData.bio.substring(0, 150)}${
+          userData.bio.length > 150 ? '...' : ''
+        } • ${themesCount} themes`
+      : `Explore a curated collection of ${themesCount} themes created by this user.`;
+
+    return {
+      title,
+      description,
+      openGraph: {
+        title,
+        description,
+        url: `${baseUrl}themes/user/${userId}`,
+        siteName: 'MyApp',
+        images: [
+          {
+            url: ogImageUrl,
+            width: 1200,
+            height: 630,
+            alt: `${userData.name || 'User'}'s profile and themes`,
+          },
+          ...previousImages,
+        ],
+        locale: 'en_US',
+        type: 'website',
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title,
+        description,
+        images: [ogImageUrl],
+      },
+      alternates: {
+        canonical: `${baseUrl}themes/user/${userId}`,
+      },
+      keywords: [
+        'themes',
+        'user themes',
+        userData.name as string,
+        'design',
+        'customization',
+      ],
+      authors: [{ name: userData.name || 'MyApp User' }],
+      robots: {
+        index: true,
+        follow: true,
+      },
+    };
+  } catch (error) {
+    console.error('Error generating metadata:', error);
+
+    // Fallback metadata if fetch fails
+    return {
+      title: 'User Themes | MyApp',
+      description: 'Explore themes created by this user.',
+      openGraph: {
+        title: 'User Themes | MyApp',
+        description: 'Explore themes created by this user.',
+        url: `${baseUrl}themes/user/${userId}`,
+        siteName: 'MyApp',
+        images: [
+          {
+            url: `${baseUrl}api/user/og?userId=${userId}`,
+            width: 1200,
+            height: 630,
+            alt: 'User profile and themes',
+          },
+        ],
+      },
+    };
+  }
+}
+
+export default async function UserPage({ params }: PageProps) {
+  const { userId } = await params;
 
   return (
     <div>
-      {isUserFetching ? (
-        <UserProfileHeroSkeleton />
-      ) : (
-        <>
-          {userError ? (
-            <p>Error fetching user: {userError.message}</p>
-          ) : (
-            <div className='w-full flex items-center justify-center p-8'>
-              <UserProfileHero
-                bio={user?.bio || ''}
-                themesCount={data?.totalCount || 0}
-                username={user?.name || ''}
-                avatar={user?.image || ''}
-                joinDate={
-                  user?.createdAt
-                    ? new Date(user.createdAt).toLocaleDateString()
-                    : ''
-                }
-              />
-            </div>
-          )}
-        </>
-      )}
-      <ThemesGrid
-        data={data}
-        error={error}
-        isFetching={isFetching}
-        page={page}
-        pageSize={pageSize}
-        setPage={setPage}
-      />
+      <UserProfile userId={userId} />
     </div>
   );
-};
-
-export default page;
+}

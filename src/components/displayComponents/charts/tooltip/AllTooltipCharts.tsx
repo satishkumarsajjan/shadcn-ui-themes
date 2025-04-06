@@ -9,19 +9,20 @@ import { TooltipNoIndicatorComponent } from './TooltipNoIndicator';
 import { TooltipNoLabelComponent } from './TooltipNoLabel';
 
 const TooltipChartComponents = [
-  <TooltipAdvancedComponent />,
-  <TooltipCustomlabelComponent />,
-  <TooltipDefaultComponent />,
-  <TooltipFormatterComponent />,
-  <TooltipIconsComponent />,
-  <TooltipLabelFormatterComponent />,
-  <TooltipLineIndicatorComponent />,
-  <TooltipNoIndicatorComponent />,
-  <TooltipNoLabelComponent />,
+  <TooltipAdvancedComponent key='tooltip-advanced' />,
+  <TooltipCustomlabelComponent key='tooltip-customlabel' />,
+  <TooltipDefaultComponent key='tooltip-default' />,
+  <TooltipFormatterComponent key='tooltip-formatter' />,
+  <TooltipIconsComponent key='tooltip-icons' />,
+  <TooltipLabelFormatterComponent key='tooltip-label-formatter' />,
+  <TooltipLineIndicatorComponent key='tooltip-line-indicator' />,
+  <TooltipNoIndicatorComponent key='tooltip-no-indicator' />,
+  <TooltipNoLabelComponent key='tooltip-no-label' />,
 ];
 
+// Export the components array for use in other files
 export const AllTooltipChartObject = {
-  title: 'Tooltip Charts',
+  title: 'Radial Charts',
   Components: TooltipChartComponents,
   Additional: null,
 };

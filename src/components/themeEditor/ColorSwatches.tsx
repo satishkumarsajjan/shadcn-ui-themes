@@ -18,18 +18,6 @@ interface ColorSwatchesProps {
   onThemeChange?: (key: string, colorValue: string) => void;
 }
 
-// Parse HSL string to HslColor object
-const parseHslString = (hslString: string): HslColor => {
-  // Handle HSL strings in format "hsl(h s% l%)" or just "h s% l%"
-  const cleanHsl = hslString.replace('hsl(', '').replace(')', '');
-  const [h, s, l] = cleanHsl.split(' ').map((part) => {
-    // Remove percentage sign and convert to number
-    return parseFloat(part.replace('%', ''));
-  });
-
-  return { h, s, l };
-};
-
 const ColorSwatches = memo(
   ({ themeConfig, onThemeChange }: ColorSwatchesProps) => {
     // Store the original theme config for reset functionality
@@ -54,10 +42,6 @@ const ColorSwatches = memo(
         const colorValue = `${Math.round(newColor.h)} ${Math.round(
           newColor.s
         )}% ${Math.round(newColor.l)}%`;
-
-        // Check if the color has changed from the original
-        const hasChanged = originalThemeConfig[key] !== colorValue;
-        setHasChanges(true);
 
         // Call the parent's callback with just the key and new value
         onThemeChange(key, colorValue);

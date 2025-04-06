@@ -5,9 +5,9 @@ import Pastel from './Pastel/Pastel';
 import SunsetGlow from './Sunset Glow/SunsetGlow';
 
 export const previewThemes = [
-  <SunsetGlow />,
-  <Forest />,
-  <Ocean />,
-  <Lavender />,
-  <Pastel />,
+  <SunsetGlow key='sunset-glow' />,
+  <Forest key='forest' />,
+  <Ocean key='ocean' />,
+  <Lavender key='lavender' />,
+  <Pastel key='pastel' />,
 ];

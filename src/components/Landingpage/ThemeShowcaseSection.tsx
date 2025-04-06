@@ -39,16 +39,6 @@ export function ThemeShowcaseSection() {
     return null;
   }
 
-  // Preview card content
-  const previewContent = {
-    card: 'bg-card border rounded-lg p-4',
-    title: 'text-lg font-medium mb-2',
-    text: 'text-muted-foreground text-sm mb-4',
-    button: 'bg-primary text-primary-foreground text-sm px-3 py-1.5 rounded-md',
-    outlineButton:
-      'border border-primary text-primary px-3 py-1.5 rounded-md text-sm',
-  };
-
   return (
     <section id='themes-toggle' className='section-container bg-muted/5'>
       <div className='container'>
@@ -126,11 +116,8 @@ export function ThemeShowcaseSection() {
             {/* Preview card with current theme */}
             <div className='relative glass-effect rounded-xl border shadow-lg p-6 z-10'>
               <div className='mb-6 flex justify-between items-center'>
-                <div className='flex items-center gap-2'>
-                  <Logo />
+                <Logo />
 
-                  <h4 className='font-medium'>Theme Preview</h4>
-                </div>
                 <div className='flex gap-1'>
                   <div className='w-3 h-3 rounded-full bg-red-500' />
                   <div className='w-3 h-3 rounded-full bg-yellow-500' />
@@ -162,7 +149,7 @@ export function ThemeShowcaseSection() {
 
                 return (
                   <ScrollAnimation
-                    key={benefit.title}
+                    key={i}
                     animationType='fade-up'
                     delay={delayValue}
                   >

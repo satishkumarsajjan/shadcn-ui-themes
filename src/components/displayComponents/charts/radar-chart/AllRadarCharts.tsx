@@ -1,5 +1,5 @@
 import { RadarChartComponent } from './RadarChart';
-import { RadarChartCustomLabelComponent } from './RadarChartCustom Label';
+import { RadarChartCustomLabelComponent } from './RadarChartCustomLabel';
 import { RadarChartDotsComponent } from './RadarChartDots';
 import { RadarChartGridCircleComponent } from './RadarChartGridCircle';
 import { RadarChartGridCircleFilledComponent } from './RadarChartGridCircleFilled';
@@ -14,20 +14,20 @@ import { RadarChartMultipleComponent } from './RadarChartMultiple';
 import { RadarChartRadiusAxisComponent } from './RadarChartRadiusAxis';
 
 const RadarChartComponents = [
-  <RadarChartComponent />,
-  <RadarChartRadiusAxisComponent />,
-  <RadarChartCustomLabelComponent />,
-  <RadarChartDotsComponent />,
-  <RadarChartGridCircleComponent />,
-  <RadarChartGridCircleFilledComponent />,
-  <RadarChartGridCircleNolinesComponent />,
-  <RadarChartGridCustomComponent />,
-  <RadarChartGridFilledComponent />,
-  <RadarChartGridNoneComponent />,
-  <RadarChartIconsComponent />,
-  <RadarChartLegendComponent />,
-  <RadarChartLinesOnlyComponent />,
-  <RadarChartMultipleComponent />,
+  <RadarChartComponent key='radar-chart' />,
+  <RadarChartRadiusAxisComponent key='radar-chart-radius-axis' />,
+  <RadarChartCustomLabelComponent key='radar-chart-custom-label' />,
+  <RadarChartDotsComponent key='radar-chart-dots' />,
+  <RadarChartGridCircleComponent key='radar-chart-grid-circle' />,
+  <RadarChartGridCircleFilledComponent key='radar-chart-grid-circle-filled' />,
+  <RadarChartGridCircleNolinesComponent key='radar-chart-grid-circle-nolines' />,
+  <RadarChartGridCustomComponent key='radar-chart-grid-custom' />,
+  <RadarChartGridFilledComponent key='radar-chart-grid-filled' />,
+  <RadarChartGridNoneComponent key='radar-chart-grid-none' />,
+  <RadarChartIconsComponent key='radar-chart-icons' />,
+  <RadarChartLegendComponent key='radar-chart-legend' />,
+  <RadarChartLinesOnlyComponent key='radar-chart-lines-only' />,
+  <RadarChartMultipleComponent key='radar-chart-multiple' />,
 ];
 
 export const AllRadarChartsObject = {
