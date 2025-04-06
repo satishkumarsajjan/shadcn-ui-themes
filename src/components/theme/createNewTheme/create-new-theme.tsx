@@ -59,6 +59,17 @@ const CreateNewTheme = ({ className }: { className?: string }) => {
       toast.success('Theme created successfully');
       router.push(`/themes/id/${data.data.id}`);
     },
+    onError(error) {
+      // Handle error
+      if (axios.isAxiosError(error) && error.response) {
+        const errorMessage = error.response.data || 'Error creating theme';
+        toast.error(errorMessage);
+        console.error('Error creating theme:', errorMessage);
+      } else {
+        toast.error('An unexpected error occurred');
+        console.error('Error creating theme:', error);
+      }
+    },
   });
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {

@@ -20,12 +20,12 @@ export async function GET(req: Request) {
       return new NextResponse('User not found', { status: 404 });
     }
 
-    // Exclude the email field from the user object
-    const { email, ...userWithoutEmail } = user;
+  
+    const { bio,createdAt,id,image,name,updatedAt } = user;
 
     return NextResponse.json({
       message: 'User fetched successfully',
-      user: userWithoutEmail,
+      user: { bio,createdAt,id,image,name,updatedAt }, 
     }, { status: 200 });
 
   } catch (error) {
