@@ -58,20 +58,60 @@ bun install
 
 Create a `.env.local` file in the root directory with the following variables:
 
-```
-# Database
-DATABASE_URL=your_database_url
+# Environment Variables
 
-# NextAuth
-NEXTAUTH_URL=http://localhost:3000
-NEXTAUTH_SECRET=your_nextauth_secret
+This project requires several environment variables to be set up for proper functionality. Create a `.env.local` file in the root of your project with the following variables:
 
-# OAuth Providers (optional)
-GITHUB_ID=your_github_id
-GITHUB_SECRET=your_github_secret
-GOOGLE_CLIENT_ID=your_google_client_id
-GOOGLE_CLIENT_SECRET=your_google_client_secret
+## Authentication
+
 ```
+# Required secret for NextAuth.js
+AUTH_SECRET="your-auth-secret"
+
+# GitHub OAuth credentials
+AUTH_GITHUB_ID=your-github-client-id
+AUTH_GITHUB_SECRET=your-github-client-secret
+AUTH_GITHUB_CALLBACK_URL=your-github-callback-url
+
+# Google OAuth credentials
+AUTH_GOOGLE_ID=your-google-client-id
+AUTH_GOOGLE_SECRET=your-google-client-secret
+
+# NextAuth.js configuration
+NEXTAUTH_URL=your-app-url
+AUTH_URL=your-app-url
+AUTH_TRUST_HOST=true
+```
+
+## API Configuration
+
+```
+# API URLs
+NEXT_PUBLIC_API_BASE_URL='your-api-base-url'
+NEXT_PUBLIC_BASE_URL='your-app-base-url'
+```
+
+## Database
+
+```
+# Database connection string
+DATABASE_URL="your-database-connection-string"
+```
+
+## Analytics
+
+```
+# Google Analytics ID
+GAID="your-google-analytics-id"
+```
+
+## Getting Started
+
+1. Copy the above template to a new file named `.env.local` in your project root
+2. Replace the placeholder values with your actual credentials
+3. Make sure to add `.env.local` to your `.gitignore` file to avoid exposing sensitive information
+
+Note: Never commit your actual secrets or API keys to version control.
 
 4. **Run database migrations**
 
