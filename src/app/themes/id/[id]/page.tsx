@@ -1,4 +1,5 @@
 import ThemeEditor from '@/components/themeEditor/ThemeEditor';
+import { siteConfig } from '@/config/site';
 import { Metadata } from 'next';
 
 // Update the interface to match the expected type from Next.js in this project
@@ -17,7 +18,7 @@ export async function generateMetadata({
   try {
     // Fetch theme data
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/theme/getthemenamebyId?themeId=${id}`,
+      `https://themes-for-shadcn-ui.vercel.app/api/theme/getthemenamebyId?themeId=${id}`,
       { next: { revalidate: 3600 } } // Cache for 1 hour
     );
 
@@ -30,17 +31,13 @@ export async function generateMetadata({
 
     // Create OG image URL with theme name and author if available
     const ogImageUrl = new URL(
-      `${
-        process.env.NEXT_PUBLIC_APP_URL || 'https://ui-theme-editor.vercel.app'
-      }api/theme/og?themeId=${id}`
+      `https://themes-for-shadcn-ui.vercel.app/api/theme/og?themeId=${id}`
     );
     ogImageUrl.searchParams.append('title', `${themeName} Theme`);
     ogImageUrl.searchParams.append('author', data.author || 'UI Theme Editor');
 
     // Construct canonical URL
-    const canonicalUrl = `${
-      process.env.NEXT_PUBLIC_APP_URL || 'https://ui-theme-editor.vercel.app'
-    }/themes/id/${id}`;
+    const canonicalUrl = `https://themes-for-shadcn-ui.vercel.app/themes/id/${id}`;
 
     return {
       title: `${themeName} Theme | UI Theme Editor`,
@@ -74,7 +71,8 @@ export async function generateMetadata({
         title: `${themeName} UI Theme | UI Theme Editor`,
         description: `Explore and customize the ${themeName} UI theme. Create beautiful user interfaces with this customizable shadcn theme.`,
         images: [ogImageUrl.toString()],
-        creator: '@uithemeeditor',
+        creator: siteConfig.twitterHandle,
+        site: siteConfig.url,
       },
       alternates: {
         canonical: canonicalUrl,
