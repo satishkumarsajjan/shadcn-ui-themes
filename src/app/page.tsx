@@ -9,6 +9,18 @@ import { ThemesShowcase } from '@/components/Landingpage/ThemesShowcase';
 import { siteConfig } from '@/config/site';
 import { Metadata } from 'next';
 
+// Ensure we have a valid base URL
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://yourdomain.com';
+
+// Make sure image URL is absolute
+const getAbsoluteUrl = (path: string) => {
+  if (path.startsWith('http')) return path;
+  return `${baseUrl}${path.startsWith('/') ? '' : '/'}${path}`;
+};
+
+// Define image URL with fallback
+const ogImageUrl = getAbsoluteUrl(siteConfig.ogImage || '/og.png');
+
 export const metadata: Metadata = {
   title: siteConfig.name,
   description: siteConfig.description,
@@ -18,10 +30,10 @@ export const metadata: Metadata = {
   openGraph: {
     title: siteConfig.name,
     description: siteConfig.description,
-    url: process.env.NEXT_PUBLIC_BASE_URL,
+    url: baseUrl,
     images: [
       {
-        url: siteConfig.ogImage || `${process.env.NEXT_PUBLIC_BASE_URL}/og.png`,
+        url: ogImageUrl,
         width: 1200,
         height: 630,
         alt: siteConfig.name,
@@ -33,13 +45,12 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: siteConfig.name,
     description: siteConfig.description,
-    images: [
-      siteConfig.ogImage || `${process.env.NEXT_PUBLIC_BASE_URL}/og.png`,
-    ],
+    images: [ogImageUrl],
     creator: siteConfig.twitterHandle,
+    site: siteConfig.twitterHandle,
   },
   alternates: {
-    canonical: process.env.NEXT_PUBLIC_BASE_URL,
+    canonical: baseUrl,
   },
 };
 
