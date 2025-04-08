@@ -1,4 +1,3 @@
-// src/app/page.tsx
 import { CommunitySection } from '@/components/Landingpage/CommunitySection';
 import { CtaSection } from '@/components/Landingpage/CtaSection';
 import { FeaturesSection } from '@/components/Landingpage/FeaturesSection';
@@ -10,7 +9,6 @@ import { ThemesShowcase } from '@/components/Landingpage/ThemesShowcase';
 import { siteConfig } from '@/config/site';
 import { Metadata } from 'next';
 
-// Generate metadata for the page
 export const metadata: Metadata = {
   title: siteConfig.name,
   description: siteConfig.description,
@@ -23,7 +21,7 @@ export const metadata: Metadata = {
     url: process.env.NEXT_PUBLIC_BASE_URL,
     images: [
       {
-        url: '../../public/og.png', // Local image from the public folder
+        url: siteConfig.ogImage || `${process.env.NEXT_PUBLIC_BASE_URL}/og.png`,
         width: 1200,
         height: 630,
         alt: siteConfig.name,
@@ -35,8 +33,10 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: siteConfig.name,
     description: siteConfig.description,
-    images: [`../../public/og.png`],
-    creator: '@iamsatish4564',
+    images: [
+      siteConfig.ogImage || `${process.env.NEXT_PUBLIC_BASE_URL}/og.png`,
+    ],
+    creator: siteConfig.twitterHandle,
   },
   alternates: {
     canonical: process.env.NEXT_PUBLIC_BASE_URL,
