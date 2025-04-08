@@ -23,10 +23,7 @@ export const metadata: Metadata = {
     url: process.env.NEXT_PUBLIC_BASE_URL,
     images: [
       {
-        url: `${
-          process.env.NEXT_PUBLIC_APP_URL ||
-          'https://ui-theme-editor.vercel.app'
-        }/api/og`,
+        url: '../../public/og.png', // Local image from the public folder
         width: 1200,
         height: 630,
         alt: siteConfig.name,
@@ -38,11 +35,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: siteConfig.name,
     description: siteConfig.description,
-    images: [
-      `${
-        process.env.NEXT_PUBLIC_APP_URL || 'https://ui-theme-editor.vercel.app'
-      }/api/og`,
-    ],
+    images: [`../../public/og.png`],
     creator: '@iamsatish4564',
   },
   alternates: {

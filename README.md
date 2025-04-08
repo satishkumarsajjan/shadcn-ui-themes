@@ -2,7 +2,7 @@
 
 Beautiful themes for your next project. Discover, create, and share stunning shadcn/ui themes. Join a growing community of designers creating colorful UI themes.
 
-![Shadcn UI Themes](https://themes-for-shadcn-ui.vercel.app/api/og)
+![Shadcn UI Themes](./public/og.png)
 
 ## 🌟 Features
 
@@ -38,7 +38,7 @@ Beautiful themes for your next project. Discover, create, and share stunning sha
 1. **Clone the repository**
 
 ```bash
-git clone https://github.com/yourusername/shadcn-ui-themes.git
+git clone https://github.com/satishkumarsajjan/shadcn-ui-themes.git
 cd shadcn-ui-themes
 ```
 
@@ -132,30 +132,6 @@ bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-## 🧩 Project Structure
-
-```
-├── prisma/               # Database schema and migrations
-├── public/               # Static assets
-├── src/
-│   ├── app/              # Next.js App Router
-│   ├── components/       # UI components
-│   │   ├── providers/    # Context providers
-│   │   └── ui/           # shadcn/ui components
-│   ├── config/           # Configuration files
-│   ├── lib/              # Utility functions
-│   └── types/            # TypeScript type definitions
-├── .env.example          # Example environment variables
-└── package.json          # Project dependencies
-```
-
-## 🔧 Available Scripts
-
-- `npm run dev` - Start the development server with Turbopack
-- `npm run build` - Build the application for production
-- `npm run start` - Start the production server
-- `npm run lint` - Run ESLint to check for code issues
 
 ## 🌐 Deployment
 
