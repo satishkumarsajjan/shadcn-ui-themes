@@ -140,7 +140,7 @@ export function ThemeCard({ theme }: { theme: ThemeWithUserActions }) {
       <CardHeader>
         <Link href={`/themes/id/${theme.id}`}>
           <div
-            className={`w-full h-[300px] grid rounded-md overflow-hidden`}
+            className={`w-full h-[200px] grid rounded-md overflow-hidden`}
             style={{
               gridTemplateColumns: `repeat(${theme.colors.length}, minmax(0, 1fr))`,
             }}

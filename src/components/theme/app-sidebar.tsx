@@ -49,7 +49,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible='offcanvas' variant='floating' {...props}>
       <SidebarHeader>
-        <Link href={'/'}>
+        {/* <Link href={'/'}>
           <div className='flex justify-between items-center gap-2'>
             <div className='flex aspect-square size-8 items-center justify-center rounded-lg'>
               <Logo />
@@ -59,7 +59,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               <span className='truncate text-xs'>For Shadcn UI</span>
             </div>
           </div>
-        </Link>
+        </Link> */}
+        <Logo />
       </SidebarHeader>
       <SidebarContent>
         <NavProjects pages={data.pages} />
