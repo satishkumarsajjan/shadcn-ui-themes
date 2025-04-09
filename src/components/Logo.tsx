@@ -16,7 +16,7 @@ const Logo = () => {
           </div>
         </div>
       </Link>
-      <Badge className='text-xs bg-blue-700'>beta</Badge>
+      <Badge className='text-xs bg-blue-700 hover:bg-blue-700'>beta</Badge>
     </div>
   );
 };

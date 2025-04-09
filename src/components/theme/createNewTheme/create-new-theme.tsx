@@ -81,7 +81,7 @@ const CreateNewTheme = ({ className }: { className?: string }) => {
       <DialogTrigger asChild>
         <Button
           variant='outline'
-          size='lg'
+          size='sm'
           className={cn('flex justify-between px-2', className)}
         >
           <LucidePlusSquare className='' />

@@ -99,7 +99,7 @@ export function HeroSection() {
               <div className='flex flex-wrap gap-4'>
                 <CreateNewTheme className='bg-primary text-primary-foreground' />
                 <Link href={'/themes'}>
-                  <Button variant='outline' size='lg'>
+                  <Button variant='outline' size='sm'>
                     Browse Themes
                   </Button>
                 </Link>
