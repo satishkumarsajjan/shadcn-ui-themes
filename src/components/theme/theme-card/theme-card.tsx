@@ -21,11 +21,13 @@ import {
   ThumbsDown,
   ThumbsUp,
 } from 'lucide-react';
+import { useSession } from 'next-auth/react';
 import { Link } from 'next-view-transitions';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
 export function ThemeCard({ theme }: { theme: ThemeWithUserActions }) {
+  const { data: session } = useSession();
   const [isLiked, setIsLiked] = useState<boolean>(theme.isLiked);
   const [likeCounts, setLikeCounts] = useState<number>(theme._count.likes);
   const [isDisliked, setIsDisliked] = useState<boolean>(theme.isDisliked);
@@ -134,7 +136,9 @@ export function ThemeCard({ theme }: { theme: ThemeWithUserActions }) {
       }
     );
   };
-
+  const handleNotSignedIn = () => {
+    toast.error('Please sign in to like, dislike, or bookmark themes.');
+  };
   return (
     <Card className='relative shadow-none'>
       <CardHeader>
@@ -184,7 +188,9 @@ export function ThemeCard({ theme }: { theme: ThemeWithUserActions }) {
         <div className='flex items-center gap-0'>
           <Button
             variant={'ghost'}
-            onClick={() => likeMutation.mutate(theme.id)}
+            onClick={() =>
+              !session ? handleNotSignedIn() : likeMutation.mutate(theme.id)
+            }
             aria-label={isLiked ? 'Unlike theme' : 'Like theme'}
             aria-pressed={isLiked}
           >
@@ -193,7 +199,9 @@ export function ThemeCard({ theme }: { theme: ThemeWithUserActions }) {
           </Button>
           <Button
             variant='ghost'
-            onClick={() => dislikeMutation.mutate(theme.id)}
+            onClick={() =>
+              !session ? handleNotSignedIn() : dislikeMutation.mutate(theme.id)
+            }
             aria-label={isDisliked ? 'Remove dislike' : 'Dislike theme'}
             aria-pressed={isDisliked}
           >
@@ -206,7 +214,9 @@ export function ThemeCard({ theme }: { theme: ThemeWithUserActions }) {
         <div>
           <Button
             variant='ghost'
-            onClick={() => bookmarkMutation.mutate(theme.id)}
+            onClick={() =>
+              !session ? handleNotSignedIn() : bookmarkMutation.mutate(theme.id)
+            }
             aria-label={isBookmarked ? 'Remove bookmark' : 'Bookmark theme'}
             aria-pressed={isBookmarked}
           >
