@@ -34,6 +34,12 @@ yarn-error.log*
 .env
 .env.local
 
+.env.test.local
+
+.env.development
+
+.env.production
+
 # vercel
 .vercel
 
@@ -43,3 +49,4 @@ next-env.d.ts
 
 .qodo/history.sqlite
 .qodo
+.env*.local

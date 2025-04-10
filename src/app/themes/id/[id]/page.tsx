@@ -31,7 +31,7 @@ export async function generateMetadata({
 
     // Create OG image URL with theme name and author if available
     const ogImageUrl = new URL(
-      `https://themes-for-shadcn-ui.vercel.app/api/theme/og?themeId=${id}`
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/theme/og?themeId=${id}`
     );
     ogImageUrl.searchParams.append('title', `${themeName} Theme`);
     ogImageUrl.searchParams.append('author', data.author || 'UI Theme Editor');

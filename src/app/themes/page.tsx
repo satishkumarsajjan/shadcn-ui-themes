@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     url: `${process.env.NEXT_PUBLIC_BASE_URL}/themes`,
     images: [
       {
-        url: `${process.env.NEXT_PUBLIC_BASE_URL}/og-image.png`,
+        url: `${process.env.NEXT_PUBLIC_BASE_URL}/og.png`,
         width: 1200,
         height: 630,
         alt: 'Explore All Themes',
@@ -38,7 +38,7 @@ export const metadata: Metadata = {
     title: 'Explore All Themes | Shadcn UI Themes',
     description:
       'Discover and explore a wide range of beautifully crafted UI themes. Find the perfect theme for your next project.',
-    images: [`${process.env.NEXT_PUBLIC_BASE_URL}/og-image.png`],
+    images: [`${process.env.NEXT_PUBLIC_BASE_URL}/og.png`],
   },
   robots: {
     index: true,
@@ -64,13 +64,13 @@ const page = () => {
               description:
                 'Discover and explore a wide range of beautifully crafted UI themes. Find the perfect theme for your next project.',
               url: `${process.env.NEXT_PUBLIC_BASE_URL}/themes`,
-              image: `${process.env.NEXT_PUBLIC_BASE_URL}/og-image.png`,
+              image: `${process.env.NEXT_PUBLIC_BASE_URL}/og.png`,
               publisher: {
                 '@type': 'Organization',
                 name: 'Shadcn UI Themes',
                 logo: {
                   '@type': 'ImageObject',
-                  url: `${process.env.NEXT_PUBLIC_BASE_URL}/logo.png`,
+                  url: `${process.env.NEXT_PUBLIC_BASE_URL}/assets/logo.png`,
                 },
               },
               mainEntityOfPage: {

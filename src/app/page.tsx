@@ -10,16 +10,11 @@ import { siteConfig } from '@/config/site';
 import { Metadata } from 'next';
 
 // Ensure we have a valid base URL
-const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://yourdomain.com';
-
-// Make sure image URL is absolute
-const getAbsoluteUrl = (path: string) => {
-  if (path.startsWith('http')) return path;
-  return `${baseUrl}${path.startsWith('/') ? '' : '/'}${path}`;
-};
+const baseUrl =
+  process.env.NEXT_PUBLIC_BASE_URL || 'https://themes-for-shadcn-ui.vercel.app';
 
 // Define image URL with fallback
-const ogImageUrl = getAbsoluteUrl(siteConfig.ogImage || '/og.png');
+const ogImageUrl = siteConfig.ogImage;
 
 export const metadata: Metadata = {
   title: siteConfig.name,

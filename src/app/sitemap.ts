@@ -2,7 +2,7 @@ import { prisma } from '@/db/prisma';
 
 export default async function generateSitemap() {
   try {
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://yourapp.com/';
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://themes-for-shadcn-ui.vercel.app';
 
     // Fetch data for sitemap
     const users = await prisma.user.findMany({
@@ -21,12 +21,12 @@ export default async function generateSitemap() {
 
     // Generate sitemap entries
     const userSitemap = users.map((user) => ({
-      url: `${baseUrl}themes/user/${user.id}`,
+      url: `${baseUrl}/themes/user/${user.id}`,
       lastModified: new Date().toISOString(),
     }));
 
     const themeSitemap = themes.map((theme) => ({
-      url: `${baseUrl}themes/${theme.id}`,
+      url: `${baseUrl}/themes/${theme.id}`,
       lastModified: new Date().toISOString(),
     }));
 
