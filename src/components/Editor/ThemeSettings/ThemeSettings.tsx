@@ -19,6 +19,7 @@ import { ThemeContentEditor } from './ThemeContentEditor';
 import { ThemeWithCounts, ThemeWithUserActions } from '@/types/apiReturnTypes';
 import ThemeThumbnail from './ThemeThumbnail';
 import { ThemeEditDialog } from './Edit/EditDialog';
+import TagEditor from './TagEditor';
 
 // Component props
 export interface EditThemeProps {
@@ -297,6 +298,8 @@ export function EditTheme({
           />
         </>
       )}
+      <Separator orientation='horizontal' className='my-3' />
+      <TagEditor theme={theme} />
     </div>
   );
 }

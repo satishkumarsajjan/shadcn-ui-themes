@@ -18,7 +18,7 @@ export async function generateMetadata({
   try {
     // Fetch theme data
     const response = await fetch(
-      `https://themes-for-shadcn-ui.vercel.app/api/theme/getthemenamebyId?themeId=${id}`,
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/theme/getthemenamebyId?themeId=${id}`,
       { next: { revalidate: 3600 } } // Cache for 1 hour
     );
 

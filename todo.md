@@ -2,19 +2,21 @@
 
 ## 🚀 High Priority
 
-- [ ] Analytics
-- [x] Seo
+- [ ] Search
+- [ ] Tag
 
 ## 📋 Backlog
 
 - [ ] Documentation updates (How to setup themes)
 - [ ] Performance optimizations
-- [ ] Cross-browser testing
 
 ## ✅ Completed
 
 <!-- Move items here when done -->
 
+- [x] Seo
+- [x] Analytics
+- [x] Cross-browser testing
 - [x] Landing page implementation
 - [x] Polish Landing Page
 - [x] Landing page sign in problem

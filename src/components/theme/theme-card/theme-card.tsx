@@ -1,5 +1,6 @@
 'use client';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -9,8 +10,12 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { useGetUserInfo } from '@/hooks/get-user-by-id';
+import { useTags } from '@/hooks/use-tags';
 import { cn } from '@/lib/utils';
-import { ThemeWithUserActions } from '@/types/apiReturnTypes';
+import {
+  ThemeTagWithDetails,
+  ThemeWithUserActions,
+} from '@/types/apiReturnTypes';
 import { User } from '@prisma/client';
 import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
@@ -39,7 +44,15 @@ export function ThemeCard({ theme }: { theme: ThemeWithUserActions }) {
     theme._count.bookmarks
   );
   const [user, setUser] = useState<User | null>(null);
+  const { data: initialTags } = useTags(theme?.id || '');
+  const [tags, setTags] = useState<ThemeTagWithDetails[]>();
 
+  // Update tags state when initialTags is loaded
+  useEffect(() => {
+    if (initialTags) {
+      setTags(initialTags);
+    }
+  }, [initialTags]);
   // Call the hook directly in the component body
   const { data, error } = useGetUserInfo(theme.userId);
 
@@ -140,7 +153,7 @@ export function ThemeCard({ theme }: { theme: ThemeWithUserActions }) {
     toast.error('Please sign in to like, dislike, or bookmark themes.');
   };
   return (
-    <Card className='relative shadow-none'>
+    <Card className='shadow-none h-full'>
       <CardHeader>
         <Link href={`/themes/id/${theme.id}`}>
           <div
@@ -163,29 +176,41 @@ export function ThemeCard({ theme }: { theme: ThemeWithUserActions }) {
         <Link href={`/themes/id/${theme.id}`}>
           <CardTitle className='text-2xl'>{theme.title}</CardTitle>
         </Link>
-        <span className='flex my-2 items-center justify-start gap-2'>
-          <Avatar className='size-6'>
-            <AvatarImage src={user?.image || ''} alt={user?.name || 'User'} />
-            <AvatarFallback>
-              {user?.name
-                ? user.name
-                    .split(' ')
-                    .map((n) => n[0])
-                    .join('')
-                    .toUpperCase()
-                : 'CN'}
-            </AvatarFallback>
-          </Avatar>
-          <Link
-            href={`/themes/user/${user?.id}`}
-            className='text-sm hover:underline'
-          >
-            {user?.name}
-          </Link>
-        </span>
+        <div className='flex flex-wrap gap-2 mt-2'>
+          {tags?.map((themeTag) => (
+            <Badge
+              key={themeTag.tag.name}
+              className='px-2 py-1 text-sm rounded-md flex items-center gap-1 scale-90'
+            >
+              <Link href={`/theme/tags/${themeTag.tag.name}`}>
+                {themeTag.tag.name}
+              </Link>
+            </Badge>
+          ))}
+        </div>
       </CardContent>
       <CardFooter className='flex justify-between'>
-        <div className='flex items-center gap-0'>
+        <div className='flex items-center justify-center gap-2'>
+          <span className='flex my-2 items-center justify-start gap-2'>
+            <Avatar className='size-6'>
+              <AvatarImage src={user?.image || ''} alt={user?.name || 'User'} />
+              <AvatarFallback>
+                {user?.name
+                  ? user.name
+                      .split(' ')
+                      .map((n) => n[0])
+                      .join('')
+                      .toUpperCase()
+                  : 'CN'}
+              </AvatarFallback>
+            </Avatar>
+            <Link
+              href={`/themes/user/${user?.id}`}
+              className='text-sm hover:underline'
+            >
+              {user?.name}
+            </Link>
+          </span>
           <Button
             variant={'ghost'}
             onClick={() =>
