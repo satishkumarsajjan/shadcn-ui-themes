@@ -2,6 +2,7 @@ import { auth } from '@/auth';
 import { redirect } from 'next/navigation';
 import { Metadata } from 'next';
 import BookmarksGrid from '@/components/theme/bookmarks/BookmarksGrid';
+import { siteConfig } from '@/config/site';
 
 // Define page-specific metadata
 export const metadata: Metadata = {
@@ -35,7 +36,7 @@ export const metadata: Metadata = {
     // Use a generic image since this is a private page
     images: [
       {
-        url: '/images/bookmarks-og.jpg', // Create this generic bookmarks preview image
+        url: siteConfig.ogImage, // Create this generic bookmarks preview image
         width: 1200,
         height: 630,
         alt: 'Bookmarked UI Themes',

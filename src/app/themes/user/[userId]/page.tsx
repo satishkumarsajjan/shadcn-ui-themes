@@ -16,14 +16,13 @@ export async function generateMetadata(
   parent: ResolvingMetadata
 ): Promise<Metadata> {
   const { userId } = await params;
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://yourapp.com/';
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
 
   try {
     if (!userId) {
       console.error('No userId provided');
       throw new Error('No userId provided');
     }
-    console.log(`Fetching user data from database for userId: ${userId}`);
 
     // Fetch user directly from the database
     const userData = await prisma.user.findUnique({
@@ -44,8 +43,6 @@ export async function generateMetadata(
       throw new Error('User not found');
     }
 
-    console.log('User data fetched successfully from DB:', userData);
-
     // Count user's themes directly from the database
     const themesCount = await prisma.theme.count({
       where: {
@@ -53,10 +50,8 @@ export async function generateMetadata(
       },
     });
 
-    console.log('Themes count fetched successfully from DB:', themesCount);
-
     // Generate dynamic OG image URL
-    const ogImageUrl = `${baseUrl}api/user/og?userId=${userId}`;
+    const ogImageUrl = `${baseUrl}/api/user/og?userId=${userId}`;
 
     // Get metadata from parent (if needed)
     const previousImages = (await parent).openGraph?.images || [];
@@ -77,7 +72,7 @@ export async function generateMetadata(
       openGraph: {
         title,
         description,
-        url: `${baseUrl}themes/user/${userId}`,
+        url: `${baseUrl}/themes/user/${userId}`,
         siteName: 'MyApp',
         images: [
           {
@@ -98,7 +93,7 @@ export async function generateMetadata(
         images: [ogImageUrl],
       },
       alternates: {
-        canonical: `${baseUrl}themes/user/${userId}`,
+        canonical: `${baseUrl}/themes/user/${userId}`,
       },
       keywords: [
         'themes',
@@ -127,7 +122,7 @@ export async function generateMetadata(
         siteName: 'MyApp',
         images: [
           {
-            url: `${baseUrl}api/user/og?userId=${userId}`,
+            url: `${baseUrl}/api/user/og?userId=${userId}`,
             width: 1200,
             height: 630,
             alt: 'User profile and themes',

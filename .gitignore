@@ -49,3 +49,4 @@ next-env.d.ts
 
 .qodo/history.sqlite
 .qodo
+.env*.local
