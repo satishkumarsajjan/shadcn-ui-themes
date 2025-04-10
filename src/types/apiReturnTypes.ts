@@ -8,6 +8,21 @@ export interface Tag {
   updatedAt: Date;
 }
 
+export type ThemeTagWithDetails = {
+  tag: {
+    name: string;
+    id: string;
+    createdAt: Date;
+    updatedAt: Date;
+  };
+} & {
+  id: string;
+  themeId: string;
+  tagId: string;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
 // Junction table between themes and tags
 export interface ThemeTag {
   id: string;
