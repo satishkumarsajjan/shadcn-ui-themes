@@ -1,3 +1,4 @@
+import { Prisma } from '@prisma/client';
 import { Theme, ThemeMode } from '@prisma/client';
 
 // Tag model
@@ -96,3 +97,17 @@ export interface UpdateModeResponse {
     content: string;
   };
 }
+
+
+// This represents the exact return type of the Prisma query
+export type ThemeSearchResults = Array<
+  Prisma.ThemeGetPayload<{
+    include: {
+      tags: {
+        include: {
+          tag: true;
+        };
+      };
+    };
+  }>
+>;
