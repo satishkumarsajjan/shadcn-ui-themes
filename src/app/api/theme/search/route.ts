@@ -1,4 +1,6 @@
 import { prisma } from '@/db/prisma';
+import { ThemeSearchResults } from '@/types/apiReturnTypes';
+
 import { NextResponse } from 'next/server';
 
 export async function GET(req: Request) {
@@ -9,12 +11,16 @@ export async function GET(req: Request) {
     const pageSize = parseInt(searchParams.get('pageSize') || '10', 10);
     const skip = (page - 1) * pageSize;
 
-    const results = await prisma.theme.findMany({
+    const results:ThemeSearchResults = await prisma.theme.findMany({
       where: {
         OR: [
           { title: { contains: query, mode: 'insensitive' } },
           { description: { contains: query, mode: 'insensitive' } },
-          { tags: { some: { tag: { name: { contains: query, mode: 'insensitive' } } } } }, // Search by tag name
+          {
+            tags: {
+              some: { tag: { name: { contains: query, mode: 'insensitive' } } },
+            },
+          }, // Search by tag name
         ],
       },
       skip,

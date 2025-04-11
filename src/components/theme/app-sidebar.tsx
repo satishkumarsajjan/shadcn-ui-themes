@@ -14,7 +14,6 @@ import { useSession } from 'next-auth/react';
 import Logo from '../Logo';
 import { NavProjects } from './nav-projects';
 import { NavUser } from './nav-user';
-import { SearchBar } from '../Search/SearchBar';
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { data: session } = useSession();
@@ -52,7 +51,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <Logo />
       </SidebarHeader>
       <SidebarContent>
-        <SearchBar />
         <NavProjects pages={data.pages} />
       </SidebarContent>
       <SidebarFooter>

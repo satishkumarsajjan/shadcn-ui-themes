@@ -27,8 +27,10 @@ export default function SidebarWrapper({
             </div>
             <div className='flex justify-end items-center gap-2 '>
               <SearchBar />
-              <CreateNewTheme />
-              <ModeToggle />
+              <div className='flex justify-end items-center gap-2 '>
+                <CreateNewTheme />
+                <ModeToggle />
+              </div>
             </div>
           </div>
         </header>
