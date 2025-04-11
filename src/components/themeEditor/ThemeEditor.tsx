@@ -5,29 +5,18 @@ import { useThemeById } from '@/hooks/get-theme-by-Id';
 import { DEFAULT_THEME } from '@/lib/constants';
 import { useSession } from 'next-auth/react';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import SignInDialogContent from '../auth/SignInDialogContent';
 import { AllAreaChartsObject } from '../displayComponents/charts/area-chart/AllAreaCharts';
-import ChartsGrid from '../displayComponents/charts/ChartsGrid';
-import { EditTheme } from '../Editor/ThemeSettings/ThemeSettings';
-import {
-  ResizableHandle,
-  ResizablePanel,
-  ResizablePanelGroup,
-} from '../ui/resizable';
-import { ScrollArea } from '../ui/scroll-area';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
-import ColorSwatches from './ColorSwatches';
-import DescriptionTextEditor from './RichTextEditor';
-import { Separator } from '../ui/separator';
 import { AllBarCharsObject } from '../displayComponents/charts/bar-chart/AllBarCharts';
+import ChartsGrid from '../displayComponents/charts/ChartsGrid';
 import { AllLineChartsObject } from '../displayComponents/charts/line-chart/AllLineCharts';
 import { AllPieChartsObject } from '../displayComponents/charts/pie-chart/AllPieCharts';
 import { AllRadarChartsObject } from '../displayComponents/charts/radar-chart/AllRadarCharts';
 import { AllRadialChartsObject } from '../displayComponents/charts/radial-chart/AllRadialCharts';
 import { AllTooltipChartObject } from '../displayComponents/charts/tooltip/AllTooltipCharts';
-import Buttons from '../displayComponents/simpletons/Buttons';
 import Alerts from '../displayComponents/simpletons/Alerts';
 import Badges from '../displayComponents/simpletons/Badges';
-import { CommandDemo } from '../displayComponents/simpletons/CommandDemo';
+import Buttons from '../displayComponents/simpletons/Buttons';
 import { MenubarDemo } from '../displayComponents/simpletons/MenubarDemo';
 import { PaginationDemo } from '../displayComponents/simpletons/PaginationDemo';
 import { ProgressDemo } from '../displayComponents/simpletons/ProgressDemo';
@@ -36,10 +25,20 @@ import { ScrollAreaHorizontalDemo } from '../displayComponents/simpletons/Scroll
 import { SeparatorDemo } from '../displayComponents/simpletons/SeparatorDemo';
 import { SliderDemo } from '../displayComponents/simpletons/SliderDemo';
 import { ToggleGroupDemo } from '../displayComponents/simpletons/ToggleGroupDemo';
+import { EditTheme } from '../Editor/ThemeSettings/ThemeSettings';
 import ImportThemeButton from '../theme/themes/ImportThemeButton';
-import { Dialog, DialogTrigger } from '../ui/dialog';
 import { Button } from '../ui/button';
-import SignInDialogContent from '../auth/SignInDialogContent';
+import { Dialog, DialogTrigger } from '../ui/dialog';
+import {
+  ResizableHandle,
+  ResizablePanel,
+  ResizablePanelGroup,
+} from '../ui/resizable';
+import { ScrollArea } from '../ui/scroll-area';
+import { Separator } from '../ui/separator';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
+import ColorSwatches from './ColorSwatches';
+import DescriptionTextEditor from './RichTextEditor';
 
 export interface ThemeConfig {
   [key: string]: string;
@@ -299,7 +298,6 @@ function ThemeEditor({ id }: { id: string }) {
                 <ToggleGroupDemo />
                 <RadioGroupDemo />
                 <Alerts />
-                <CommandDemo />
                 <ScrollAreaHorizontalDemo />
               </div>
 
