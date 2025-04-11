@@ -8,6 +8,7 @@ import {
 } from '@/components/ui/sidebar';
 import CreateNewTheme from '../theme/createNewTheme/create-new-theme';
 import { ModeToggle } from '../theme/ModeToggle';
+import { SearchBar } from '../Search/SearchBar';
 
 export default function SidebarWrapper({
   children,
@@ -25,6 +26,7 @@ export default function SidebarWrapper({
               <Separator orientation='vertical' className='mr-2 h-4' />
             </div>
             <div className='flex justify-end items-center gap-2 '>
+              <SearchBar />
               <CreateNewTheme />
               <ModeToggle />
             </div>
