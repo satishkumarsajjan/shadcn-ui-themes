@@ -1,26 +1,65 @@
-import { Input } from '@/components/ui/input';
+'use client';
+import {
+  CommandDialog,
+  CommandEmpty,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from '@/components/ui/command';
 import { useState } from 'react';
-import { Button } from '../ui/button';
 
-export const SearchBar = ({
-  onSearch,
-}: {
-  onSearch: (query: string) => void;
-}) => {
+// Define the type for search results
+type SearchResult = {
+  id: string;
+  name: string;
+};
+
+export function SearchBar() {
   const [query, setQuery] = useState('');
+  const [results, setResults] = useState<SearchResult[]>([]); // Add type for results
+  const [loading, setLoading] = useState(false);
 
-  const handleSearch = () => {
-    onSearch(query);
+  const handleSearch = async (value: string) => {
+    setQuery(value);
+    if (!value) {
+      setResults([]);
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const res = await fetch(`/api/theme/search?query=${value}`);
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
+      const data: SearchResult[] = await res.json(); // Ensure data matches the expected type
+      setResults(data);
+    } catch (error) {
+      console.error('Search error:', error);
+      setResults([]); // Reset results on error
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div className='flex items-center gap-2'>
-      <Input
+    <CommandDialog>
+      <CommandInput
+        placeholder='Type a command or search...'
         value={query}
-        onChange={(e) => setQuery(e.target.value)}
-        placeholder='Search by tags...'
+        onValueChange={(value: string) => handleSearch(value)} // Use onValueChange if CommandInput expects it
       />
-      <Button onClick={handleSearch}>Search</Button>
-    </div>
+      <CommandList>
+        {loading && <CommandEmpty>Loading...</CommandEmpty>}
+        {!loading && results.length === 0 && (
+          <CommandEmpty>No results found.</CommandEmpty>
+        )}
+        {results.map((result) => (
+          <CommandItem key={result.id}>
+            <span>{result.name}</span>
+          </CommandItem>
+        ))}
+      </CommandList>
+    </CommandDialog>
   );
-};
+}
