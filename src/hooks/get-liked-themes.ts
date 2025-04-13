@@ -13,5 +13,6 @@ export const useLikedThemes = (page: number, pageSize: number) => {
   return useQuery<ThemesResponse>({
     queryKey: ['likedThemes', page, pageSize],
     queryFn: () => fetchLikedThemes(page, pageSize),
+    refetchOnWindowFocus: false,
   });
 };

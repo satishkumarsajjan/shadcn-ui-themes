@@ -41,5 +41,6 @@ export function useThemes({ page, pageSize, sortBy, timeframe }: ThemesParams) {
   return useQuery<ThemesResponse>({
     queryKey: ['themes', { page, pageSize, sortBy, timeframe }],
     queryFn: () => fetchThemes({ page, pageSize, sortBy, timeframe }),
+    refetchOnWindowFocus: false,
   });
 }

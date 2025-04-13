@@ -34,5 +34,6 @@ export function useThemeSearch({ query, page = 1, pageSize = 10 }: SearchThemesP
     queryFn: () => fetchThemes({ query, page, pageSize }),
     enabled: query.length > 0, // Only run the query if there's a search term
     staleTime: 5 * 60 * 1000, // Consider data fresh for 5 minutes
+    refetchOnWindowFocus: false,
   });
 }
