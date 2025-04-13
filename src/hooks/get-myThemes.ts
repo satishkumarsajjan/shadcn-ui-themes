@@ -13,6 +13,7 @@ export const useMyThemes = (page: number, pageSize: number) => {
   return useQuery<ThemesResponse>({
     queryKey: ['myThemes', page, pageSize],
     queryFn: () => fetchMyThemes(page, pageSize),
+    refetchOnWindowFocus: false,
   });
 };
 
@@ -28,5 +29,6 @@ export const useUserThemes = (userId: string, page: number, pageSize: number) =>
     queryKey: ['userThemes', userId, page, pageSize],
     queryFn: () => fetchUserThemes(userId, page, pageSize),
     enabled: !!userId, // Only run the query if userId is provided
+    refetchOnWindowFocus: false,
   });
 };

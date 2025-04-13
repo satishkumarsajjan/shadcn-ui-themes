@@ -13,5 +13,6 @@ export const useMyBookmarks = (page: number, pageSize: number) => {
   return useQuery<ThemesResponse>({
     queryKey: ['myBookmarks', page, pageSize],
     queryFn: () => fetchBookmarks(page, pageSize),
+    refetchOnWindowFocus: false,
   });
 };

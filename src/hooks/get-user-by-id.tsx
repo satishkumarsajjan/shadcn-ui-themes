@@ -17,6 +17,7 @@ export function useGetUser(userId: string) {
     enabled: !!userId, // Only run the query if userId is provided
     retry: 1, // Retry once on failure
     staleTime: 1000 * 60 * 5, // Cache data for 5 minutes
+    refetchOnWindowFocus: false,
   });
 }
 
@@ -35,5 +36,6 @@ export function useGetUserInfo(userId: string) {
     enabled: !!userId, // Only run the query if userId is provided
     retry: 1, // Retry once on failure
     staleTime: 1000 * 60 * 5, // Cache data for 5 minutes
+    refetchOnWindowFocus: false,
   });
 }

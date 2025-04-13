@@ -13,5 +13,6 @@ export const useThemeById = (themeId: string) => {
   return useQuery<GetThemeByIdResponse>({
     queryKey: ['Theme', themeId],
     queryFn: () => fetchTheme(themeId),
+    refetchOnWindowFocus: false,
   });
 };
