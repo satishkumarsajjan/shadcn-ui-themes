@@ -8,9 +8,9 @@ import { toast } from 'sonner';
 
 export function CommunitySection() {
   return (
-    <section id='community' className=' py-20 md:py-32'>
+    <section id='community' className='relative py-20 md:py-32 overflow-hidden'>
       {/* Background decorations */}
-      <div className='absolute inset-0 -z-10'>
+      <div className='absolute inset-0 -z-10 overflow-hidden'>
         <div className='absolute right-0 top-0 h-[25rem] w-[25rem] translate-x-1/3 rounded-full bg-primary/5 blur-3xl' />
         <div className='absolute bottom-0 left-0 h-[20rem] w-[20rem] -translate-x-1/3 rounded-full bg-primary/10 blur-3xl' />
       </div>
@@ -35,85 +35,13 @@ export function CommunitySection() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
             viewport={{ once: true }}
-            className='text-muted-foreground'
+            className='text-muted-foreground px-4'
           >
             Connect with designers and developers from around the world. Share
             your creations, get inspired, and collaborate on beautiful UI
             themes.
           </motion.p>
         </div>
-
-        {/* Community members grid */}
-        {/* <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-          viewport={{ once: true }}
-          className='relative mx-auto mb-12 max-w-4xl'
-        >
-          <div className='absolute inset-0 flex items-center justify-center'>
-            <div className='h-[350px] w-[350px] rounded-full bg-primary/5 blur-3xl' />
-          </div>
-
-          <div className='relative grid grid-cols-3 gap-4 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6'>
-            {communityMembers.map((member, index) => (
-              <HoverCard key={member.name} openDelay={200} closeDelay={100}>
-                <HoverCardTrigger asChild>
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    transition={{
-                      duration: 0.4,
-                      delay: 0.1 + index * 0.05,
-                      type: 'spring',
-                      stiffness: 260,
-                      damping: 20,
-                    }}
-                    whileHover={{ y: -5 }}
-                    className='flex cursor-pointer flex-col items-center'
-                  >
-                    <Avatar className='h-16 w-16 border-2 border-primary/20'>
-                      <AvatarFallback className='bg-primary/10 text-primary'>
-                        {member.avatar}
-                      </AvatarFallback>
-                    </Avatar>
-                    <p className='mt-2 text-center text-sm font-medium'>
-                      {member.name.split(' ')[0]}
-                    </p>
-                    <p className='text-xs text-muted-foreground'>
-                      {member.themes} themes
-                    </p>
-                  </motion.div>
-                </HoverCardTrigger>
-                <HoverCardContent className='w-80 p-0' side='top'>
-                  <div className='flex flex-col gap-2 p-4'>
-                    <div className='flex items-center gap-3'>
-                      <Avatar className='h-10 w-10'>
-                        <AvatarFallback>{member.avatar}</AvatarFallback>
-                      </Avatar>
-                      <div>
-                        <h4 className='text-sm font-semibold'>{member.name}</h4>
-                        <p className='text-xs text-muted-foreground'>
-                          {member.role}
-                        </p>
-                      </div>
-                    </div>
-                    <p className='text-sm text-muted-foreground'>
-                      {member.bio}
-                    </p>
-                    <div className='mt-2 flex justify-between border-t pt-2 text-sm'>
-                      <span>{member.themes} themes</span>
-                      <span>{member.followers.toLocaleString()} followers</span>
-                    </div>
-                    <Button variant='outline' size='sm' className='mt-1 w-full'>
-                      View Profile
-                    </Button>
-                  </div>
-                </HoverCardContent>
-              </HoverCard>
-            ))}
-          </div>
-        </motion.div> */}
 
         {/* Community benefits */}
         <div className='mx-auto max-w-5xl'>
