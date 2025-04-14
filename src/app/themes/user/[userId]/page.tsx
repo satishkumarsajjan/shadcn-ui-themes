@@ -16,7 +16,7 @@ export async function generateMetadata(
   parent: ResolvingMetadata
 ): Promise<Metadata> {
   const { userId } = await params;
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 
   try {
     if (!userId) {
@@ -90,7 +90,7 @@ export async function generateMetadata(
         card: 'summary_large_image',
         title,
         description,
-        images: [ogImageUrl],
+        images: ogImageUrl,
       },
       alternates: {
         canonical: `${baseUrl}/themes/user/${userId}`,
